@@ -1,6 +1,7 @@
 #include "Scene.h"
 
 
+
 /*! \brief Brief description.
 *  Scene class is a container for loading all the game objects in your simulation or your game.
 *
@@ -17,7 +18,7 @@ Scene::Scene()
 	_lightPosition = glm::vec3(10, 10, 0);
 
 	// Create a game object
-	_physics_object = new GameObject();
+	_physics_object = new KinematicObject();
 	// Create a game level object
 	_level = new GameObject();
 
@@ -73,10 +74,11 @@ Scene::Scene()
 	modelMesh->LoadOBJ("assets/models/sphere.obj");
 	// Tell the game object to use this mesh
 	_physics_object->SetMesh(modelMesh);
-	_physics_object->SetPosition(0.0f, 10.0f, 0.0f);
+	_physics_object->SetPosition(0.0f, 5.0f, 0.0f);
 	_physics_object->SetScale(0.3f, 0.3f, 0.3f);
-
+	_physics_object->SetVelocity(glm::vec3(0.04, 0.2, 0.0));
 	
+	GetCamera()->SetPos(GetCamera()->GetPos() + glm::vec3(0.0, 0.0, 10.0));
 }
 
 Scene::~Scene()
@@ -92,29 +94,7 @@ void Scene::Update(float deltaTs, Input* input)
 	// Update the game object (this is currently hard-coded motion)
 	if (input->cmd_x)
 	{
-		_simulation_start = true;
-	}
-	if (_simulation_start == true)
-	{
-		//Fake gravity
-		glm::vec3 pos = _physics_object->GetPosition();
-		glm::vec3 vel = _physics_object->GetVelocity();
-
-		//v = u + at, simulate gravity
-		vel.y += (-0.0981f * deltaTs);
-		pos += vel;
-		_physics_object->SetVelocity(vel);
-
-
-
-		//Fake collision detection
-		if (pos.y <= 0.3f) 
-		{
-			pos.y = 0.3f;
-			vel = glm::vec3(0,0,0);
-		}
-
-		_physics_object->SetPosition(pos);
+		_physics_object->SetSimulated(true);
 	}
 
 	_physics_object->Update(deltaTs);

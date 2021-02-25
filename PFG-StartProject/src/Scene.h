@@ -3,6 +3,7 @@
 #define _SCENE_H_
 
 #include "GameObject.h"
+#include "KinematicObject.h"
 #include "Camera.h"
 
 /*! \brief Brief description.
@@ -44,7 +45,7 @@ private:
 
 	/** A physics object
 	*/
-	GameObject* _physics_object;
+	KinematicObject* _physics_object;
 	/** An example game level in the scene
 	*/
 	GameObject* _level; 

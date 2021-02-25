@@ -31,6 +31,8 @@ public:
 	*/
 	inline void SetPos(glm::vec3 pos) { _cameraPos = pos; }
 
+	inline glm::vec3 GetPos() { return _cameraPos; }
+
 	/** Function for updatting the camera 
 	* @param input keyboard and mourse input inofrmation
 	*/
