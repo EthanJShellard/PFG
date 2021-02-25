@@ -5,7 +5,7 @@ class KinematicObject : public GameObject
 {
 private:
 	bool simulated;
-
+	float radius;
 
 public:
 
@@ -14,6 +14,7 @@ public:
 	void Update(float deltaTs);
 
 	void SetSimulated(bool sim);
+	void SetRadius(float newRad);
 
 	KinematicObject();
 	~KinematicObject();

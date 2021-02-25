@@ -18,9 +18,9 @@ void KinematicObject::Update(float deltaTs)
 		_position += _velocity;
 
 		//Fake collision detection
-		if (_position.y <= 0.3f)
+		if (_position.y <= radius)
 		{
-			_position.y = 0.3f;
+			_position.y = radius;
 			_velocity = glm::vec3(0.0, 0.0, 0.0);
 		}
 
@@ -33,6 +33,11 @@ void KinematicObject::SetSimulated(bool sim)
 	simulated = sim;
 }
 
+void KinematicObject::SetRadius(float newRad)
+{
+	radius = newRad;
+}
+
 KinematicObject::KinematicObject()
 {
 	// Initialise everything here
@@ -42,6 +47,7 @@ KinematicObject::KinematicObject()
 	_scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	_velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 	simulated = false;
+	radius = 1.0f;
 }
 
 KinematicObject::~KinematicObject()
