@@ -12,7 +12,7 @@
 */
 
 // Define a fixed step length for stable physics simulations
-static float STEP_LENGTH = 0.1;
+static float STEP_LENGTH = 0.03;
 
 Application::Application()
 {
@@ -194,10 +194,6 @@ bool Application::Update()
 		// This tells the renderer to actually show its contents to the screen
 		// We'll get into this sort of thing at a later date - or just look up 'double buffering' if you're impatient :P
 		SDL_Delay(10);
-		
-
-
-		
 		
 	}
 

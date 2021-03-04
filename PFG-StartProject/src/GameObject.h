@@ -24,33 +24,33 @@ public:
 	/** Function for setting mesh geometry for the game object 
 	* @param *input  a pointer to a mesh object
 	*/
-	void SetMesh(Mesh *input) {_mesh = input;}
+	void SetMesh(Mesh *input) {mesh = input;}
 	/** Function for setting material for the game object
 	* @param *input  a pointer to a material object
 	*/
-	void SetMaterial(Material *input) {_material = input;}
+	void SetMaterial(Material *input) {material = input;}
 	/** Function for setting position for the game object
 	* @param float posX x position
 	* @param float posY y position
 	* @param float posZ z position
 	*/
-	void SetPosition( float posX, float posY, float posZ ) {_position.x = posX; _position.y = posY; _position.z = posZ;}
+	void SetPosition( float posX, float posY, float posZ ) {position.x = posX; position.y = posY; position.z = posZ;}
 	/** Function for setting position for the game object
 	* @param glm::vec3 value  a position 3D vector
 	*/
-	void SetPosition( glm::vec3 value) {_position = value;}
+	void SetPosition( glm::vec3 value) {position = value;}
 	/** Function for setting rotation for the game object
 	* @param float rotX x rotation
 	* @param float rotY y rotation
 	* @param float rotZ z rotation
 	*/
-	void SetRotation( float rotX, float rotY, float rotZ ) {_rotation.x = rotX; _rotation.y = rotY; _rotation.z = rotZ;}
+	void SetRotation( float rotX, float rotY, float rotZ ) {rotation.x = rotX; rotation.y = rotY; rotation.z = rotZ;}
 	/** Function for setting scale for the game object
 	* @param float sX x scale
 	* @param float sY y scale
 	* @param float sZ z scale
 	*/
-	void SetScale(float sX, float sY, float sZ) { _scale.x = sX; _scale.y = sY; _scale.z = sZ; }
+	void SetScale(float sX, float sY, float sZ) { scale.x = sX; scale.y = sY; scale.z = sZ; }
 	
 	void SetVelocity(glm::vec3 newVel);
 
@@ -59,7 +59,7 @@ public:
 	/** Function for getting position of the game object
 	* @return The result
 	*/
-	glm::vec3 GetPosition() {return _position;}
+	glm::vec3 GetPosition() {return position;}
 	
 	/** A virtual function for updating the simulation result at each time frame
 	*   You need to expand this function 
@@ -77,33 +77,33 @@ protected:
 
 	/** The model geometry
 	*/
-	Mesh *_mesh;
+	Mesh *mesh;
 	/** The material contains the shader
 	*/
-	Material *_material;
+	Material *material;
 
 	/** Matrix for the position of the game object
 	*/ 
-	glm::mat4 _modelMatrix;
+	glm::mat4 modelMatrix;
 	/** Matrix for the orientation of the game object
 	*/
-	glm::mat4 _invModelMatrix;
+	glm::mat4 invModelMatrix;
 	
 	/** Position of the model
 	* The model matrix must be built from the position of the model geometry
 	*/
-	glm::vec3 _position;
+	glm::vec3 position;
 	
 	/** Orientation of the model
 	* The model matrix must be built from the orientation of the model geometry
 	*/
-	glm::vec3 _rotation;
+	glm::vec3 rotation;
 	/** Scale of the model
 	* The model matrix must be built from the scale of the model geometry
 	*/
-	glm::vec3 _scale;
+	glm::vec3 scale;
 
-	glm::vec3 _velocity;
+	glm::vec3 velocity;
 
 };
 

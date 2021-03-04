@@ -19,7 +19,7 @@ Scene::Scene()
 
 	// Create a game object
 	_physics_object = new KinematicObject();
-	_physics_object2 = new KinematicObject();
+	_physics_object2 = new DynamicObject();
 	// Create a game level object
 	_level = new GameObject();
 
@@ -87,13 +87,14 @@ Scene::Scene()
 	_physics_object->SetMesh(modelMesh);
 	_physics_object->SetPosition(0.0f, 5.0f, 0.0f);
 	_physics_object->SetScale(0.3f, 0.3f, 0.3f);
-	_physics_object->SetVelocity(glm::vec3(0.06, 0.2, 0.0));
+	_physics_object->SetVelocity(glm::vec3(0.06, 0.1, 0.0));
 	_physics_object->SetRadius(0.3f);
 
 	_physics_object2->SetMesh(modelMesh);
-	_physics_object2->SetPosition(0.0f, 2.5f, 0.0f);
+	_physics_object2->SetPosition(0.0f, 5.0f, 0.0f);
 	_physics_object2->SetScale(0.5f, 0.5f, 0.5f);
-	_physics_object2->SetVelocity(glm::vec3(-0.06, 0.2, 0.0));
+	_physics_object2->SetVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
+	_physics_object2->SetMass(2.0f);
 	_physics_object2->SetRadius(0.5f);
 	
 	GetCamera()->SetPos(GetCamera()->GetPos() + glm::vec3(0.0, 0.0, 10.0));

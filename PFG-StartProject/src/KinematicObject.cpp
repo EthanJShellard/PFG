@@ -2,9 +2,9 @@
 
 void KinematicObject::UpdateModelMatrix()
 {
-	_modelMatrix = glm::translate(glm::mat4(1), _position);
-	_modelMatrix = glm::scale(_modelMatrix, _scale);
-	_invModelMatrix = glm::inverse(_modelMatrix);
+	modelMatrix = glm::translate(glm::mat4(1), position);
+	modelMatrix = glm::scale(modelMatrix, scale);
+	invModelMatrix = glm::inverse(modelMatrix);
 }
 
 void KinematicObject::Update(float deltaTs)
@@ -14,14 +14,14 @@ void KinematicObject::Update(float deltaTs)
 		glm::vec3 g = glm::vec3(0.0, -0.0981, 0.0);
 
 		//v = u + at, simulate gravity
-		_velocity += g * deltaTs;
-		_position += _velocity;
+		velocity += g * deltaTs;
+		position += velocity;
 
 		//Fake collision detection
-		if (_position.y <= radius)
+		if (position.y <= radius)
 		{
-			_position.y = radius;
-			_velocity = glm::vec3(0.0, 0.0, 0.0);
+			position.y = radius;
+			velocity = glm::vec3(0.0, 0.0, 0.0);
 		}
 
 	}
@@ -41,11 +41,11 @@ void KinematicObject::SetRadius(float newRad)
 KinematicObject::KinematicObject()
 {
 	// Initialise everything here
-	_mesh = NULL;
-	_material = NULL;
+	mesh = NULL;
+	material = NULL;
 	// Set default value
-	_scale = glm::vec3(1.0f, 1.0f, 1.0f);
-	_velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+	scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 	simulated = false;
 	radius = 1.0f;
 }

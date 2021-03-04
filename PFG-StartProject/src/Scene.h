@@ -4,6 +4,7 @@
 
 #include "GameObject.h"
 #include "KinematicObject.h"
+#include "DynamicObject.h"
 #include "Camera.h"
 #include <vector>
 
@@ -47,7 +48,7 @@ private:
 	/** A physics object
 	*/
 	KinematicObject* _physics_object;
-	KinematicObject* _physics_object2;
+	DynamicObject* _physics_object2;
 
 	std::vector<KinematicObject*> kinematicObjects;
 	/** An example game level in the scene
