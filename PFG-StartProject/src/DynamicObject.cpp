@@ -12,7 +12,7 @@ void DynamicObject::Update(float deltaTs)
 		//Clear Force
 		ClearForces();
 
-		//Computer Forces on the object
+		//Compute Forces on the object
 		AddForce(glm::vec3(0, mass * -9.81, 0)); //Add Gravity
 
 		//Fake collision detection
