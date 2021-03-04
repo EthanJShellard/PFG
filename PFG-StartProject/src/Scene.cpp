@@ -49,7 +49,7 @@ Scene::Scene()
 	_level->SetMesh(groundMesh);
 	_level->SetPosition(0.0f, 0.0f, 0.0f);
 	_level->SetRotation(3.141590f, 0.0f, 0.0f);
-
+	_level->SetScale(1.5f, 1.0f, 1.5f);
 
 	// Create the material for the game object- level
 	Material *objectMaterial = new Material();

@@ -62,30 +62,30 @@ void Input::update()
 			{
 				//mouseDelta.y = 10;
 				cmd_w = true;
-				std::cout << "Down Mouse Button & w ! \n";
+				std::cout << "w pressed! \n";
 			}
 			else if (eventQueue.key.keysym.sym == SDLK_DOWN || eventQueue.key.keysym.sym == SDLK_s)
 			{
 				//mouseDelta.y = -10;
 				cmd_s = true;
-				std::cout << "Down Mouse Button & s ! \n";
+				std::cout << "s pressed! \n";
 			}
 			else if (eventQueue.key.keysym.sym == SDLK_RIGHT || eventQueue.key.keysym.sym == SDLK_d)
 			{
 				//mouseDelta.x = 10;
 				cmd_d = true;
-				std::cout << "Right Mouse Button & d ! \n";
+				std::cout << "d pressed! \n";
 			}
 			else if (eventQueue.key.keysym.sym == SDLK_LEFT || eventQueue.key.keysym.sym == SDLK_a)
 			{
 				//mouseDelta.x = -10;
 				cmd_a = true;
-				std::cout << "Left Mouse Button & a  ! \n";
+				std::cout << "a pressed! \n";
 			}
 			else if (eventQueue.key.keysym.sym == SDLK_x)
 			{
 				cmd_x = true;
-				std::cout << "Left Mouse Button & x  ! \n";
+				std::cout << "x pressed! \n";
 			}
 			else if (eventQueue.key.keysym.sym == SDLK_ESCAPE)
 			{

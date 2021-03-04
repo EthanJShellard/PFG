@@ -19,7 +19,7 @@ void DynamicObject::Update(float deltaTs)
 		if (position.y <= radius)
 		{
 			AddForce(glm::vec3(0.0f, mass * 9.81f, 0.0f)); //Normal Force
-			AddForce(glm::vec3(0.0f, -velocity.y * 40.0f, 0.0f)); //Bounce?
+			AddForce(glm::vec3(0.0f, -velocity.y * 40.0f, 0.0f)); //Faked Bounce
 			position.y = radius;
 			velocity = glm::vec3(0.0, 0.0, 0.0);
 		}
