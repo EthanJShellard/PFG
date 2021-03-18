@@ -1,4 +1,5 @@
 #include "DynamicObject.h"
+#include "PFGCollision.h"
 #include <GLM/gtc/matrix_transform.hpp>
 
 
@@ -15,8 +16,16 @@ void DynamicObject::Update(float deltaTs)
 		//Compute Forces on the object
 		AddForce(glm::vec3(0, mass * -9.81, 0)); //Add Gravity
 
+		glm::vec3 planeNormal = glm::vec3(0.0f, 1.0f, 0.0f);
+		glm::vec3 pointOnPlane = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 nextPosition = position + (velocity * deltaTs);
+
+		glm::vec3 collisionPosition;
+
+		bool collision = PFG::MovingSphereToPlaneCollision(planeNormal, position, nextPosition, pointOnPlane, radius, collisionPosition);
+
 		//Fake collision detection
-		if (position.y <= radius)
+		if (collision)
 		{
 			AddForce(glm::vec3(0.0f, mass * 9.81f, 0.0f)); //Normal Force
 			AddForce(glm::vec3(0.0f, -velocity.y * 40.0f, 0.0f)); //Faked Bounce
