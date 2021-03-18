@@ -12,7 +12,7 @@
 */
 
 // Define a fixed step length for stable physics simulations
-static float STEP_LENGTH = 0.03;
+static float STEP_LENGTH = 0.02;
 
 Application::Application()
 {
@@ -181,6 +181,8 @@ bool Application::Update()
 		// Draw the scene
 		myScene->Draw();
 
+		// This tells the renderer to actually show its contents to the screen
+		// We'll get into this sort of thing at a later date - or just look up 'double buffering' if you're impatient :P
 		SDL_GL_SwapWindow(window);
 		
 		//caps framerate
@@ -191,10 +193,8 @@ bool Application::Update()
 		}
 		lastTime = currentTime;
 
-		// This tells the renderer to actually show its contents to the screen
-		// We'll get into this sort of thing at a later date - or just look up 'double buffering' if you're impatient :P
-		SDL_Delay(10);
 		
+		SDL_Delay(10);
 	}
 
 	return true;

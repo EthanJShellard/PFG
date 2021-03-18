@@ -1,5 +1,6 @@
+#pragma once
 #include "Scene.h"
-
+#include "PFGCollision.h"
 
 
 /*! \brief Brief description.
@@ -111,7 +112,6 @@ Scene::~Scene()
 
 void Scene::Update(float deltaTs, Input* input)
 {
-	// Update the game object (this is currently hard-coded motion)
 	if (input->cmd_x)
 	{
 		_physics_object->SetSimulated(true);
