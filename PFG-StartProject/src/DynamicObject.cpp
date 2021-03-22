@@ -27,10 +27,22 @@ void DynamicObject::Update(float deltaTs)
 		//Fake collision detection
 		if (collision)
 		{
-			AddForce(glm::vec3(0.0f, mass * 9.81f, 0.0f)); //Normal Force
-			AddForce(glm::vec3(0.0f, -velocity.y * 40.0f, 0.0f)); //Faked Bounce
+			//Impulse collision repsonse demonstration
+			glm::vec3 planeVelocity = glm::vec3(0,0,0);
+			glm::vec3 relativeVel = velocity - planeVelocity;
+			glm::vec3 n = glm::vec3(0.0f, 1.0f, 0.0f);
+			float planeMass = FLT_MAX;
+			float eCof = -(1.0f + 0.8f) * glm::dot(relativeVel, n);
+			float invMass = 1 / mass;
+			float jLin = eCof / (invMass + 0.0f); //0.0f because floor is static (infinite mass)
+
+			glm::vec3 collisionImpulseForce = jLin * n / deltaTs;
+			AddForce(collisionImpulseForce);
+
+			//AddForce(glm::vec3(0.0f, mass * 9.81f, 0.0f)); //Normal Force
+			//AddForce(glm::vec3(0.0f, -velocity.y * 40.0f, 0.0f)); //Faked Bounce
 			position.y = radius;
-			velocity = glm::vec3(0.0, 0.0, 0.0);
+			//velocity = glm::vec3(0.0, 0.0, 0.0);
 		}
 
 
