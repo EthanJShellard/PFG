@@ -28,14 +28,14 @@ void KinematicObject::Update(float deltaTs)
 	UpdateModelMatrix();
 }
 
-void KinematicObject::SetSimulated(bool sim)
-{
-	simulated = sim;
-}
-
 void KinematicObject::SetRadius(float newRad)
 {
 	radius = newRad;
+}
+
+void KinematicObject::SetSimulated(bool sim)
+{
+	simulated = sim;
 }
 
 KinematicObject::KinematicObject()

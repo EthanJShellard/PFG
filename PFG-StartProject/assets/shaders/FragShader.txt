@@ -14,7 +14,7 @@ uniform vec3 emissiveColour = {0,0,0};
 uniform vec3 ambientColour  = {0.1f,0.1f,0.2f};
 uniform vec3 diffuseColour  = {1.0f,1.0f,1.0f};
 uniform vec3 specularColour = {1.0f,1.0f,1.0f};
-uniform float shininess     = 50.0f;
+uniform float shininess     = 100.0f;
 uniform float alpha         = 1.0f;
 
 // The output of the fragment shader is the fragment's colour

@@ -19,8 +19,8 @@ Scene::Scene()
 	_lightPosition = glm::vec3(10, 10, 0);
 
 	// Create a game object
-	_physics_object = new KinematicObject();
-	_physics_object2 = new DynamicObject();
+	std::shared_ptr<DynamicObject> smallSphere = std::make_shared<DynamicObject>();
+	std::shared_ptr<DynamicObject> bigSphere = std::make_shared<DynamicObject>();
 	// Create a game level object
 	_level = new GameObject();
 
@@ -69,14 +69,14 @@ Scene::Scene()
 	// If you change the light's position you need to call this again
 	objectMaterial->SetLightPosition(_lightPosition);
 	// Tell the level object to use this material
-	_physics_object->SetMaterial(objectMaterial);
+	smallSphere->SetMaterial(objectMaterial);
 
 	objectMaterial2->LoadShaders("assets/shaders/VertShader.txt", "assets/shaders/FragShader.txt");
 	objectMaterial2->SetDiffuseColour(glm::vec3(0.1, 0.8, 0.1));
 	objectMaterial2->SetTexture("assets/textures/default.bmp");
 	objectMaterial2->SetLightPosition(_lightPosition);
 
-	_physics_object2->SetMaterial(objectMaterial2);
+	bigSphere->SetMaterial(objectMaterial2);
 	
 
 
@@ -85,27 +85,31 @@ Scene::Scene()
 	// Load from OBJ file. This must have triangulated geometry
 	modelMesh->LoadOBJ("assets/models/sphere.obj");
 	// Tell the game object to use this mesh
-	_physics_object->SetMesh(modelMesh);
-	_physics_object->SetPosition(0.0f, 5.0f, 0.0f);
-	_physics_object->SetScale(0.3f, 0.3f, 0.3f);
-	_physics_object->SetVelocity(glm::vec3(0.06, 0.1, 0.0));
-	_physics_object->SetRadius(0.3f);
+	smallSphere->SetMesh(modelMesh);
+	smallSphere->SetPosition(1.0f, 5.0f, 0.0f);
+	smallSphere->SetScale(0.3f, 0.3f, 0.3f);
+	smallSphere->SetVelocity(glm::vec3(4.0, 1.0, 0.0));
+	smallSphere->SetMass(2.0f);
+	smallSphere->SetRadius(0.3f);
 
-	_physics_object2->SetMesh(modelMesh);
-	_physics_object2->SetPosition(0.0f, 5.0f, 0.0f);
-	_physics_object2->SetScale(0.5f, 0.5f, 0.5f);
-	_physics_object2->SetVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
-	_physics_object2->SetMass(2.0f);
-	_physics_object2->SetRadius(0.5f);
+	bigSphere->SetMesh(modelMesh);
+	bigSphere->SetPosition(0.0f, 5.0f, 0.0f);
+	bigSphere->SetScale(0.5f, 0.5f, 0.5f);
+	bigSphere->SetVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
+	bigSphere->SetMass(2.0f);
+	bigSphere->SetRadius(0.5f);
 	
 	GetCamera()->SetPos(GetCamera()->GetPos() + glm::vec3(0.0, 0.0, 10.0));
+
+	gameObjects.push_back(smallSphere);
+	gameObjects.push_back(bigSphere);
 }
 
 Scene::~Scene()
 {
 	// You should neatly clean everything up here
-	delete _physics_object;
-	delete _physics_object2;
+	//delete _physics_object;
+	//delete _physics_object2;
 	delete _level;
 	delete _camera;
 }
@@ -114,12 +118,21 @@ void Scene::Update(float deltaTs, Input* input)
 {
 	if (input->cmd_x)
 	{
-		_physics_object->SetSimulated(true);
-		_physics_object2->SetSimulated(true);
+		//_physics_object->SetSimulated(true);
+		//_physics_object2->SetSimulated(true);
+		for (int i = 0; i < gameObjects.size(); i++) 
+		{
+			gameObjects.at(i)->SetSimulated(true);
+		}
 	}
 
-	_physics_object->Update(deltaTs);
-	_physics_object2->Update(deltaTs);
+	for (int i = 0; i < gameObjects.size(); i++)
+	{
+		gameObjects.at(i)->Update(deltaTs);
+	}
+
+	//_physics_object->Update(deltaTs);
+	//_physics_object2->Update(deltaTs);
 	_level->Update(deltaTs);
 	_camera->Update(input);
 
@@ -131,8 +144,12 @@ void Scene::Update(float deltaTs, Input* input)
 void Scene::Draw()
 {
 	// Draw objects, giving the camera's position and projection
-	_physics_object->Draw(_viewMatrix, _projMatrix);
-	_physics_object2->Draw(_viewMatrix, _projMatrix);
+	//_physics_object->Draw(_viewMatrix, _projMatrix);
+	//_physics_object2->Draw(_viewMatrix, _projMatrix);
+	for (int i = 0; i < gameObjects.size(); i++)
+	{
+		gameObjects.at(i)->Draw(_viewMatrix, _projMatrix);
+	}
 	_level->Draw(_viewMatrix, _projMatrix);
 
 }

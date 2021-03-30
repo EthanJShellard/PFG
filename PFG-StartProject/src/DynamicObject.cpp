@@ -1,19 +1,17 @@
 #include "DynamicObject.h"
 #include "PFGCollision.h"
 #include <GLM/gtc/matrix_transform.hpp>
+#include <iostream>
 
 
 
 void DynamicObject::Update(float deltaTs)
 {
-	//Using F=MA, calculate velocity and position
-
 	if (simulated)
 	{
 		//Clear Force
 		ClearForces();
 
-		//Compute Forces on the object
 		AddForce(glm::vec3(0, mass * -9.81, 0)); //Add Gravity
 
 		glm::vec3 planeNormal = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -32,10 +30,11 @@ void DynamicObject::Update(float deltaTs)
 			glm::vec3 relativeVel = velocity - planeVelocity;
 			glm::vec3 n = glm::vec3(0.0f, 1.0f, 0.0f);
 			float planeMass = FLT_MAX;
-			float eCof = -(1.0f + 0.8f) * glm::dot(relativeVel, n);
+			float surfaceCharacteristics = 0.70f;
+			//Ja = -(1 + e)(Va- Vb) . n / (1/ma) + (1/mb)
+			float eCoef = -(1.0f + surfaceCharacteristics) * glm::dot(relativeVel, n);
 			float invMass = 1 / mass;
-			float jLin = eCof / (invMass + 0.0f); //0.0f because floor is static (infinite mass)
-
+			float jLin = eCoef / (invMass + 0.0f); //0.0f because floor is static (infinite mass)
 			glm::vec3 collisionImpulseForce = jLin * n / deltaTs;
 			AddForce(collisionImpulseForce);
 
@@ -46,7 +45,7 @@ void DynamicObject::Update(float deltaTs)
 		}
 
 
-		Euler(deltaTs);
+		RungeKutta4(deltaTs);
 	}
 	UpdateModelMatrix();
 }
@@ -60,9 +59,67 @@ void DynamicObject::Euler(float deltaTs)
 	position += velocity * deltaTs;
 }
 
-void DynamicObject::SetSimulated(bool sim)
+void DynamicObject::RungeKutta2(float deltaTs) 
 {
-	simulated = sim;
+	float oneOverMass = 1.0f / mass;
+	
+	glm::vec3 force;
+	glm::vec3 acceleration;
+	//K0 from beginning, k1 from half time
+	glm::vec3 k0, k1;
+
+	//evaluate once at t0
+	force = netForce;
+	acceleration = force / mass;
+	k0 = acceleration * deltaTs;
+
+	//evaluate once at half deltaTs
+	force = netForce + (k0/2.0f);
+	acceleration = force / mass;
+	k1 = acceleration * deltaTs;
+
+	//Update velocity using k1
+	velocity += k1;
+
+	//Update position using velocity
+	position += velocity * deltaTs;
+}
+
+void DynamicObject::RungeKutta4(float deltaTs)
+{
+	float oneOverMass = 1.0f / mass;
+
+	glm::vec3 force;
+	glm::vec3 acceleration;
+	//K0 from beginning, k1 and k2 at middle, k3 from k2
+	glm::vec3 k0, k1, k2, k3;
+
+	//evaluate once at t0
+	force = netForce;
+	acceleration = force / mass;
+	k0 = acceleration * deltaTs;
+
+	//evaluate once at half deltaTs
+	force = netForce + (k0 / 2.0f);
+	acceleration = force / mass;
+	k1 = acceleration * deltaTs;
+
+	//evaluate again at half deltaTs;
+	force = netForce + (k1 / 2.0f);
+	acceleration = force / mass;
+	k2 = acceleration * deltaTs;
+
+	//Evaluate once at full deltaTs
+	force = netForce + k2;
+	acceleration = force / mass;
+	k3 = acceleration * deltaTs;
+
+
+	//Update velocity using weighted average
+	velocity += (k0 + (2.0f * k1)  + (2.0f * k2) + k3) / 6.0f;
+
+	//Update position using velocity
+	position += velocity * deltaTs;
 }
 
 void DynamicObject::SetRadius(float newRad)
@@ -95,7 +152,7 @@ void DynamicObject::AddForce(glm::vec3 force)
 
 void DynamicObject::SetForce(glm::vec3 newForce)
 {
-	newForce = newForce;
+	netForce = newForce;
 }
 
 void DynamicObject::ClearForces()

@@ -24,23 +24,46 @@ namespace PFG
 	/// <param name="radius">Radius of the sphere</param>
 	/// <param name="centreAtCollision">The centre of the sphere at the time of collision</param>
 	/// <returns>True if sphere collides with plane, False otherwise.</returns>
-	bool MovingSphereToPlaneCollision(glm::vec3 planeNormal, glm::vec3 centre0, glm::vec3 centre1, glm::vec3 pointOnPlane, float radius, glm::vec3& centreAtCollision)
+	bool MovingSphereToPlaneCollision(glm::vec3 planeNormal, glm::vec3 centreBefore, glm::vec3 centreAfter, glm::vec3 pointOnPlane, float radius, glm::vec3& centreAtCollision)
 	{
 		float t;
 
-		float distanceBefore = DistanceToPlane(planeNormal, centre0, pointOnPlane);
-		float distanceAfter = DistanceToPlane(planeNormal, centre1, pointOnPlane);
+		float distanceBefore = DistanceToPlane(planeNormal, centreBefore, pointOnPlane);
+		float distanceAfter = DistanceToPlane(planeNormal, centreAfter, pointOnPlane);
 
 		if (glm::abs(distanceBefore) <= radius) 
 		{
-			centreAtCollision = centre0;
+			centreAtCollision = centreBefore;
 			return true;
 		}
 		else if (distanceBefore > radius && distanceAfter < radius)
 		{
 			t = (distanceBefore - radius) / (distanceBefore - distanceAfter);
-			centreAtCollision = (1 - t) * centre0 + t * centre1;
+			centreAtCollision = (1 - t) * centreBefore + t * centreAfter;
 
+			return true;
+		}
+
+		return false;
+	}
+	bool MovingSphereToPlaneCollision(glm::vec3 planeNormal, glm::vec3 centreBefore, glm::vec3 centreAfter, glm::vec3 pointOnPlane, float radius, Collision& collision)
+	{
+		float t;
+
+		float distanceBefore = DistanceToPlane(planeNormal, centreBefore, pointOnPlane);
+		float distanceAfter = DistanceToPlane(planeNormal, centreAfter, pointOnPlane);
+
+		if (glm::abs(distanceBefore) <= radius)
+		{
+			collision.collisionPoint = centreBefore;
+			collision.bNormal = planeNormal;
+			return true;
+		}
+		else if (distanceBefore > radius && distanceAfter < radius)
+		{
+			t = (distanceBefore - radius) / (distanceBefore - distanceAfter);
+			collision.collisionPoint = (1 - t) * centreBefore + t * centreAfter;
+			collision.bNormal = planeNormal;
 			return true;
 		}
 
@@ -68,6 +91,11 @@ namespace PFG
 			return true;
 		}
 
+		return false;
+	}
+
+	bool SphereToSphereCollision(glm::vec3 centre0, glm::vec3 centre1, float radius0, float radius1, Collision& collision)
+	{
 		return false;
 	}
 

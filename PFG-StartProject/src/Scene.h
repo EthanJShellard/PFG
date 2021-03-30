@@ -45,10 +45,7 @@ public:
 
 private:
 
-	/** A physics object
-	*/
-	KinematicObject* _physics_object;
-	DynamicObject* _physics_object2;
+	std::vector< std::shared_ptr<GameObject> > gameObjects;
 
 	std::vector<KinematicObject*> kinematicObjects;
 	/** An example game level in the scene

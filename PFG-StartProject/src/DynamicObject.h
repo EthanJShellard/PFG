@@ -4,14 +4,9 @@
 class DynamicObject : public GameObject 
 {
 private:
-	//Is the object currently simulated
-	bool simulated;
-
 	float radius;
 	//mass in kg
 	float mass;
-	//Velocity in m/s
-	glm::vec3 velocity;
 	//Net force on the object
 	glm::vec3 netForce;
 public:
@@ -23,14 +18,19 @@ public:
 	void SetForce(glm::vec3 newForce);
 	void ClearForces();
 	/// <summary>
-	/// Numeric integration method
+	/// Euler numeric integration method
 	/// </summary>
 	/// <param name="deltaT">Period of time</param>
 	void Euler(float deltaTs);
+	/// <summary>
+	/// Runge Kutta 2 numeric integration method
+	/// </summary>
+	/// <param name="deltaTs">Period of time</param>
+	void RungeKutta2(float deltaTs);
+	void RungeKutta4(float deltaTs);
 
 
 	void SetMass(float newMass);
-	void SetSimulated(bool sim);
 	void SetRadius(float newRad);
 
 	DynamicObject();
