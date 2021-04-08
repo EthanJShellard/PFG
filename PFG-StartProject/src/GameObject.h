@@ -108,6 +108,9 @@ protected:
 
 	glm::vec3 velocity;
 
+
+	
+	//Include object in physics simulation?
 	bool simulated;
 };
 
