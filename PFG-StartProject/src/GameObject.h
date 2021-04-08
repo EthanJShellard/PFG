@@ -73,6 +73,9 @@ public:
 	*/
 	virtual void Draw(glm::mat4 &viewMatrix, glm::mat4 &projMatrix);
 
+	virtual void SetSimulated(bool sim);
+	
+
 protected:
 
 	/** The model geometry
@@ -105,6 +108,7 @@ protected:
 
 	glm::vec3 velocity;
 
+	bool simulated;
 };
 
 

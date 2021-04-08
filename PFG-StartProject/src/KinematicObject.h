@@ -13,8 +13,9 @@ public:
 
 	void Update(float deltaTs);
 
-	void SetSimulated(bool sim);
 	void SetRadius(float newRad);
+
+	void SetSimulated(bool sim);
 
 	KinematicObject();
 	~KinematicObject();

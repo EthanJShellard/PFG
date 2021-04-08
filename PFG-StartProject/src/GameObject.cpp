@@ -15,6 +15,7 @@ GameObject::GameObject()
 	// Set default value
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+	simulated = false;
 }
 
 GameObject::~GameObject()
@@ -32,7 +33,7 @@ glm::vec3 GameObject::GetVelocity()
 	return velocity;
 }
 
-void GameObject::Update( float deltaTs )
+void GameObject::Update(float deltaTs)
 {
 	// Put any update code here
 	// Make sure matrices are up to date (if you don't change them elsewhere, you can put this in the update function)
@@ -42,11 +43,11 @@ void GameObject::Update( float deltaTs )
 	modelMatrix = glm::scale(modelMatrix, scale);
 }
 
-void GameObject::Draw(glm::mat4 &viewMatrix, glm::mat4 &projMatrix)
+void GameObject::Draw(glm::mat4& viewMatrix, glm::mat4& projMatrix)
 {
-	if( mesh != NULL )
+	if (mesh != NULL)
 	{
-		if( material != NULL )
+		if (material != NULL)
 		{
 			// Give all the matrices to the material
 
@@ -60,4 +61,9 @@ void GameObject::Draw(glm::mat4 &viewMatrix, glm::mat4 &projMatrix)
 		mesh->Draw();
 
 	}
+}
+
+void GameObject::SetSimulated(bool sim)
+{
+	simulated = sim;
 }
