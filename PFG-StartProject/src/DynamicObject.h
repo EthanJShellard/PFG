@@ -4,7 +4,6 @@
 class DynamicObject : public GameObject 
 {
 private:
-	float radius;
 	//mass in kg
 	float mass;
 	//Net force on the object
@@ -31,7 +30,6 @@ public:
 
 
 	void SetMass(float newMass);
-	void SetRadius(float newRad);
 
 	DynamicObject();
 	~DynamicObject();

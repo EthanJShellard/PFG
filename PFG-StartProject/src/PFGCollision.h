@@ -2,18 +2,25 @@
 #include "glm/glm.hpp"
 #include <memory>
 
+class Collider;
 class GameObject;
+
+struct Collision
+{
+	float otherInverseMass;
+	float otherBounciness;
+	glm::vec3 otherVelocity;
+	glm::vec3 collisionPoint;
+	glm::vec3 aNormal;
+	glm::vec3 otherNormal;
+
+	Collision();
+};
 
 namespace PFG
 {
-	struct Collision
-	{
-		std::shared_ptr<GameObject> a;
-		std::shared_ptr<GameObject> b;
-		glm::vec3 collisionPoint;
-		glm::vec3 aNormal;
-		glm::vec3 bNormal;
-	};
+
+	Collision CheckCollision(std::shared_ptr<Collider> A, std::shared_ptr<Collider> B, bool& didCollide);
 
 	float DistanceToPlane(glm::vec3 n, glm::vec3 p, glm::vec3 q);
 
@@ -25,7 +32,4 @@ namespace PFG
 
 	bool SphereToSphereCollision(glm::vec3 centre0, glm::vec3 centre1, float radius0, float radius1, Collision& collision);
 
-	enum ColliderType {SPHERE, PLANE};
-
-	
 }

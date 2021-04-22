@@ -3,27 +3,37 @@
 #include "GameObject.h"
 #include <memory>
 
-enum ColliderType { SPHERE, INFINITE_PLANE };
+enum class ColliderType { SPHERE, INFINITE_PLANE };
 
+class GameObject;
 
-class Collider 
+struct Collider 
 {
-public:
+	//Current position
 	glm::vec3 pos;
+	//Next position if no collision - used for collision detection
+	glm::vec3 nextPos;
 	glm::vec3 scale;
+	float bounciness;
 
-	std::shared_ptr<GameObject> parent;
+	GameObject * parent;
+
+	ColliderType GetType();
+	Collider();
+
+protected:
 	ColliderType type;
 };
 
-class SphereCollider : public Collider
+struct SphereCollider : public Collider
 {
-	float centre;
 	float radius;
+	SphereCollider();
 };
 
-class InfinitePlaneCollider : public Collider
+struct InfinitePlaneCollider : public Collider
 {
-	glm::vec3 normal;
-	glm::vec3 point;
+	glm::vec3 planeNormal;
+	glm::vec3 pointOnPlane;
+	InfinitePlaneCollider();
 };

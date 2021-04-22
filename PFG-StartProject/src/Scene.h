@@ -50,7 +50,7 @@ private:
 	std::vector<KinematicObject*> kinematicObjects;
 	/** An example game level in the scene
 	*/
-	GameObject* _level; 
+	std::shared_ptr<GameObject> _level; 
 	/** The main camera in the scene 
 	*/
 	Camera* _camera; 

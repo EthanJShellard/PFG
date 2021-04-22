@@ -22,7 +22,7 @@ Scene::Scene()
 	std::shared_ptr<DynamicObject> smallSphere = std::make_shared<DynamicObject>();
 	std::shared_ptr<DynamicObject> bigSphere = std::make_shared<DynamicObject>();
 	// Create a game level object
-	_level = new GameObject();
+	_level = std::make_shared<GameObject>();
 
 	// Create the material for the game object- level
 	Material *modelMaterial = new Material();
@@ -90,19 +90,38 @@ Scene::Scene()
 	smallSphere->SetScale(0.3f, 0.3f, 0.3f);
 	smallSphere->SetVelocity(glm::vec3(4.0, 1.0, 0.0));
 	smallSphere->SetMass(2.0f);
-	smallSphere->SetRadius(0.3f);
 
 	bigSphere->SetMesh(modelMesh);
 	bigSphere->SetPosition(0.0f, 5.0f, 0.0f);
 	bigSphere->SetScale(0.5f, 0.5f, 0.5f);
 	bigSphere->SetVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
 	bigSphere->SetMass(2.0f);
-	bigSphere->SetRadius(0.5f);
-	
+
+	//CREATE COLLIDERS
+	std::shared_ptr<InfinitePlaneCollider> levelCollider = std::make_shared<InfinitePlaneCollider>();
+	levelCollider->bounciness = 0.2;
+	levelCollider->pointOnPlane = glm::vec3(0, 0, 0);
+	levelCollider->planeNormal = glm::vec3(0, 1, 0);
+	_level->SetCollider(levelCollider);
+
+	std::shared_ptr<SphereCollider> smallSphereCollider = std::make_shared<SphereCollider>();
+	smallSphereCollider->bounciness = 0.5f;
+	smallSphereCollider->radius = 0.3f;
+	smallSphereCollider->scale = smallSphere->GetScale();
+	smallSphere->SetCollider(smallSphereCollider);
+
+	std::shared_ptr<SphereCollider> bigSphereCollider = std::make_shared<SphereCollider>();
+	bigSphereCollider->bounciness = 0.5f;
+	bigSphereCollider->radius = 0.5f;
+	bigSphereCollider->scale = bigSphere->GetScale();
+	bigSphere->SetCollider(bigSphereCollider);
+	/////////////////////////////////
+
 	GetCamera()->SetPos(GetCamera()->GetPos() + glm::vec3(0.0, 0.0, 10.0));
 
 	gameObjects.push_back(smallSphere);
 	gameObjects.push_back(bigSphere);
+	gameObjects.push_back(_level);
 }
 
 Scene::~Scene()
@@ -110,7 +129,6 @@ Scene::~Scene()
 	// You should neatly clean everything up here
 	//delete _physics_object;
 	//delete _physics_object2;
-	delete _level;
 	delete _camera;
 }
 
@@ -123,6 +141,30 @@ void Scene::Update(float deltaTs, Input* input)
 		for (int i = 0; i < gameObjects.size(); i++) 
 		{
 			gameObjects.at(i)->SetSimulated(true);
+		}
+	}
+
+	for (int i = 0; i < gameObjects.size(); i++)
+	{
+		gameObjects.at(i)->UpdateCollider(deltaTs);
+	}
+
+	//CHECK COLLISION
+	bool didCollide = false;
+	for (int i = 0; i < gameObjects.size(); i++)
+	{
+		if (!gameObjects.at(i)->GetCollider()) continue; //No need to perform checks if no collider
+		gameObjects.at(i)->ClearCollisions();
+
+		for (int j = 0; j < gameObjects.size(); j++) 
+		{
+			if (i == j || !gameObjects.at(j)->GetCollider()) continue; //No need to perform checks if no collider
+
+			didCollide = false;
+
+			Collision c = PFG::CheckCollision(gameObjects.at(i)->GetCollider(), gameObjects.at(j)->GetCollider(), didCollide);
+
+			if (didCollide) gameObjects.at(i)->AddCollision(c);
 		}
 	}
 

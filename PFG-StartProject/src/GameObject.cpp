@@ -33,6 +33,11 @@ glm::vec3 GameObject::GetVelocity()
 	return velocity;
 }
 
+glm::vec3 GameObject::GetScale()
+{
+	return scale;
+}
+
 void GameObject::Update(float deltaTs)
 {
 	// Put any update code here
@@ -66,4 +71,32 @@ void GameObject::Draw(glm::mat4& viewMatrix, glm::mat4& projMatrix)
 void GameObject::SetSimulated(bool sim)
 {
 	simulated = sim;
+}
+
+void GameObject::AddCollision(Collision c)
+{
+	collisions.push_back(c);
+}
+
+void GameObject::ClearCollisions()
+{
+	collisions.clear();
+}
+
+std::shared_ptr<Collider> GameObject::GetCollider()
+{
+	return collider;
+}
+
+void GameObject::SetCollider(std::shared_ptr<Collider> newCollider)
+{
+	collider = newCollider;
+	collider->parent = this;
+}
+
+void GameObject::UpdateCollider(float deltaTs)
+{
+	if (!collider) return;
+	collider->pos = position;
+	collider->nextPos = position + (velocity * deltaTs);
 }

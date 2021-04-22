@@ -3,6 +3,10 @@
 
 #include "Mesh.h"
 #include "Material.h"
+#include "PFGCollision.h"
+#include "Collider.h"
+#include <vector>
+#include <memory>
 
 /*! \brief Brief description.
 *  GameObject class contains a mesh, a material, a position and an orientation information
@@ -10,7 +14,7 @@
 *
 */
 
-class GameObject
+class GameObject : public std::enable_shared_from_this<GameObject>
 {
 public:
 	/** GameObject constructor
@@ -55,6 +59,7 @@ public:
 	void SetVelocity(glm::vec3 newVel);
 
 	glm::vec3 GetVelocity();
+	glm::vec3 GetScale();
 
 	/** Function for getting position of the game object
 	* @return The result
@@ -75,6 +80,14 @@ public:
 
 	virtual void SetSimulated(bool sim);
 	
+	void AddCollision(Collision c);
+	void ClearCollisions();
+
+	std::shared_ptr<Collider> GetCollider();
+
+	void SetCollider(std::shared_ptr<Collider> newCollider);
+
+	void UpdateCollider(float deltaTs);
 
 protected:
 
@@ -108,12 +121,11 @@ protected:
 
 	glm::vec3 velocity;
 
-
+	//Collider and Collisions
+	std::shared_ptr<Collider> collider;
+	std::vector<Collision> collisions;
 	
 	//Include object in physics simulation?
 	bool simulated;
 };
-
-
-
 #endif

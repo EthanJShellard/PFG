@@ -14,34 +14,55 @@ void DynamicObject::Update(float deltaTs)
 
 		AddForce(glm::vec3(0, mass * -9.81, 0)); //Add Gravity
 
-		glm::vec3 planeNormal = glm::vec3(0.0f, 1.0f, 0.0f);
-		glm::vec3 pointOnPlane = glm::vec3(0.0f, 0.0f, 0.0f);
-		glm::vec3 nextPosition = position + (velocity * deltaTs);
+		//glm::vec3 planeNormal = glm::vec3(0.0f, 1.0f, 0.0f);
+		//glm::vec3 pointOnPlane = glm::vec3(0.0f, 0.0f, 0.0f);
+		//glm::vec3 nextPosition = position + (velocity * deltaTs);
 
-		glm::vec3 collisionPosition;
+		//glm::vec3 collisionPosition;
 
-		bool collision = PFG::MovingSphereToPlaneCollision(planeNormal, position, nextPosition, pointOnPlane, radius, collisionPosition);
+		//bool collision = PFG::MovingSphereToPlaneCollision(planeNormal, position, nextPosition, pointOnPlane, radius, collisionPosition);
 
-		//Fake collision detection
-		if (collision)
+		////Fake collision detection
+		//if (collision)
+		//{
+		//	//Impulse collision repsonse demonstration
+		//	glm::vec3 planeVelocity = glm::vec3(0,0,0);
+		//	glm::vec3 relativeVel = velocity - planeVelocity;
+		//	glm::vec3 n = glm::vec3(0.0f, 1.0f, 0.0f);
+		//	float surfaceCharacteristics = 0.70f;
+		//	//Ja = -(1 + e)(Va- Vb) . n / (1/ma) + (1/mb)
+		//	float eCoef = -(1.0f + surfaceCharacteristics) * glm::dot(relativeVel, n);
+		//	float invMass = 1 / mass;
+		//	float jLin = eCoef / (invMass + 0.0f); //0.0f because floor is static (infinite mass)
+		//	glm::vec3 collisionImpulseForce = jLin * n / deltaTs;
+		//	AddForce(collisionImpulseForce);
+
+		//	//AddForce(glm::vec3(0.0f, mass * 9.81f, 0.0f)); //Normal Force
+		//	//AddForce(glm::vec3(0.0f, -velocity.y * 40.0f, 0.0f)); //Faked Bounce
+		//	position.y = radius;
+		//	//velocity = glm::vec3(0.0, 0.0, 0.0);
+		//}
+
+		if (collisions.size() > 0) 
 		{
-			//Impulse collision repsonse demonstration
-			glm::vec3 planeVelocity = glm::vec3(0,0,0);
-			glm::vec3 relativeVel = velocity - planeVelocity;
-			glm::vec3 n = glm::vec3(0.0f, 1.0f, 0.0f);
-			float planeMass = FLT_MAX;
-			float surfaceCharacteristics = 0.70f;
-			//Ja = -(1 + e)(Va- Vb) . n / (1/ma) + (1/mb)
-			float eCoef = -(1.0f + surfaceCharacteristics) * glm::dot(relativeVel, n);
-			float invMass = 1 / mass;
-			float jLin = eCoef / (invMass + 0.0f); //0.0f because floor is static (infinite mass)
-			glm::vec3 collisionImpulseForce = jLin * n / deltaTs;
-			AddForce(collisionImpulseForce);
+			//Impulse collision response for each collision
+			for (int i = 0; i < collisions.size(); i++) 
+			{
+				Collision c = collisions.at(i);
 
-			//AddForce(glm::vec3(0.0f, mass * 9.81f, 0.0f)); //Normal Force
-			//AddForce(glm::vec3(0.0f, -velocity.y * 40.0f, 0.0f)); //Faked Bounce
-			position.y = radius;
-			//velocity = glm::vec3(0.0, 0.0, 0.0);
+				//	//Ja = -(1 + e)(Va- Vb) . n / (1/ma) + (1/mb)
+				glm::vec3 relativeVelocity = velocity - c.otherVelocity;
+				float surfaceCharacteristics = collider->bounciness + c.otherBounciness;
+				float eCoef = -(1.0f + surfaceCharacteristics) * glm::dot(relativeVelocity, c.otherNormal);
+				float invMass = 1 / mass;
+				float jLin = eCoef / (invMass + c.otherInverseMass);
+				glm::vec3 collisionImpulseForce = jLin * c.otherNormal / deltaTs;
+				AddForce(collisionImpulseForce);
+
+				//Temorarily we are pushing back the object to prevent sinking
+				position = c.collisionPoint;
+			}
+			
 		}
 
 
@@ -122,11 +143,6 @@ void DynamicObject::RungeKutta4(float deltaTs)
 	position += velocity * deltaTs;
 }
 
-void DynamicObject::SetRadius(float newRad)
-{
-	radius = newRad;
-}
-
 DynamicObject::DynamicObject()
 {
 	// Initialise everything here
@@ -136,7 +152,6 @@ DynamicObject::DynamicObject()
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 	simulated = false;
-	radius = 1.0f;
 	mass = 0;
 	netForce = glm::vec3(0);
 }
