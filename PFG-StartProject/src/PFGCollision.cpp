@@ -4,8 +4,6 @@
 
 namespace PFG
 {
-	Collision CheckCollision(std::shared_ptr<Collider> A, std::shared_ptr<Collider> B, bool& didCollide);
-
 	/// <summary>
 	/// Distance of point from plane.
 	/// </summary>
@@ -74,8 +72,6 @@ namespace PFG
 	}
 	bool MovingSphereToPlaneCollision(std::shared_ptr<SphereCollider> sph, std::shared_ptr<InfinitePlaneCollider> pla, Collision& collision)
 	{
-		float t;
-
 		float distanceBefore = DistanceToPlane(pla->planeNormal, sph->pos, pla->pointOnPlane);
 		float distanceAfter = DistanceToPlane(pla->planeNormal, sph->nextPos, pla->pointOnPlane);
 
@@ -83,20 +79,54 @@ namespace PFG
 		{
 			collision.collisionPoint = sph->pos;
 			collision.otherNormal = pla->planeNormal;
+			collision.returnPosition = collision.collisionPoint + (sph->radius * collision.otherNormal);//FIND CORRECT SOLUTION
 			collision.otherBounciness = pla->bounciness;
+			collision.otherInverseMass = 0;
 			return true;
 		}
-		else if (distanceBefore > sph->radius && distanceAfter < sph->radius)
+		else if (distanceBefore > sph->radius && distanceAfter <= sph->radius)
 		{
+			float t;
+
 			t = (distanceBefore - sph->radius) / (distanceBefore - distanceAfter);
 			collision.collisionPoint = (1 - t) * sph->pos + t * sph->nextPos;
 			collision.otherNormal = pla->planeNormal;
+			collision.returnPosition = collision.collisionPoint + (sph->radius * collision.otherNormal);//FIND CORRECT SOLUTION
 			collision.otherBounciness = pla->bounciness;
+			collision.otherInverseMass = 0;
 			return true;
 		}
 
 		return false;
 	}
+
+	bool SphereToSphereCollision(std::shared_ptr<SphereCollider> A, std::shared_ptr<SphereCollider> B, Collision& collision) 
+	{
+		float distanceBefore = glm::distance( A->pos, B->pos);
+		float distanceAfter = glm::distance(A->nextPos, B->nextPos);
+
+		if (distanceBefore <= A->radius + B->radius) 
+		{
+			collision.collisionPoint = A->pos;
+			collision.otherNormal = glm::normalize(A->pos - B->pos);
+			collision.returnPosition = collision.collisionPoint + (0.05f * collision.otherNormal);//FIND CORRECT SOLUTION
+			collision.otherBounciness = B->bounciness;
+			collision.otherInverseMass = B->parent->GetInverseMass();
+			return true;
+		}
+		else if (distanceBefore > A->radius + B->radius && distanceAfter <= A->radius + B->radius)
+		{
+			float t = (distanceBefore - A->radius) / (distanceBefore - distanceAfter);
+			collision.collisionPoint = (1 - t) * A->pos + t * A->nextPos;
+			collision.otherNormal = glm::normalize(A->pos - B->pos);
+			collision.returnPosition = collision.collisionPoint + (0.05f * collision.otherNormal); //FIND CORRECT SOLUTION
+			collision.otherBounciness = B->bounciness;
+			collision.otherInverseMass = B->parent->GetInverseMass();
+			return true;
+		}
+
+		return false;
+	};
 
 	/// <summary>
 	/// Checks for collision between two spheres.
@@ -123,11 +153,6 @@ namespace PFG
 		return false;
 	}
 
-	bool SphereToSphereCollision(glm::vec3 centre0, glm::vec3 centre1, float radius0, float radius1, Collision& collision)
-	{
-		return false;
-	}
-
 
 	Collision CheckCollision(std::shared_ptr<Collider> A, std::shared_ptr<Collider> B, bool& didCollide)
 	{
@@ -143,14 +168,14 @@ namespace PFG
 			{
 				//Assumes plane is static
 				didCollide = MovingSphereToPlaneCollision(std::static_pointer_cast<SphereCollider>(A), std::static_pointer_cast<InfinitePlaneCollider>(B), c);
-				c.otherInverseMass = 0;
-				c.otherBounciness = c.otherBounciness;
+			}
+			else if (B->GetType() == ColliderType::SPHERE) 
+			{
+				didCollide = SphereToSphereCollision(std::static_pointer_cast<SphereCollider>(A), std::static_pointer_cast<SphereCollider>(B), c);
 			}
 		}
 
 		return c;
-
-
 	}
 
 }
@@ -161,6 +186,7 @@ Collision::Collision()
 	otherBounciness = 0;
 	otherVelocity = glm::vec3(0);
 	collisionPoint = glm::vec3(0);
+	returnPosition = glm::vec3(0);
 	aNormal = glm::vec3(0);
 	otherNormal = glm::vec3(0);
 }

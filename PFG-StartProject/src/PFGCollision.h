@@ -3,6 +3,7 @@
 #include <memory>
 
 class Collider;
+class SphereCollider;
 class GameObject;
 
 struct Collision
@@ -11,6 +12,7 @@ struct Collision
 	float otherBounciness;
 	glm::vec3 otherVelocity;
 	glm::vec3 collisionPoint;
+	glm::vec3 returnPosition;
 	glm::vec3 aNormal;
 	glm::vec3 otherNormal;
 
@@ -30,6 +32,5 @@ namespace PFG
 
 	bool SphereToSphereCollision(glm::vec3 centre0, glm::vec3 centre1, float radius0, float radius1, glm::vec3& contactPoint);
 
-	bool SphereToSphereCollision(glm::vec3 centre0, glm::vec3 centre1, float radius0, float radius1, Collision& collision);
-
+	bool SphereToSphereCollision(std::shared_ptr<SphereCollider> A, std::shared_ptr<SphereCollider> B, Collision& collision);
 }

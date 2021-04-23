@@ -79,6 +79,8 @@ public:
 	virtual void Draw(glm::mat4 &viewMatrix, glm::mat4 &projMatrix);
 
 	virtual void SetSimulated(bool sim);
+
+	virtual float GetInverseMass();
 	
 	void AddCollision(Collision c);
 	void ClearCollisions();

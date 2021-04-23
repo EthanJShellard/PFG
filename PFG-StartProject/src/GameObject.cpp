@@ -73,6 +73,11 @@ void GameObject::SetSimulated(bool sim)
 	simulated = sim;
 }
 
+float GameObject::GetInverseMass()
+{
+	return 0.0f;
+}
+
 void GameObject::AddCollision(Collision c)
 {
 	collisions.push_back(c);

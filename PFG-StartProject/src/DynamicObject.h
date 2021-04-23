@@ -28,6 +28,7 @@ public:
 	void RungeKutta2(float deltaTs);
 	void RungeKutta4(float deltaTs);
 
+	float GetInverseMass() override;
 
 	void SetMass(float newMass);
 

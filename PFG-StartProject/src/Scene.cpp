@@ -86,15 +86,15 @@ Scene::Scene()
 	modelMesh->LoadOBJ("assets/models/sphere.obj");
 	// Tell the game object to use this mesh
 	smallSphere->SetMesh(modelMesh);
-	smallSphere->SetPosition(1.0f, 5.0f, 0.0f);
-	smallSphere->SetScale(0.3f, 0.3f, 0.3f);
-	smallSphere->SetVelocity(glm::vec3(4.0, 1.0, 0.0));
+	smallSphere->SetPosition(-1.0f, 5.0f, 0.0f);
+	smallSphere->SetScale(0.5f, 0.5f, 0.5f);
+	smallSphere->SetVelocity(glm::vec3(4.0f, 0.0f, 0.0f));
 	smallSphere->SetMass(2.0f);
 
 	bigSphere->SetMesh(modelMesh);
-	bigSphere->SetPosition(0.0f, 5.0f, 0.0f);
+	bigSphere->SetPosition(1.0f, 5.0f, 0.0f);
 	bigSphere->SetScale(0.5f, 0.5f, 0.5f);
-	bigSphere->SetVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
+	bigSphere->SetVelocity(glm::vec3(-4.0f, 0.0f, 0.0f));
 	bigSphere->SetMass(2.0f);
 
 	//CREATE COLLIDERS
@@ -106,7 +106,7 @@ Scene::Scene()
 
 	std::shared_ptr<SphereCollider> smallSphereCollider = std::make_shared<SphereCollider>();
 	smallSphereCollider->bounciness = 0.5f;
-	smallSphereCollider->radius = 0.3f;
+	smallSphereCollider->radius = 0.5f;
 	smallSphereCollider->scale = smallSphere->GetScale();
 	smallSphere->SetCollider(smallSphereCollider);
 

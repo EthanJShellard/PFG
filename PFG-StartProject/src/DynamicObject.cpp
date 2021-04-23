@@ -60,7 +60,7 @@ void DynamicObject::Update(float deltaTs)
 				AddForce(collisionImpulseForce);
 
 				//Temorarily we are pushing back the object to prevent sinking
-				position = c.collisionPoint;
+				position = c.returnPosition;
 			}
 			
 		}
@@ -141,6 +141,12 @@ void DynamicObject::RungeKutta4(float deltaTs)
 
 	//Update position using velocity
 	position += velocity * deltaTs;
+}
+
+float DynamicObject::GetInverseMass()
+{
+	if (mass != 0) return 1 / mass;
+	else return 0; //Will make it clear something is wrong
 }
 
 DynamicObject::DynamicObject()
