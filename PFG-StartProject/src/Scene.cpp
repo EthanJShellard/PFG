@@ -16,7 +16,7 @@ Scene::Scene()
 	_simulation_start = false;
 
 	// Position of the light, in world-space
-	_lightPosition = glm::vec3(10, 10, 0);
+	_lightPosition = glm::vec3(0, 10, 0);
 
 	// Create a game object
 	std::shared_ptr<DynamicObject> smallSphere = std::make_shared<DynamicObject>();
@@ -55,15 +55,15 @@ Scene::Scene()
 	// Tell the game object to use this mesh
 	_level->SetMesh(groundMesh);
 	_level->SetPosition(0.0f, 0.0f, 0.0f);
-	_level->SetRotation(3.141590f, 0.0f, 0.0f);
+	_level->SetRotation(0.0f, 0.0f, 0.0f);
 	_level->SetScale(1.5f, 1.0f, 1.5f);
 	wallEast->SetMesh(groundMesh);
 	wallEast->SetPosition(7.5f, 7.5f, 0.0f);
-	wallEast->SetRotation(glm::radians(90.0f), glm::radians(-90.0f), 0.0f);
+	wallEast->SetRotation(glm::radians(90.0f), glm::radians(90.0f), 0.0f);
 	wallEast->SetScale(1.5f, 1.0f, 1.5f);
 	wallWest->SetMesh(groundMesh);
 	wallWest->SetPosition(-7.5f, 7.5f, 0.0f);
-	wallWest->SetRotation(glm::radians(90.0f), glm::radians(90.0f), 0.0f);
+	wallWest->SetRotation(glm::radians(90.0f), glm::radians(-90.0f), 0.0f);
 	wallWest->SetScale(1.5f, 1.0f, 1.5f);
 	wallNorth->SetMesh(groundMesh);
 	wallNorth->SetPosition(0.0f, 7.5f, -7.5f);
