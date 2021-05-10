@@ -1,5 +1,6 @@
 #include <GLM/gtc/type_ptr.hpp>
 #include <GLM/gtc/matrix_transform.hpp>
+#include "glm/gtx/quaternion.hpp"
 #include "GameObject.h"
 
 /*! \brief Brief description.
@@ -44,7 +45,9 @@ void GameObject::Update(float deltaTs)
 	// Make sure matrices are up to date (if you don't change them elsewhere, you can put this in the update function)
 	//_modelMatrix = glm::rotate(_modelMatrix, _rotation.y, glm::vec3(0,1,0) );
 	//_invModelMatrix = glm::rotate(glm::mat4(1.0f), -_rotation.y, glm::vec3(0,1,0) );
-	modelMatrix = glm::translate(glm::mat4(1.0f), position);
+	modelMatrix = glm::mat4();
+	modelMatrix = glm::toMat4(rotation) * modelMatrix;
+	modelMatrix = glm::translate(glm::mat4(), position) * modelMatrix;
 	modelMatrix = glm::scale(modelMatrix, scale);
 }
 
@@ -102,6 +105,16 @@ void GameObject::SetCollider(std::shared_ptr<Collider> newCollider)
 void GameObject::UpdateCollider(float deltaTs)
 {
 	if (!collider) return;
-	collider->pos = position;
-	collider->nextPos = position + (velocity * deltaTs);
+	collider->Update(deltaTs);
+}
+
+void GameObject::InitialiseCollider()
+{
+	if (!collider) return;
+	collider->Initialise();
+}
+
+float GameObject::GetMass()
+{
+	return 0.0f;
 }

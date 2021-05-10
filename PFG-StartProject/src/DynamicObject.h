@@ -8,6 +8,15 @@ private:
 	float mass;
 	//Net force on the object
 	glm::vec3 netForce;
+	//Rate of change of rotation
+	glm::quat angularVelocity;
+	//Sum of torques on this object
+	glm::quat netTorque;
+	//Angular momentum
+	glm::mat4 angularMomentum;
+
+
+
 public:
 
 	void UpdateModelMatrix();
@@ -30,6 +39,7 @@ public:
 
 	float GetInverseMass() override;
 
+	float GetMass() override;
 	void SetMass(float newMass);
 
 	DynamicObject();

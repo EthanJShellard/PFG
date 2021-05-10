@@ -5,6 +5,8 @@
 #include "Material.h"
 #include "PFGCollision.h"
 #include "Collider.h"
+#include "glm/gtx/quaternion.hpp"
+#include "glm/gtx/euler_angles.hpp"
 #include <vector>
 #include <memory>
 
@@ -48,7 +50,10 @@ public:
 	* @param float rotY y rotation
 	* @param float rotZ z rotation
 	*/
-	void SetRotation( float rotX, float rotY, float rotZ ) {rotation.x = rotX; rotation.y = rotY; rotation.z = rotZ;}
+	void SetRotation(float rotX, float rotY, float rotZ) { rotation = glm::quat(glm::orientate3(glm::vec3(rotX, rotY, rotZ))); }
+	
+	void Rotate(float angle, glm::vec3 axis) { rotation = glm::angleAxis(angle, axis) * rotation; };
+
 	/** Function for setting scale for the game object
 	* @param float sX x scale
 	* @param float sY y scale
@@ -90,7 +95,8 @@ public:
 	void SetCollider(std::shared_ptr<Collider> newCollider);
 
 	void UpdateCollider(float deltaTs);
-
+	void InitialiseCollider();
+	virtual float GetMass();
 protected:
 
 	/** The model geometry
@@ -115,13 +121,15 @@ protected:
 	/** Orientation of the model
 	* The model matrix must be built from the orientation of the model geometry
 	*/
-	glm::vec3 rotation;
+	glm::quat rotation;
 	/** Scale of the model
 	* The model matrix must be built from the scale of the model geometry
 	*/
 	glm::vec3 scale;
 
 	glm::vec3 velocity;
+
+	
 
 	//Collider and Collisions
 	std::shared_ptr<Collider> collider;

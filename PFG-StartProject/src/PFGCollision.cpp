@@ -1,9 +1,15 @@
 #include "glm/glm.hpp"
 #include "PFGCollision.h"
 #include "Collider.h"
+#include <iostream>
 
 namespace PFG
 {
+	glm::vec3 Interpolate(float t, glm::vec3 pos1, glm::vec3 pos2) 
+	{
+		return ((1 - t) * pos1)  +  (t * pos2);
+	}
+
 	/// <summary>
 	/// Distance of point from plane.
 	/// </summary>
@@ -79,7 +85,7 @@ namespace PFG
 		{
 			collision.collisionPoint = sph->pos;
 			collision.otherNormal = pla->planeNormal;
-			collision.returnPosition = collision.collisionPoint + (sph->radius * collision.otherNormal);//FIND CORRECT SOLUTION
+			collision.returnPosition = sph->pos + (pla->planeNormal * (sph->radius - distanceBefore));//FIND CORRECT SOLUTION
 			collision.otherBounciness = pla->bounciness;
 			collision.otherInverseMass = 0;
 			return true;
@@ -87,11 +93,12 @@ namespace PFG
 		else if (distanceBefore > sph->radius && distanceAfter <= sph->radius)
 		{
 			float t;
-
 			t = (distanceBefore - sph->radius) / (distanceBefore - distanceAfter);
-			collision.collisionPoint = (1 - t) * sph->pos + t * sph->nextPos;
+
+			t= std::max(std::min(t, 1.0f), 0.0f); //Clamp to [0,1]
+			collision.collisionPoint = Interpolate(t, sph->pos, sph->nextPos);
 			collision.otherNormal = pla->planeNormal;
-			collision.returnPosition = collision.collisionPoint + (sph->radius * collision.otherNormal);//FIND CORRECT SOLUTION
+			collision.returnPosition = collision.collisionPoint + (pla->planeNormal * (sph->radius - DistanceToPlane(pla->planeNormal, collision.collisionPoint, pla->pointOnPlane)));//FIND CORRECT SOLUTION
 			collision.otherBounciness = pla->bounciness;
 			collision.otherInverseMass = 0;
 			return true;
@@ -107,23 +114,25 @@ namespace PFG
 
 		if (distanceBefore <= A->radius + B->radius) 
 		{
-			collision.collisionPoint = A->pos;
 			collision.otherNormal = glm::normalize(A->pos - B->pos);
-			collision.returnPosition = collision.collisionPoint + (0.05f * collision.otherNormal);//FIND CORRECT SOLUTION
+			collision.collisionPoint = A->pos + (collision.otherNormal * A->radius);
+			collision.returnPosition = A->pos + (collision.otherNormal * (A->radius + B->radius - distanceBefore));// A->pos;//FIND CORRECT SOLUTION
 			collision.otherBounciness = B->bounciness;
 			collision.otherInverseMass = B->parent->GetInverseMass();
 			return true;
 		}
-		else if (distanceBefore > A->radius + B->radius && distanceAfter <= A->radius + B->radius)
-		{
-			float t = (distanceBefore - A->radius) / (distanceBefore - distanceAfter);
-			collision.collisionPoint = (1 - t) * A->pos + t * A->nextPos;
-			collision.otherNormal = glm::normalize(A->pos - B->pos);
-			collision.returnPosition = collision.collisionPoint + (0.05f * collision.otherNormal); //FIND CORRECT SOLUTION
-			collision.otherBounciness = B->bounciness;
-			collision.otherInverseMass = B->parent->GetInverseMass();
-			return true;
-		}
+		//else if (distanceBefore > A->radius + B->radius && distanceAfter <= A->radius + B->radius)
+		//{
+		//	float t = (distanceBefore - A->radius) / (distanceBefore - distanceAfter);
+		//	t = std::max(std::min(t, 1.0f), 0.0f); //Clamp to [0,1]
+		//	std::cout << t << std::endl;
+		//	collision.collisionPoint = Interpolate(t, A->pos, A->nextPos);
+		//	collision.otherNormal = glm::normalize(A->pos - B->pos);
+		//	collision.returnPosition = Interpolate(t, B->pos, B->nextPos) + (collision.otherNormal * ((A->radius + B->radius))); //collision.collisionPoint; //FIND CORRECT SOLUTION
+		//	collision.otherBounciness = B->bounciness;
+		//	collision.otherInverseMass = B->parent->GetInverseMass();
+		//	return true;
+		//}
 
 		return false;
 	};
@@ -174,6 +183,8 @@ namespace PFG
 				didCollide = SphereToSphereCollision(std::static_pointer_cast<SphereCollider>(A), std::static_pointer_cast<SphereCollider>(B), c);
 			}
 		}
+
+		c.otherVelocity = B->velocity;
 
 		return c;
 	}

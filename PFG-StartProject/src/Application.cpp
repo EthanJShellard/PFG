@@ -75,6 +75,8 @@ bool Application::Init()
 	// This means we are using the latest version and cannot use the deprecated functions
 	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 8);
+
 	// Create the SDL window
 	window = SDL_CreateWindow("Physics Simulation", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
@@ -100,7 +102,7 @@ bool Application::Init()
 	// Enable the depth test to make sure triangles in front are always in front no matter the order they are drawn
 	// When you do this, don't forget to clear the depth buffer at the start of each frame - otherwise you just get an empty screen!
 	glEnable(GL_DEPTH_TEST);
-
+	glEnable(GL_MULTISAMPLE);
 	// The scene contains all the objects etc
     myScene = new Scene();
 

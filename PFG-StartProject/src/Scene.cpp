@@ -21,6 +21,9 @@ Scene::Scene()
 	// Create a game object
 	std::shared_ptr<DynamicObject> smallSphere = std::make_shared<DynamicObject>();
 	std::shared_ptr<DynamicObject> bigSphere = std::make_shared<DynamicObject>();
+	std::shared_ptr<GameObject> wallEast = std::make_shared<GameObject>();
+	std::shared_ptr<GameObject> wallNorth = std::make_shared<GameObject>();
+	std::shared_ptr<GameObject> wallWest = std::make_shared<GameObject>();
 	// Create a game level object
 	_level = std::make_shared<GameObject>();
 
@@ -41,6 +44,9 @@ Scene::Scene()
 	modelMaterial->SetLightPosition(_lightPosition);
 	// Tell the level object to use this material
 	_level->SetMaterial(modelMaterial);
+	wallEast->SetMaterial(modelMaterial);
+	wallWest->SetMaterial(modelMaterial);
+	wallNorth->SetMaterial(modelMaterial);
 
 	// The mesh is the geometry for the object
 	Mesh *groundMesh = new Mesh();
@@ -51,6 +57,18 @@ Scene::Scene()
 	_level->SetPosition(0.0f, 0.0f, 0.0f);
 	_level->SetRotation(3.141590f, 0.0f, 0.0f);
 	_level->SetScale(1.5f, 1.0f, 1.5f);
+	wallEast->SetMesh(groundMesh);
+	wallEast->SetPosition(7.5f, 7.5f, 0.0f);
+	wallEast->SetRotation(glm::radians(90.0f), glm::radians(-90.0f), 0.0f);
+	wallEast->SetScale(1.5f, 1.0f, 1.5f);
+	wallWest->SetMesh(groundMesh);
+	wallWest->SetPosition(-7.5f, 7.5f, 0.0f);
+	wallWest->SetRotation(glm::radians(90.0f), glm::radians(90.0f), 0.0f);
+	wallWest->SetScale(1.5f, 1.0f, 1.5f);
+	wallNorth->SetMesh(groundMesh);
+	wallNorth->SetPosition(0.0f, 7.5f, -7.5f);
+	wallNorth->SetRotation(glm::radians(90.0f), 0.0f, 0.0f);
+	wallNorth->SetScale(1.5f, 1.0f, 1.5f);
 
 	// Create the material for the game object- level
 	Material *objectMaterial = new Material();
@@ -98,22 +116,23 @@ Scene::Scene()
 	bigSphere->SetMass(2.0f);
 
 	//CREATE COLLIDERS
-	std::shared_ptr<InfinitePlaneCollider> levelCollider = std::make_shared<InfinitePlaneCollider>();
+	std::shared_ptr<InfinitePlaneCollider> levelCollider = std::make_shared<InfinitePlaneCollider>(glm::vec3(0, 1, 0), glm::vec3(0, 0, 0));
 	levelCollider->bounciness = 0.2;
-	levelCollider->pointOnPlane = glm::vec3(0, 0, 0);
-	levelCollider->planeNormal = glm::vec3(0, 1, 0);
 	_level->SetCollider(levelCollider);
+	std::shared_ptr<InfinitePlaneCollider> wallWestCollider = std::make_shared<InfinitePlaneCollider>(glm::vec3(1, 0, 0), wallWest->GetPosition());
+	wallWestCollider->bounciness = 0.2;
+	wallWest->SetCollider(wallWestCollider);
+	std::shared_ptr<InfinitePlaneCollider> wallEastCollider = std::make_shared<InfinitePlaneCollider>(glm::vec3(-1, 0, 0), wallEast->GetPosition());
+	wallEastCollider->bounciness = 0.2;
+	wallEast->SetCollider(wallEastCollider);
+	std::shared_ptr<InfinitePlaneCollider> wallNorthCollider = std::make_shared<InfinitePlaneCollider>(glm::vec3(0, 0, -1), wallNorth->GetPosition());
+	wallNorthCollider->bounciness = 0.2;
+	wallNorth->SetCollider(wallNorthCollider);
 
-	std::shared_ptr<SphereCollider> smallSphereCollider = std::make_shared<SphereCollider>();
-	smallSphereCollider->bounciness = 0.5f;
-	smallSphereCollider->radius = 0.5f;
-	smallSphereCollider->scale = smallSphere->GetScale();
+	std::shared_ptr<SphereCollider> smallSphereCollider = std::make_shared<SphereCollider>(smallSphere->GetScale().x, 0.5f);
 	smallSphere->SetCollider(smallSphereCollider);
 
-	std::shared_ptr<SphereCollider> bigSphereCollider = std::make_shared<SphereCollider>();
-	bigSphereCollider->bounciness = 0.5f;
-	bigSphereCollider->radius = 0.5f;
-	bigSphereCollider->scale = bigSphere->GetScale();
+	std::shared_ptr<SphereCollider> bigSphereCollider = std::make_shared<SphereCollider>(bigSphere->GetScale().x , 0.5f);
 	bigSphere->SetCollider(bigSphereCollider);
 	/////////////////////////////////
 
@@ -122,6 +141,14 @@ Scene::Scene()
 	gameObjects.push_back(smallSphere);
 	gameObjects.push_back(bigSphere);
 	gameObjects.push_back(_level);
+	gameObjects.push_back(wallEast);
+	gameObjects.push_back(wallWest);
+	gameObjects.push_back(wallNorth);
+
+	for (int i = 0; i < gameObjects.size(); i++) 
+	{
+		gameObjects.at(i)->InitialiseCollider();
+	}
 }
 
 Scene::~Scene()
@@ -134,6 +161,7 @@ Scene::~Scene()
 
 void Scene::Update(float deltaTs, Input* input)
 {
+
 	if (input->cmd_x)
 	{
 		//_physics_object->SetSimulated(true);

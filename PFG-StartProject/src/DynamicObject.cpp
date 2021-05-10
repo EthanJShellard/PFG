@@ -43,14 +43,26 @@ void DynamicObject::Update(float deltaTs)
 		//	//velocity = glm::vec3(0.0, 0.0, 0.0);
 		//}
 
+		glm::vec3 finalReturnPos = position + (velocity * deltaTs);
+		float shortestLength = length(finalReturnPos);
+
 		if (collisions.size() > 0) 
 		{
 			//Impulse collision response for each collision
 			for (int i = 0; i < collisions.size(); i++) 
 			{
 				Collision c = collisions.at(i);
+				
+				//Go back to return position
+				if (float l = glm::length(c.returnPosition - position) < shortestLength)
+				{
+					position = c.returnPosition;
+					shortestLength = l;
+					collider->ComputeCentreOfMass();
+				}
 
-				//	//Ja = -(1 + e)(Va- Vb) . n / (1/ma) + (1/mb)
+				//Impulse response
+				//	//Ja = -(1 + e)(Va- Vb) . n / (1/ma) + (1/mb				
 				glm::vec3 relativeVelocity = velocity - c.otherVelocity;
 				float surfaceCharacteristics = collider->bounciness + c.otherBounciness;
 				float eCoef = -(1.0f + surfaceCharacteristics) * glm::dot(relativeVelocity, c.otherNormal);
@@ -59,8 +71,7 @@ void DynamicObject::Update(float deltaTs)
 				glm::vec3 collisionImpulseForce = jLin * c.otherNormal / deltaTs;
 				AddForce(collisionImpulseForce);
 
-				//Temorarily we are pushing back the object to prevent sinking
-				position = c.returnPosition;
+				simulated = false;
 			}
 			
 		}
@@ -149,6 +160,7 @@ float DynamicObject::GetInverseMass()
 	else return 0; //Will make it clear something is wrong
 }
 
+
 DynamicObject::DynamicObject()
 {
 	// Initialise everything here
@@ -160,6 +172,9 @@ DynamicObject::DynamicObject()
 	simulated = false;
 	mass = 0;
 	netForce = glm::vec3(0);
+	angularMomentum = glm::mat4();
+	netTorque = glm::quat();
+	angularVelocity = glm::quat();
 }
 
 DynamicObject::~DynamicObject()
@@ -181,6 +196,11 @@ void DynamicObject::ClearForces()
 	netForce = glm::vec3(0);
 }
 
+float DynamicObject::GetMass()
+{
+	return mass;
+}
+
 void DynamicObject::SetMass(float newMass)
 {
 	mass = newMass;
@@ -188,7 +208,8 @@ void DynamicObject::SetMass(float newMass)
 
 void DynamicObject::UpdateModelMatrix()
 {
-	modelMatrix = glm::translate(glm::mat4(1), position);
+	modelMatrix = glm::mat4();
+	modelMatrix = glm::toMat4(rotation) * modelMatrix;
+	modelMatrix = glm::translate(glm::mat4(), position) * modelMatrix;
 	modelMatrix = glm::scale(modelMatrix, scale);
-	invModelMatrix = glm::inverse(modelMatrix);
 }
