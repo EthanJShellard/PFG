@@ -6,7 +6,6 @@ material 0
     lightposition 0 10 0
     texture assets/textures/diffuse.bmp
 }
-
 material 1
 {
     vert assets/shaders/VertShader.txt
@@ -15,7 +14,6 @@ material 1
     lightposition 0 10 0
     texture assets/textures/default.bmp
 }
-
 material 2
 {
     vert assets/shaders/VertShader.txt
@@ -24,22 +22,17 @@ material 2
     lightposition 0 10 0
     texture assets/textures/default.bmp
 }
-
 mesh assets/models/woodfloor.obj 0
 mesh assets/models/sphere.obj 1
-
 gameobject floorPlane
 {
     simulated 1
     id 0
-
     mesh 0
     material 0
-
     position 0.0 0.0 0.0
     scale 1.5 1.0 1.5
     rotation 0.0 0.0 0.0
-
     collider
     {
         type plane
@@ -49,19 +42,15 @@ gameobject floorPlane
         point 0.0 0.0 0.0
     }
 }
-
 gameobject eastWall
 {
     simulated 1
     id 2
-
     mesh 0
     material 0
-
     position 7.5 7.5 0.0
     rotation 90.0 90.0 0.0
     scale 1.5 1.0 1.5
-
     collider
     {
         type plane
@@ -71,19 +60,15 @@ gameobject eastWall
         point 7.5 7.5 0.0
     }
 }
-
 gameobject westWall
 {
     simulated 1
     id 3
-
     mesh 0
     material 0
-
     position -7.5 7.5 0.0
     rotation 90.0 -90.0 0.0
     scale 1.5 1.0 1.5
-
     collider
     {
         type plane
@@ -93,19 +78,15 @@ gameobject westWall
         point -7.5 7.5 0.0
     }
 }
-
 gameobject westWall
 {
     simulated 1
     id 4
-
     mesh 0
     material 0
-
     position 0.0 7.5 -7.5
     rotation 90.0 0.0 0.0
     scale 1.5 1.0 1.5
-
     collider
     {
         type plane
@@ -115,15 +96,12 @@ gameobject westWall
         point 0.0 7.5 -7.5
     }
 }
-
 dynamicobject smallSphere
 {
     simulated 0
     id 10
-
     mesh 1
     material 1
-
     position -1.0 5.0 0.0
     scale 0.5 0.5 0.5
     velocity 6.0 0.0 0.0
@@ -138,28 +116,24 @@ dynamicobject smallSphere
         radius 0.5
     }
 }
-
 dynamicobject bigSphere
 {
     simulated 0
     id 11
-
     mesh 1
     material 2
-
     position 1.0 5.0 0.0
-    scale 0.5 0.5 0.5
+    scale 1.0 1.0 1.0
     velocity -6.0 0.0 0.0
     rotation 0.0 0.0 0.0
-    mass 2.0
+    mass 4.0
 
     collider
     {
         type sphere
         bounciness 0.6
         friction 0.2
-        radius 0.5
+        radius 1.0
     }
 }
-
 cameraposition 0 5 10

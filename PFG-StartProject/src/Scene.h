@@ -48,9 +48,7 @@ public:
 private:
 
 	std::vector< std::shared_ptr<GameObject> > gameObjects;
-	/** An example game level in the scene
-	*/
-	std::shared_ptr<GameObject> _level; 
+
 	/** The main camera in the scene 
 	*/
 	Camera* _camera; 
