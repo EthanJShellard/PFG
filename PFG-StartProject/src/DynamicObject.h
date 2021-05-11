@@ -9,11 +9,11 @@ private:
 	//Net force on the object
 	glm::vec3 netForce;
 	//Rate of change of rotation
-	glm::quat angularVelocity;
+	glm::vec3 angularVelocity;
 	//Sum of torques on this object
-	glm::quat netTorque;
+	glm::vec3 netTorque;
 	//Angular momentum
-	glm::mat4 angularMomentum;
+	glm::vec3 angularMomentum;
 
 
 
@@ -23,6 +23,7 @@ public:
 
 	void Update(float deltaTs);
 	void AddForce(glm::vec3 force);
+	void AddTorque(glm::vec3 torque);
 	void SetForce(glm::vec3 newForce);
 	void ClearForces();
 	/// <summary>

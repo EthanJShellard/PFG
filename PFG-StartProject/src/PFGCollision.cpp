@@ -83,24 +83,21 @@ namespace PFG
 
 		if (glm::abs(distanceBefore) <= sph->radius)
 		{
-			collision.collisionPoint = sph->pos;
 			collision.otherNormal = pla->planeNormal;
-			collision.returnPosition = sph->pos + (pla->planeNormal * (sph->radius - distanceBefore));//FIND CORRECT SOLUTION
-			collision.otherBounciness = pla->bounciness;
-			collision.otherInverseMass = 0;
+			collision.collisionPoint = sph->pos - (pla->planeNormal * (distanceBefore));
+			collision.returnPosition = sph->pos - (sph->radius * -collision.otherNormal) - (collision.otherNormal * distanceBefore);
 			return true;
 		}
 		else if (distanceBefore > sph->radius && distanceAfter <= sph->radius)
 		{
+			
 			float t;
 			t = (distanceBefore - sph->radius) / (distanceBefore - distanceAfter);
-
 			t= std::max(std::min(t, 1.0f), 0.0f); //Clamp to [0,1]
-			collision.collisionPoint = Interpolate(t, sph->pos, sph->nextPos);
+			glm::vec3 posAtCollision = Interpolate(t, sph->pos, sph->nextPos);
+			collision.collisionPoint = posAtCollision - (pla->planeNormal * (sph->radius));;
 			collision.otherNormal = pla->planeNormal;
-			collision.returnPosition = collision.collisionPoint + (pla->planeNormal * (sph->radius - DistanceToPlane(pla->planeNormal, collision.collisionPoint, pla->pointOnPlane)));//FIND CORRECT SOLUTION
-			collision.otherBounciness = pla->bounciness;
-			collision.otherInverseMass = 0;
+			collision.returnPosition = posAtCollision;
 			return true;
 		}
 
@@ -116,9 +113,8 @@ namespace PFG
 		{
 			collision.otherNormal = glm::normalize(A->pos - B->pos);
 			collision.collisionPoint = A->pos + (collision.otherNormal * A->radius);
-			collision.returnPosition = A->pos + (collision.otherNormal * (A->radius + B->radius - distanceBefore));// A->pos;//FIND CORRECT SOLUTION
-			collision.otherBounciness = B->bounciness;
-			collision.otherInverseMass = B->parent->GetInverseMass();
+			collision.returnPosition = A->pos + (collision.otherNormal * (A->radius + B->radius - distanceBefore));// A->pos;//FIND CORRECT SOLUTION??
+			
 			return true;
 		}
 		//else if (distanceBefore > A->radius + B->radius && distanceAfter <= A->radius + B->radius)
@@ -185,6 +181,9 @@ namespace PFG
 		}
 
 		c.otherVelocity = B->velocity;
+		c.otherBounciness = B->bounciness;
+		c.otherInverseMass = B->parent->GetInverseMass();
+		c.otherFriction = B->friction;
 
 		return c;
 	}
@@ -195,6 +194,7 @@ Collision::Collision()
 {
 	otherInverseMass = 0;
 	otherBounciness = 0;
+	otherFriction = 0;
 	otherVelocity = glm::vec3(0);
 	collisionPoint = glm::vec3(0);
 	returnPosition = glm::vec3(0);

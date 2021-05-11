@@ -106,34 +106,42 @@ Scene::Scene()
 	smallSphere->SetMesh(modelMesh);
 	smallSphere->SetPosition(-1.0f, 5.0f, 0.0f);
 	smallSphere->SetScale(0.5f, 0.5f, 0.5f);
-	smallSphere->SetVelocity(glm::vec3(4.0f, 0.0f, 0.0f));
+	smallSphere->SetVelocity(glm::vec3(6.0f, 0.0f, 0.0f));
 	smallSphere->SetMass(2.0f);
 
 	bigSphere->SetMesh(modelMesh);
 	bigSphere->SetPosition(1.0f, 5.0f, 0.0f);
 	bigSphere->SetScale(0.5f, 0.5f, 0.5f);
-	bigSphere->SetVelocity(glm::vec3(-4.0f, 0.0f, 0.0f));
+	bigSphere->SetVelocity(glm::vec3(-6.0f, 0.0f, 0.0f));
 	bigSphere->SetMass(2.0f);
 
 	//CREATE COLLIDERS
 	std::shared_ptr<InfinitePlaneCollider> levelCollider = std::make_shared<InfinitePlaneCollider>(glm::vec3(0, 1, 0), glm::vec3(0, 0, 0));
-	levelCollider->bounciness = 0.2;
+	levelCollider->bounciness = 0.3f;
+	levelCollider->friction = 0.2f;
 	_level->SetCollider(levelCollider);
 	std::shared_ptr<InfinitePlaneCollider> wallWestCollider = std::make_shared<InfinitePlaneCollider>(glm::vec3(1, 0, 0), wallWest->GetPosition());
-	wallWestCollider->bounciness = 0.2;
+	wallWestCollider->bounciness = 0.3f;
+	wallWestCollider->friction = 0.2f;
 	wallWest->SetCollider(wallWestCollider);
 	std::shared_ptr<InfinitePlaneCollider> wallEastCollider = std::make_shared<InfinitePlaneCollider>(glm::vec3(-1, 0, 0), wallEast->GetPosition());
-	wallEastCollider->bounciness = 0.2;
+	wallEastCollider->bounciness = 0.3f;
+	wallEastCollider->friction = 0.2f;
 	wallEast->SetCollider(wallEastCollider);
 	std::shared_ptr<InfinitePlaneCollider> wallNorthCollider = std::make_shared<InfinitePlaneCollider>(glm::vec3(0, 0, -1), wallNorth->GetPosition());
-	wallNorthCollider->bounciness = 0.2;
+	wallNorthCollider->bounciness = 0.3f;
+	wallNorthCollider->friction = 0.2f;
 	wallNorth->SetCollider(wallNorthCollider);
 
 	std::shared_ptr<SphereCollider> smallSphereCollider = std::make_shared<SphereCollider>(smallSphere->GetScale().x, 0.5f);
 	smallSphere->SetCollider(smallSphereCollider);
+	smallSphereCollider->bounciness = 0.5;
+	smallSphereCollider->friction = 0.2f;
 
 	std::shared_ptr<SphereCollider> bigSphereCollider = std::make_shared<SphereCollider>(bigSphere->GetScale().x , 0.5f);
 	bigSphere->SetCollider(bigSphereCollider);
+	bigSphereCollider->bounciness = 0.5f;
+	bigSphereCollider->friction = 0.2f;
 	/////////////////////////////////
 
 	GetCamera()->SetPos(GetCamera()->GetPos() + glm::vec3(0.0, 0.0, 10.0));

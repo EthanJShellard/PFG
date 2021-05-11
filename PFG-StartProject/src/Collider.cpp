@@ -17,6 +17,7 @@ Collider::Collider()
 	pos = glm::vec3(0);
 	nextPos = glm::vec3(0);
 	bounciness = 0;
+	friction = 0;
 	parent = nullptr;
 	mass = 0;
 	type = ColliderType::SPHERE;

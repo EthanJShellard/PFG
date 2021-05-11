@@ -14,6 +14,7 @@ struct Collider
 	//Next position if no collision - used for collision detection
 	glm::vec3 nextPos;
 	float bounciness;
+	float friction;
 	glm::vec3 velocity;
 	glm::vec3 centreOfMass;
 	float mass;

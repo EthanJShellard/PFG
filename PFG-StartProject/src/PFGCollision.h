@@ -10,6 +10,7 @@ struct Collision
 {
 	float otherInverseMass;
 	float otherBounciness;
+	float otherFriction;
 	glm::vec3 otherVelocity;
 	glm::vec3 collisionPoint;
 	glm::vec3 returnPosition;
