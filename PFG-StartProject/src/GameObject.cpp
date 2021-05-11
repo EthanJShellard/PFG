@@ -17,6 +17,7 @@ GameObject::GameObject()
 	scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 	simulated = false;
+	ID = 0;
 }
 
 GameObject::~GameObject()
@@ -118,4 +119,14 @@ void GameObject::InitialiseCollider()
 float GameObject::GetMass()
 {
 	return 0.0f;
+}
+
+std::shared_ptr<Mesh> GameObject::GetMesh()
+{
+	return mesh;
+}
+
+std::shared_ptr<Material> GameObject::GetMaterial()
+{
+	return material;
 }

@@ -23,10 +23,9 @@ Collider::Collider()
 	type = ColliderType::SPHERE;
 }
 
-SphereCollider::SphereCollider(float _radius, float _bounciness)
+SphereCollider::SphereCollider(float _radius)
 {
 	radius = _radius;
-	bounciness = _bounciness;
 
 	type = ColliderType::SPHERE;
 }

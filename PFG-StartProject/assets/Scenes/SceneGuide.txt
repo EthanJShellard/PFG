@@ -1,0 +1,67 @@
+material
+{
+    vert "PATH"
+    frag "PATH"
+    colour R G B
+    texture "PATH"
+    lightposition x y z
+}
+
+mesh "path"
+
+cameraposition x y z
+
+gameobject
+{
+    mesh indexOfMesh
+    simulated 1/0 (true / false)
+    id int
+
+    position x y z
+    scale x y z
+    velocity x y z
+    rotation x y z
+
+    material indexOfMaterial
+
+    collider
+    {
+        bounciness b
+        friction f
+        type sphere/plane 
+        param 1
+        param 2
+    }
+
+}
+
+dynamicobject
+{
+    mesh indexOfMesh
+    simulated bool
+
+    position x y z
+    scale x y z
+    velocity x y z
+    rotation x y z
+
+    mass float
+    angularvelocity x y z
+
+    material indexOfMaterial
+    
+
+    collider
+    {
+        bounciness b
+        friction f
+        type
+        {
+            typeindex (enum) 
+            param 1
+            param 2
+            ... add into vector
+        }
+    }
+
+}

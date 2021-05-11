@@ -6,6 +6,7 @@
 #include <GLM/gtc/matrix_transform.hpp> // This one lets us use matrix transformations
 
 #include <vector>
+#include <memory>
 #include <iostream>
 
 /*! \brief Brief description.
@@ -41,7 +42,7 @@ private:
 	
 	/** Game and simulation content 
 	*/
-	Scene* myScene; /*!< The game scene*/
+	std::shared_ptr<Scene> myScene; /*!< The game scene*/
 	Input* input; /*!< The keyboard and mouse input */
 
 	

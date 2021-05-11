@@ -40,7 +40,7 @@ struct SphereCollider : public Collider
 {
 	float radius;
 
-	SphereCollider(float radius, float bounciness);
+	SphereCollider(float radius);
 	void ComputeCentreOfMass() override;
 	void Initialise() override;
 	void Update(float deltaTs) override;

@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "SceneLoader.h"
 #include "glew.h"
 
 #include "Scene.h"
@@ -102,9 +103,13 @@ bool Application::Init()
 	// Enable the depth test to make sure triangles in front are always in front no matter the order they are drawn
 	// When you do this, don't forget to clear the depth buffer at the start of each frame - otherwise you just get an empty screen!
 	glEnable(GL_DEPTH_TEST);
+	//Enable multisampling to smooth jagged edges
 	glEnable(GL_MULTISAMPLE);
+	
+	//LOAD SCENE HERE
 	// The scene contains all the objects etc
-    myScene = new Scene();
+	SceneLoader sl;
+	myScene = sl.LoadScene("assets/Scenes/Scene1.txt");
 
 	SDL_ShowCursor(true);
 	input = new Input();

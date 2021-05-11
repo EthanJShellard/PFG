@@ -43,11 +43,11 @@ public:
 	*/
 	void Draw();
 
+	void AddObject(std::shared_ptr<GameObject> newObject);
+	std::vector<std::shared_ptr<GameObject>> GetObjects();
 private:
 
 	std::vector< std::shared_ptr<GameObject> > gameObjects;
-
-	std::vector<KinematicObject*> kinematicObjects;
 	/** An example game level in the scene
 	*/
 	std::shared_ptr<GameObject> _level; 

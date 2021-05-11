@@ -30,11 +30,11 @@ public:
 	/** Function for setting mesh geometry for the game object 
 	* @param *input  a pointer to a mesh object
 	*/
-	void SetMesh(Mesh *input) {mesh = input;}
+	void SetMesh(std::shared_ptr<Mesh> input) {mesh = input;}
 	/** Function for setting material for the game object
 	* @param *input  a pointer to a material object
 	*/
-	void SetMaterial(Material *input) {material = input;}
+	void SetMaterial(std::shared_ptr<Material> input) {material = input;}
 	/** Function for setting position for the game object
 	* @param float posX x position
 	* @param float posY y position
@@ -51,6 +51,7 @@ public:
 	* @param float rotZ z rotation
 	*/
 	void SetRotation(float rotX, float rotY, float rotZ) { rotation = glm::quat(glm::orientate3(glm::vec3(rotX, rotY, rotZ))); }
+	void SetRotation(glm::vec3 newRot) { rotation = glm::quat(glm::orientate3(newRot)); }
 	
 	void Rotate(float angle, glm::vec3 axis) { rotation = glm::angleAxis(angle, axis) * rotation; };
 
@@ -60,6 +61,7 @@ public:
 	* @param float sZ z scale
 	*/
 	void SetScale(float sX, float sY, float sZ) { scale.x = sX; scale.y = sY; scale.z = sZ; }
+	void SetScale(glm::vec3 newScale) { scale = newScale; }
 	
 	void SetVelocity(glm::vec3 newVel);
 
@@ -95,16 +97,25 @@ public:
 	void SetCollider(std::shared_ptr<Collider> newCollider);
 
 	void UpdateCollider(float deltaTs);
+
 	void InitialiseCollider();
+
 	virtual float GetMass();
+
+	std::shared_ptr<Mesh> GetMesh();
+
+	std::shared_ptr<Material> GetMaterial();
+
+	int ID;
+
 protected:
 
 	/** The model geometry
 	*/
-	Mesh *mesh;
+	std::shared_ptr<Mesh> mesh;
 	/** The material contains the shader
 	*/
-	Material *material;
+	std::shared_ptr<Material> material;
 
 	/** Matrix for the position of the game object
 	*/ 

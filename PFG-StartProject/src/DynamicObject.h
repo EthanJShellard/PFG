@@ -24,6 +24,7 @@ public:
 	void Update(float deltaTs);
 	void AddForce(glm::vec3 force);
 	void AddTorque(glm::vec3 torque);
+	void SetAngularVelocity(glm::vec3 angVel);
 	void SetForce(glm::vec3 newForce);
 	void ClearForces();
 	/// <summary>

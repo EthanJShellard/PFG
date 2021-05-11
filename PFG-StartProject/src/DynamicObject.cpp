@@ -65,7 +65,7 @@ void DynamicObject::Update(float deltaTs)
 				}
 
 				//Normal force
-				glm::vec3 normalForce = c.otherNormal * 0.5f * glm::dot(previousNetForce, -c.otherNormal);
+				glm::vec3 normalForce = c.otherNormal * 0.5f * glm::dot(previousNetForce, -c.otherNormal); //Query
 				AddForce(normalForce);
 
 				//Linear impulse response
@@ -320,6 +320,11 @@ void DynamicObject::AddForce(glm::vec3 force)
 void DynamicObject::AddTorque(glm::vec3 torque)
 {
 	netTorque += torque;
+}
+
+void DynamicObject::SetAngularVelocity(glm::vec3 angVel)
+{
+	angularVelocity = angVel;
 }
 
 void DynamicObject::SetForce(glm::vec3 newForce)
