@@ -135,12 +135,12 @@ Scene::Scene()
 
 	std::shared_ptr<SphereCollider> smallSphereCollider = std::make_shared<SphereCollider>(smallSphere->GetScale().x, 0.5f);
 	smallSphere->SetCollider(smallSphereCollider);
-	smallSphereCollider->bounciness = 0.5;
+	smallSphereCollider->bounciness = 0.6f;
 	smallSphereCollider->friction = 0.2f;
 
 	std::shared_ptr<SphereCollider> bigSphereCollider = std::make_shared<SphereCollider>(bigSphere->GetScale().x , 0.5f);
 	bigSphere->SetCollider(bigSphereCollider);
-	bigSphereCollider->bounciness = 0.5f;
+	bigSphereCollider->bounciness = 0.6f;
 	bigSphereCollider->friction = 0.2f;
 	/////////////////////////////////
 

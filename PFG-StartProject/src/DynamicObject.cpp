@@ -71,7 +71,7 @@ void DynamicObject::Update(float deltaTs)
 				//Linear impulse response
 				//	//Ja = -(1 + e)(Va- Vb) . n / (1/ma) + (1/mb				
 				glm::vec3 relativeVelocity = velocity - c.otherVelocity;
-				float surfaceCharacteristics = collider->bounciness + c.otherBounciness;
+				float surfaceCharacteristics = std::max(std::min(collider->bounciness + c.otherBounciness, 1.0f), 0.0f);
 				float eCoef = -(1.0f + surfaceCharacteristics) * glm::dot(relativeVelocity, c.otherNormal);
 				float invMass = 1 / mass;
 				float jLin = eCoef / (invMass + c.otherInverseMass);
