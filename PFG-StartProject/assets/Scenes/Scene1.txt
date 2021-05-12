@@ -36,7 +36,7 @@ gameobject floorPlane
     collider
     {
         type plane
-        bounciness 0.3
+        bounciness 0.5
         friction 0.2
         normal 0.0 1.0 0.0
         point 0.0 0.0 0.0
@@ -54,7 +54,7 @@ gameobject eastWall
     collider
     {
         type plane
-        bounciness 0.3
+        bounciness 0.5
         friction 0.2
         normal -1.0 0.0 0.0
         point 7.5 7.5 0.0
@@ -72,13 +72,13 @@ gameobject westWall
     collider
     {
         type plane
-        bounciness 0.3
+        bounciness 0.5
         friction 0.2
         normal 1.0 0.0 0.0
         point -7.5 7.5 0.0
     }
 }
-gameobject westWall
+gameobject northWall
 {
     simulated 1
     id 4
@@ -90,12 +90,29 @@ gameobject westWall
     collider
     {
         type plane
-        bounciness 0.3
+        bounciness 0.5
         friction 0.2
         normal 0.0 0.0 1.0
         point 0.0 7.5 -7.5
     }
 }
+gameobject southWall
+{
+    simulated 1
+    id 20
+    position 0.0 7.5 7.5
+    rotation 90.0 0.0 0.0
+    scale 1.5 1.0 1.5
+    collider
+    {
+        type plane
+        bounciness 0.5
+        friction 0.2
+        normal 0.0 0.0 -1.0
+        point 0.0 7.5 7.5
+    }
+}
+
 dynamicobject smallSphere
 {
     simulated 0
@@ -116,6 +133,46 @@ dynamicobject smallSphere
         radius 0.5
     }
 }
+dynamicobject smallSphere 2
+{
+    simulated 0
+    id 15
+    mesh 1
+    material 1
+    position 0.0 4.8 1.0
+    scale 0.5 0.5 0.5
+    velocity 0.0 0.0 -6.0
+    rotation 0.0 0.0 0.0
+    mass 2.0
+
+    collider
+    {
+        type sphere
+        bounciness 0.6
+        friction 0.2
+        radius 0.5
+    }
+}
+dynamicobject smallSphere 3
+{
+    simulated 0
+    id 16
+    mesh 1
+    material 1
+    position 0.0 4.9 -1.0
+    scale 0.5 0.5 0.5
+    velocity 0.0 0.0 6.0
+    rotation 0.0 0.0 0.0
+    mass 2.0
+
+    collider
+    {
+        type sphere
+        bounciness 0.6
+        friction 0.2
+        radius 0.5
+    }
+}
 dynamicobject bigSphere
 {
     simulated 0
@@ -123,8 +180,8 @@ dynamicobject bigSphere
     mesh 1
     material 2
     position 1.0 5.0 0.0
-    scale 1.0 1.0 1.0
-    velocity -6.0 0.0 0.0
+    scale 0.75 0.75 0.75
+    velocity -10.0 0.0 0.0
     rotation 0.0 0.0 0.0
     mass 4.0
 
@@ -133,7 +190,7 @@ dynamicobject bigSphere
         type sphere
         bounciness 0.6
         friction 0.2
-        radius 1.0
+        radius 0.75
     }
 }
 cameraposition 0 5 10

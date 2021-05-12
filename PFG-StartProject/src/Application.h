@@ -5,6 +5,8 @@
 #include <GLM/glm.hpp> // This is the main GLM header
 #include <GLM/gtc/matrix_transform.hpp> // This one lets us use matrix transformations
 
+#include "PerformanceMonitor.h"
+
 #include <vector>
 #include <memory>
 #include <iostream>
@@ -49,6 +51,8 @@ private:
     /** STATIC MEMBERS: only one application instance running 
 	*/
 	static Application* instance;
+
+	PerformanceMonitor performanceMonitor;
 
 public:
 	/** Application class constructor

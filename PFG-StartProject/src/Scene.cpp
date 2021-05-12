@@ -50,6 +50,9 @@ void Scene::Update(float deltaTs, Input* input)
 		if (!gameObjects.at(i)->GetCollider()) continue; //No need to perform checks if no collider
 		gameObjects.at(i)->ClearCollisions();
 
+		//Collision checks for this object begin, begin monitoring
+		perfMonitor->CollisionBegin();
+
 		for (int j = 0; j < gameObjects.size(); j++) 
 		{
 			if (i == j || !gameObjects.at(j)->GetCollider()) continue; //No need to perform checks if no collider
@@ -60,11 +63,19 @@ void Scene::Update(float deltaTs, Input* input)
 
 			if (didCollide) gameObjects.at(i)->AddCollision(c);
 		}
+		//Collision checks for this object over, end monitoring
+		perfMonitor->CollisionEnd();
 	}
 
 	for (int i = 0; i < gameObjects.size(); i++)
 	{
+		//Update for this object beginning, start monitoring
+		perfMonitor->UpdatesBegin();
+
 		gameObjects.at(i)->Update(deltaTs);
+
+		//Update for this object ending, end monitoring
+		perfMonitor->UpdatesEnd();
 	}
 
 	//_physics_object->Update(deltaTs);

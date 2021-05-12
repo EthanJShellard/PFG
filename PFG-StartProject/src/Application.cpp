@@ -110,6 +110,7 @@ bool Application::Init()
 	// The scene contains all the objects etc
 	SceneLoader sl;
 	myScene = sl.LoadScene("assets/Scenes/Scene1.txt");
+	myScene->SetPerformanceMonitor(&performanceMonitor);
 
 	SDL_ShowCursor(true);
 	input = new Input();
@@ -155,10 +156,9 @@ bool Application::Update()
 	{
 		// Calculate deltatime
 		currentTime = SDL_GetTicks();
+		performanceMonitor.FrameBegin();
 		deltaTime = (float)(currentTime - lastTime) / 1000.0f;
 		lastTime = currentTime;
-
-
 
 		// Update the scene
 	    input->update();
@@ -202,7 +202,10 @@ bool Application::Update()
 
 		
 		SDL_Delay(10);
+		performanceMonitor.FrameEnd();
 	}
+
+	performanceMonitor.OutputResults();
 
 	return true;
 }

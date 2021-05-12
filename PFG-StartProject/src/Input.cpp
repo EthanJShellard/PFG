@@ -96,20 +96,25 @@ void Input::update()
 		}
 		else if (eventQueue.type == SDL_KEYUP)
 		{
-			if (eventQueue.key.keysym.sym == SDLK_UP || eventQueue.key.keysym.sym == SDLK_w ||
-				eventQueue.key.keysym.sym == SDLK_DOWN || eventQueue.key.keysym.sym == SDLK_s)
+			if (eventQueue.key.keysym.sym == SDLK_UP || eventQueue.key.keysym.sym == SDLK_w )
 			{
 				//mouseDelta.y = 0;
 				cmd_w = false;
-				cmd_s = false;
+				
 
 			}
-			else if (eventQueue.key.keysym.sym == SDLK_RIGHT || eventQueue.key.keysym.sym == SDLK_d ||
-				eventQueue.key.keysym.sym == SDLK_LEFT || eventQueue.key.keysym.sym == SDLK_a)
+			else if (eventQueue.key.keysym.sym == SDLK_DOWN || eventQueue.key.keysym.sym == SDLK_s)
+			{
+				cmd_s = false;
+			}
+			else if (eventQueue.key.keysym.sym == SDLK_RIGHT || eventQueue.key.keysym.sym == SDLK_d)
 			{
 				//mouseDelta.x = 0;
-				cmd_a = false;
 				cmd_d = false;
+			}
+			else if (eventQueue.key.keysym.sym == SDLK_LEFT || eventQueue.key.keysym.sym == SDLK_a)
+			{
+				cmd_a = false;
 			}
 		}
 

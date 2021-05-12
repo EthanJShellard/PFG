@@ -6,6 +6,7 @@
 #include "KinematicObject.h"
 #include "DynamicObject.h"
 #include "Camera.h"
+#include "PerformanceMonitor.h"
 #include <vector>
 
 /*! \brief Brief description.
@@ -44,7 +45,10 @@ public:
 	void Draw();
 
 	void AddObject(std::shared_ptr<GameObject> newObject);
+
 	std::vector<std::shared_ptr<GameObject>> GetObjects();
+
+	void SetPerformanceMonitor(PerformanceMonitor* monitor) { perfMonitor = monitor; };
 private:
 
 	std::vector< std::shared_ptr<GameObject> > gameObjects;
@@ -66,6 +70,7 @@ private:
 	*/
 	bool _simulation_start;
 
+	PerformanceMonitor* perfMonitor;
 };
 
 #endif // !_SCENE_H_
