@@ -5,6 +5,7 @@
 #include "Collider.h"
 #include "Mesh.h"
 #include "FlyingCameraController.h"
+#include "BallThrowerController.h"
 #include <string>
 #include <fstream>
 
@@ -423,6 +424,8 @@ std::shared_ptr<Script> SceneLoader::LoadScript(int index)
 	switch (index) 
 	{
 	case 0: return std::make_shared<FlyingCameraController>(); break;
+	case 1: return std::make_shared<BallThrowerController>(); break;
+	default: return nullptr;
 	}
 }
 

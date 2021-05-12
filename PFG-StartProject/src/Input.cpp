@@ -26,7 +26,8 @@ void Input::update()
 {
 	mouseDelta.x = 0;
 	mouseDelta.y = 0;
-
+	cmd_mouserightUp = false;
+	cmd_mouseleftUp = false;
 
 	while (SDL_PollEvent(&eventQueue) != 0)
 	{
@@ -44,17 +45,23 @@ void Input::update()
 			mouseDelta.y += mouse_y - 300;
 
 		}
+		else if (eventQueue.type == SDL_MOUSEBUTTONDOWN && eventQueue.button.button == SDL_BUTTON_LEFT)
+		{
+			cmd_mouseleft = true;
+		}
 		else if (eventQueue.type == SDL_MOUSEBUTTONDOWN && eventQueue.button.button == SDL_BUTTON_RIGHT)
 		{
-			mouse_x = eventQueue.motion.x;
-			mouse_y = eventQueue.motion.y;
-
+			cmd_mouseright = true;
+		}
+		else if (eventQueue.type == SDL_MOUSEBUTTONUP && eventQueue.button.button == SDL_BUTTON_LEFT)
+		{
+			cmd_mouseleft = false;
+			cmd_mouseleftUp = true;
 		}
 		else if (eventQueue.type == SDL_MOUSEBUTTONUP && eventQueue.button.button == SDL_BUTTON_RIGHT)
 		{
-
-			mouseDelta.x = -1;
-			mouseDelta.y = -1;
+			cmd_mouseright = false;
+			cmd_mouserightUp = true;
 		}
 		else if (eventQueue.type == SDL_KEYDOWN)
 		{

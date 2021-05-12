@@ -94,7 +94,7 @@ void DynamicObject::Update(float deltaTs)
 		}
 
 
-		RungeKutta4(deltaTs);
+		if(collider)RungeKutta4(deltaTs);
 	}
 	UpdateModelMatrix();
 }

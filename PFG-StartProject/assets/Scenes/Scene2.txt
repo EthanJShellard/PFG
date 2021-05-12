@@ -24,7 +24,7 @@ material 2
 }
 mesh assets/models/woodfloor.obj 0
 mesh assets/models/sphere.obj 1
-script 0 (Flying camera controller)
+script 1 (Ball thrower)
 gameobject floorPlane
 {
     simulated 1
@@ -37,7 +37,7 @@ gameobject floorPlane
     collider
     {
         type plane
-        bounciness 0.5
+        bounciness 0.1
         friction 0.2
         normal 0.0 1.0 0.0
         point 0.0 0.0 0.0
