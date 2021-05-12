@@ -24,6 +24,7 @@ material 2
 }
 mesh assets/models/woodfloor.obj 0
 mesh assets/models/sphere.obj 1
+script 0
 gameobject floorPlane
 {
     simulated 1

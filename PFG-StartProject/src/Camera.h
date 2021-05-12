@@ -38,6 +38,41 @@ public:
 	*/
 	void Update(Input* input);
 
+	/** Camera's rotation angle in a radian about x axis
+	*/
+	float _cameraAngleX;
+	/** Camera's rotation angle in a radian about y axis
+	*/
+	float _cameraAngleY;
+	/** Camera's speed of movement
+	*/
+	float speed;
+	/** The speed of the mouse movement
+	*/
+	float mouseSpeed;
+	/** Camera's up vector
+	*/
+	glm::vec3 _up;
+
+	/** Camera's transaltion vector
+	*/
+	glm::vec3 _translation;
+
+
+	/** The state of the mouse position
+	*/
+	int posx, posy;
+	/** The state of the mouse's previous position
+	*/
+	glm::vec2 oldMousePosition;
+	glm::vec3 _cameraPos;
+	/** Position of the camera
+	*/
+	/** Orientation of the camera
+	*/
+	glm::vec3 _cameraRot;
+	/** Point that camera looks at
+	*/
 private:
 	/** Viewing matrix for the camera
 	*/
@@ -45,40 +80,9 @@ private:
 	/** Projection matrix for the camera
 	*/
 	glm::mat4 _projMatrix;	
-	/** Position of the camera
-	*/
-	glm::vec3 _cameraPos;
-	/** Orientation of the camera
-	*/
-	glm::vec3 _cameraRot;
-	/** Point that camera looks at
-	*/
-	glm::vec3 _lookAt;
-	/** Camera's up vector 
-	*/
-	glm::vec3 _up;
 
-	/** Camera's transaltion vector
-	*/
-	glm::vec3 _translation;
-	/** Camera's rotation angle in a radian about x axis
-	*/
-	float _cameraAngleX;
-	/** Camera's rotation angle in a radian about y axis
-	*/
-	float _cameraAngleY;
-	/** Camera's speed of movement 
-	*/
-	float speed;
-	/** The speed of the mouse movement
-	*/
-	float mouseSpeed;
-	/** The state of the mouse position
-	*/
-	int posx, posy;
-	/** The state of the mouse's previous position
-	*/
-	glm::vec2 oldMousePosition;
+	glm::vec3 _lookAt;
+	
 
 };
 

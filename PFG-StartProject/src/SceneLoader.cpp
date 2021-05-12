@@ -4,6 +4,7 @@
 #include "DynamicObject.h"
 #include "Collider.h"
 #include "Mesh.h"
+#include "FlyingCameraController.h"
 #include <string>
 #include <fstream>
 
@@ -71,17 +72,17 @@ std::shared_ptr<Scene> SceneLoader::LoadScene(std::string& currentLine, const ch
 		{
 			scene->GetCamera()->SetPos(LoadVec3(tokens));
 		}
+		else if (tokens.at(0) == "script") 
+		{
+			scene->AddScript(LoadScript(atoi(tokens.at(1).c_str())));
+		}
 	}
 	//Clean up file stream
 	file.close();
 
 	auto goVec = scene->GetObjects();
 
-	//Initialise all colliders
-	for (int i = 0; i < goVec.size(); i++)
-	{
-		goVec.at(i)->InitialiseCollider();
-	}
+	scene->Initialize();
 
 	return scene;
 }
@@ -414,6 +415,15 @@ glm::vec3 SceneLoader::vec3ToRadians(glm::vec3 input)
 	output.y = glm::radians(input.y);
 	output.z = glm::radians(input.z);
 	return output;
+}
+
+std::shared_ptr<Script> SceneLoader::LoadScript(int index)
+{
+	//Select script
+	switch (index) 
+	{
+	case 0: return std::make_shared<FlyingCameraController>(); break;
+	}
 }
 
 glm::vec3 SceneLoader::LoadVec3(std::vector<std::string> tokens)

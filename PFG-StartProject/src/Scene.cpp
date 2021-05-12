@@ -38,6 +38,12 @@ void Scene::Update(float deltaTs, Input* input)
 		}
 	}
 
+	//Update scripts
+	for (int i = 0; i < scripts.size(); i++) 
+	{
+		scripts.at(i)->Update(deltaTs, input);
+	}
+
 	for (int i = 0; i < gameObjects.size(); i++)
 	{
 		gameObjects.at(i)->UpdateCollider(deltaTs);
@@ -109,6 +115,26 @@ void Scene::AddObject(std::shared_ptr<GameObject> newObject)
 std::vector<std::shared_ptr<GameObject>> Scene::GetObjects()
 {
 	return gameObjects;
+}
+
+void Scene::AddScript(std::shared_ptr<Script> script)
+{
+	script->scene = this;
+	scripts.push_back(script);
+}
+
+void Scene::Initialize()
+{
+	//Initialise all colliders
+	for (int i = 0; i < gameObjects.size(); i++)
+	{
+		gameObjects.at(i)->InitialiseCollider();
+	}
+
+	for (int i = 0; i < scripts.size(); i++) 
+	{
+		scripts.at(i)->Initialize();
+	}
 }
 
 

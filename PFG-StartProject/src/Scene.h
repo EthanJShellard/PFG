@@ -7,6 +7,7 @@
 #include "DynamicObject.h"
 #include "Camera.h"
 #include "PerformanceMonitor.h"
+#include "Script.h"
 #include <vector>
 
 /*! \brief Brief description.
@@ -49,9 +50,14 @@ public:
 	std::vector<std::shared_ptr<GameObject>> GetObjects();
 
 	void SetPerformanceMonitor(PerformanceMonitor* monitor) { perfMonitor = monitor; };
+
+	void AddScript(std::shared_ptr<Script> script);
+
+	void Initialize();
 private:
 
 	std::vector< std::shared_ptr<GameObject> > gameObjects;
+	std::vector< std::shared_ptr<Script> > scripts;
 
 	/** The main camera in the scene 
 	*/

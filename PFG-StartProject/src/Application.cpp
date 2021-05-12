@@ -189,19 +189,13 @@ bool Application::Update()
 		myScene->Draw();
 
 		// This tells the renderer to actually show its contents to the screen
-		// We'll get into this sort of thing at a later date - or just look up 'double buffering' if you're impatient :P
 		SDL_GL_SwapWindow(window);
 		
 		//caps framerate
-		if (deltaTime < (1.0f / 70.0f))
-		{
-			//SDL_Delay((unsigned int)(((1.0f / 60.0f) - deltaTime) * 1000.0f));
-			//SDL_Delay(((1.0f / 70.0f) - deltaTime) * 1000);
-		}
-		lastTime = currentTime;
-
-		
+		lastTime = currentTime;		
 		SDL_Delay(10);
+
+
 		performanceMonitor.FrameEnd();
 	}
 
