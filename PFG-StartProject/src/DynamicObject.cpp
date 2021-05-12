@@ -11,61 +11,39 @@ void DynamicObject::Update(float deltaTs)
 	if (simulated)
 	{
 		glm::vec3 previousNetForce = netForce;
+		glm::vec3 gravity = glm::vec3(0, mass * -9.81, 0);
 
 		//Clear Force
 		ClearForces();
 
-		AddForce(glm::vec3(0, mass * -9.81, 0)); //Add Gravity
 
-		/*glm::vec3 planeNormal = glm::vec3(0.0f, 1.0f, 0.0f);
-		glm::vec3 pointOnPlane = glm::vec3(0.0f, 0.0f, 0.0f);
-		glm::vec3 nextPosition = position + (velocity * deltaTs);
-
-		glm::vec3 collisionPosition;
-
-		bool collision = PFG::MovingSphereToPlaneCollision(planeNormal, position, nextPosition, pointOnPlane, radius, collisionPosition);
-
-		//Fake collision detection
-		if (collision)
-		{
-			//Impulse collision repsonse demonstration
-			glm::vec3 planeVelocity = glm::vec3(0,0,0);
-			glm::vec3 relativeVel = velocity - planeVelocity;
-			glm::vec3 n = glm::vec3(0.0f, 1.0f, 0.0f);
-			float surfaceCharacteristics = 0.70f;
-			//Ja = -(1 + e)(Va- Vb) . n / (1/ma) + (1/mb)
-			float eCoef = -(1.0f + surfaceCharacteristics) * glm::dot(relativeVel, n);
-			float invMass = 1 / mass;
-			float jLin = eCoef / (invMass + 0.0f); //0.0f because floor is static (infinite mass)
-			glm::vec3 collisionImpulseForce = jLin * n / deltaTs;
-			AddForce(collisionImpulseForce);
-
-			//AddForce(glm::vec3(0.0f, mass * 9.81f, 0.0f)); //Normal Force
-			//AddForce(glm::vec3(0.0f, -velocity.y * 40.0f, 0.0f)); //Faked Bounce
-			position.y = radius;
-			//velocity = glm::vec3(0.0, 0.0, 0.0);
-		}*/
-
-		glm::vec3 finalReturnPos = position + (velocity * deltaTs);
-		float shortestLength = length(finalReturnPos - position);
+		AddForce(gravity); //Add Gravity
 
 		if (collisions.size() > 0) 
 		{
+			glm::vec3 returnTranslate = glm::vec3(0);
+
+			//Sum return positions for each collision
+			for (int i = 0; i < collisions.size(); i++)
+			{
+				//Add return translation
+				returnTranslate += (collisions.at(i).returnPosition - position);
+			}
+
+			//Handle return positioning
+			position += returnTranslate;
+			//position = collisions.at(0).returnPosition;
+			collider->ComputeCentreOfMass();
+
 			//Collision response for each collision
 			for (int i = 0; i < collisions.size(); i++) 
 			{
 				Collision c = collisions.at(i);
 				
-				//Compute return position
-				if (float l = glm::length(c.returnPosition - position) < shortestLength)
-				{
-					position = c.returnPosition;
-					shortestLength = l;
-					collider->ComputeCentreOfMass();
-				}
+				
 
 				//Normal force
-				glm::vec3 normalForce = c.otherNormal * 0.5f * glm::dot(previousNetForce, -c.otherNormal); //Query
+				glm::vec3 normalForce = c.otherNormal * glm::dot(gravity, -c.otherNormal); //Query
 				AddForce(normalForce);
 
 				//Linear impulse response
@@ -112,7 +90,7 @@ void DynamicObject::Update(float deltaTs)
 				tempTorque -= angularMomentum * 20.0f;
 				AddTorque(tempTorque);
 			}
-			
+
 		}
 
 
