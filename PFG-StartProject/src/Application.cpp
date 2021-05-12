@@ -109,7 +109,7 @@ bool Application::Init()
 	//LOAD SCENE HERE
 	// The scene contains all the objects etc
 	SceneLoader sl;
-	myScene = sl.LoadScene("assets/Scenes/Scene1.txt");
+	myScene = sl.LoadScene("assets/Scenes/Scene2.txt");
 	myScene->SetPerformanceMonitor(&performanceMonitor);
 
 	SDL_ShowCursor(true);

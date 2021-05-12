@@ -27,17 +27,6 @@ Scene::~Scene()
 
 void Scene::Update(float deltaTs, Input* input)
 {
-
-	if (input->cmd_x)
-	{
-		//_physics_object->SetSimulated(true);
-		//_physics_object2->SetSimulated(true);
-		for (int i = 0; i < gameObjects.size(); i++) 
-		{
-			gameObjects.at(i)->SetSimulated(true);
-		}
-	}
-
 	//Update scripts
 	for (int i = 0; i < scripts.size(); i++) 
 	{

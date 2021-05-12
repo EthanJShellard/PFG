@@ -39,6 +39,14 @@ void FlyingCameraController::Update(float deltaTs, Input* input)
 		cam->_translation = right * cam->speed;
 		cam->_cameraPos += cam->_translation;
 	}
+	if (input->cmd_x)
+	{
+		auto gos = scene->GetObjects();
+		for (int i = 0; i < gos.size(); i++)
+		{
+			gos.at(i)->SetSimulated(true);
+		}
+	}
 }
 
 void FlyingCameraController::Initialize()
