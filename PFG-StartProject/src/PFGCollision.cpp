@@ -21,61 +21,7 @@ namespace PFG
 	{
 		return glm::dot((p - q), glm::normalize(n));
 	}
-	/// <summary>
-	/// Checks for collision between a moving sphere and a plane. Gives the centre of the sphere at the time of collision
-	/// </summary>
-	/// <param name="planeNormal">Normal of the plane</param>
-	/// <param name="centre0">Centre of sphere at first timestep</param>
-	/// <param name="centre1">Centre of sphere at second timestep</param>
-	/// <param name="pointOnPlane">A point on the plane</param>
-	/// <param name="radius">Radius of the sphere</param>
-	/// <param name="centreAtCollision">The centre of the sphere at the time of collision</param>
-	/// <returns>True if sphere collides with plane, False otherwise.</returns>
-	bool MovingSphereToPlaneCollision(glm::vec3 planeNormal, glm::vec3 centreBefore, glm::vec3 centreAfter, glm::vec3 pointOnPlane, float radius, glm::vec3& centreAtCollision)
-	{
-		float t;
 
-		float distanceBefore = DistanceToPlane(planeNormal, centreBefore, pointOnPlane);
-		float distanceAfter = DistanceToPlane(planeNormal, centreAfter, pointOnPlane);
-
-		if (glm::abs(distanceBefore) <= radius)
-		{
-			centreAtCollision = centreBefore;
-			return true;
-		}
-		else if (distanceBefore > radius && distanceAfter < radius)
-		{
-			t = (distanceBefore - radius) / (distanceBefore - distanceAfter);
-			centreAtCollision = (1 - t) * centreBefore + t * centreAfter;
-
-			return true;
-		}
-
-		return false;
-	}
-	bool MovingSphereToPlaneCollision(glm::vec3 planeNormal, glm::vec3 centreBefore, glm::vec3 centreAfter, glm::vec3 pointOnPlane, float radius, Collision& collision)
-	{
-		float t;
-
-		float distanceBefore = DistanceToPlane(planeNormal, centreBefore, pointOnPlane);
-		float distanceAfter = DistanceToPlane(planeNormal, centreAfter, pointOnPlane);
-
-		if (glm::abs(distanceBefore) <= radius)
-		{
-			collision.collisionPoint = centreBefore;
-			collision.otherNormal = planeNormal;
-			return true;
-		}
-		else if (distanceBefore > radius && distanceAfter < radius)
-		{
-			t = (distanceBefore - radius) / (distanceBefore - distanceAfter);
-			collision.collisionPoint = (1 - t) * centreBefore + t * centreAfter;
-			collision.otherNormal = planeNormal;
-			return true;
-		}
-
-		return false;
-	}
 	bool MovingSphereToPlaneCollision(std::shared_ptr<SphereCollider> sph, std::shared_ptr<InfinitePlaneCollider> pla, Collision& collision)
 	{
 		float distanceBefore = DistanceToPlane(pla->planeNormal, sph->pos, pla->pointOnPlane);
@@ -83,7 +29,7 @@ namespace PFG
 
 		if (glm::abs(distanceBefore) <= sph->radius)
 		{
-			collision.otherNormal = pla->planeNormal;
+			collision.otherNormal = (glm::dot(pla->planeNormal, sph->pos - pla->pointOnPlane) >= 0) ? pla->planeNormal : -pla->planeNormal;
 			collision.collisionPoint = sph->pos - (pla->planeNormal * (distanceBefore));
 			collision.returnPosition = sph->pos - (sph->radius * -collision.otherNormal) - (collision.otherNormal * distanceBefore);
 			return true;
@@ -95,8 +41,8 @@ namespace PFG
 			t = (distanceBefore - sph->radius) / (distanceBefore - distanceAfter);
 			t= std::max(std::min(t, 1.0f), 0.0f); //Clamp to [0,1]
 			glm::vec3 posAtCollision = Interpolate(t, sph->pos, sph->nextPos);
-			collision.collisionPoint = posAtCollision - (pla->planeNormal * (sph->radius));;
-			collision.otherNormal = pla->planeNormal;
+			collision.otherNormal = (glm::dot(pla->planeNormal, sph->pos - pla->pointOnPlane) >= 0) ? pla->planeNormal : -pla->planeNormal;
+			collision.collisionPoint = posAtCollision - (collision.otherNormal * (sph->radius));
 			collision.returnPosition = posAtCollision;
 			return true;
 		}

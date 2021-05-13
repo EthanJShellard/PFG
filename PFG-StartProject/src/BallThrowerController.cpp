@@ -49,6 +49,8 @@ void BallThrowerController::Update(float deltaTs, Input* input)
 	{
 		CreateBall()->SetVelocity(forward * 20.0f);
 	}
+
+	//WRITE TIMER TO DELETE BALLS
 }
 
 

@@ -6,6 +6,8 @@
 #include "Mesh.h"
 #include "FlyingCameraController.h"
 #include "BallThrowerController.h"
+#include "OrbitController.h"
+#include "SimulationStarter.h"
 #include <string>
 #include <fstream>
 
@@ -72,6 +74,11 @@ std::shared_ptr<Scene> SceneLoader::LoadScene(std::string& currentLine, const ch
 		else if (tokens.at(0) == "cameraposition") 
 		{
 			scene->GetCamera()->SetPos(LoadVec3(tokens));
+		}
+		else if (tokens.at(0) == "cameraangles") 
+		{
+			scene->GetCamera()->_cameraAngleX = atof(tokens.at(1).c_str());
+			scene->GetCamera()->_cameraAngleY = atof(tokens.at(2).c_str());
 		}
 		else if (tokens.at(0) == "script") 
 		{
@@ -425,6 +432,8 @@ std::shared_ptr<Script> SceneLoader::LoadScript(int index)
 	{
 	case 0: return std::make_shared<FlyingCameraController>(); break;
 	case 1: return std::make_shared<BallThrowerController>(); break;
+	case 2: return std::make_shared<OrbitController>(); break;
+	case 3: return std::make_shared<SimulationStarter>(); break;
 	default: return nullptr;
 	}
 }

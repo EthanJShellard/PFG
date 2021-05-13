@@ -13,9 +13,6 @@ void DynamicObject::Update(float deltaTs)
 		glm::vec3 previousNetForce = netForce;
 		glm::vec3 gravity = glm::vec3(0, mass * -9.81, 0);
 
-		//Clear Force
-		ClearForces();
-
 
 		AddForce(gravity); //Add Gravity
 
@@ -94,7 +91,19 @@ void DynamicObject::Update(float deltaTs)
 		}
 
 
-		if(collider)RungeKutta4(deltaTs);
+		if (collider)
+		{
+			switch (integrationMethod) 
+			{
+			case IntegrationMethod::RK4: RungeKutta4(deltaTs); break;
+			case IntegrationMethod::RK2: RungeKutta2(deltaTs); break;
+			case IntegrationMethod::Euler: Euler(deltaTs); break;
+			}
+		}
+
+		//Clear Force
+		ClearForces();
+
 	}
 	UpdateModelMatrix();
 }
@@ -284,6 +293,7 @@ DynamicObject::DynamicObject()
 	angularMomentum = glm::vec3();
 	netTorque = glm::vec3();
 	angularVelocity = glm::vec3();
+	integrationMethod = IntegrationMethod::RK4;
 }
 
 DynamicObject::~DynamicObject()

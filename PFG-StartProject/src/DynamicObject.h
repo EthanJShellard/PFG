@@ -1,6 +1,8 @@
 #pragma once
 #include "GameObject.h"
 
+enum class IntegrationMethod {Euler, RK2, RK4};
+
 class DynamicObject : public GameObject 
 {
 private:
@@ -46,4 +48,6 @@ public:
 
 	DynamicObject();
 	~DynamicObject();
+
+	IntegrationMethod integrationMethod;
 };

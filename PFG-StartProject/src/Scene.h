@@ -54,6 +54,8 @@ public:
 	void AddScript(std::shared_ptr<Script> script);
 
 	void Initialize();
+
+	std::shared_ptr<GameObject> FindObjectByID(int ID);
 private:
 
 	std::vector< std::shared_ptr<GameObject> > gameObjects;

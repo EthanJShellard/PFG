@@ -126,4 +126,16 @@ void Scene::Initialize()
 	}
 }
 
+std::shared_ptr<GameObject> Scene::FindObjectByID(int ID)
+{
+	for (int i = 0; i < gameObjects.size(); i++) 
+	{
+		if (gameObjects.at(i)->ID == ID) 
+		{
+			return gameObjects.at(i);
+		}
+	}
+	return nullptr;
+}
+
 

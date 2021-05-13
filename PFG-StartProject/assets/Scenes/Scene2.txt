@@ -67,7 +67,7 @@ dynamicobject smallSphere
 
 dynamicobject bigSphere
 {
-    simulated 0
+    simulated 1
     id 11
     mesh 1
     material 2
@@ -80,8 +80,8 @@ dynamicobject bigSphere
     collider
     {
         type sphere
-        bounciness 0.6
-        friction 0.2
+        bounciness 0.0
+        friction 0.3
         radius 0.75
     }
 }

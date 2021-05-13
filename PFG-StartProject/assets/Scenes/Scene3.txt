@@ -1,0 +1,223 @@
+material 0
+{
+    vert assets/shaders/VertShader.txt
+    frag assets/shaders/FragShader.txt
+    colour 0.8 0.8 0.8
+    lightposition 0 10 0
+    texture assets/textures/diffuse.bmp
+}
+material 1 rk4
+{
+    vert assets/shaders/VertShader.txt
+    frag assets/shaders/FragShader.txt
+    colour 0.8 0.1 0.1
+    lightposition 0 10 0
+    texture assets/textures/default.bmp
+}
+material 2 rk2
+{
+    vert assets/shaders/VertShader.txt
+    frag assets/shaders/FragShader.txt
+    colour 0.1 0.8 0.1
+    lightposition 0 10 0
+    texture assets/textures/default.bmp
+}
+material 3 euler
+{
+    vert assets/shaders/VertShader.txt
+    frag assets/shaders/FragShader.txt
+    colour 0.1 0.1 0.8
+    lightposition 0 10 0
+    texture assets/textures/default.bmp
+}
+material 4 centres
+{
+    vert assets/shaders/VertShader.txt
+    frag assets/shaders/FragShader.txt
+    colour 0.0 0.0 0.0
+    lightposition 0 10 0
+    texture assets/textures/default.bmp
+}
+
+
+mesh assets/models/woodfloor.obj 0
+mesh assets/models/sphere.obj 1
+script 0 (flying camera controller)
+script 2 (orbit controller)
+gameobject floorPlane
+{
+    simulated 1
+    id 0
+    mesh 0
+    material 0
+    position 0.0 0.0 0.0
+    scale 10.0 1.0 10.0
+    rotation 0.0 0.0 0.0
+    collider
+    {
+        type plane
+        bounciness 0.5
+        friction 0.2
+        normal 0.0 1.0 0.0
+        point 0.0 0.0 0.0
+    }
+}
+// gameobject divider1
+// {
+//     simulated 1
+//     id 2
+//     position 5.0 7.5 0.0
+//     rotation 90.0 90.0 0.0
+//     scale 1.5 1.0 1.5
+//     collider
+//     {
+//         type plane
+//         bounciness 0.5
+//         friction 0.2
+//         normal -1.0 0.0 0.0
+//         point 7.5 7.5 0.0
+//     }
+// }
+// gameobject divider2
+// {
+//     simulated 1
+//     id 3
+//     position -5.0 7.5 0.0
+//     rotation 90.0 -90.0 0.0
+//     scale 1.5 1.0 1.5
+//     collider
+//     {
+//         type plane
+//         bounciness 0.5
+//         friction 0.2
+//         normal 1.0 0.0 0.0
+//         point -7.5 7.5 0.0
+//     }
+// }
+
+
+
+dynamicobject rk4Orbiter
+{
+    simulated 0
+    id 104
+    mesh 1
+    material 3
+    position -10.0 5.0 2.0
+    scale 0.5 0.5 0.5
+    velocity 0.0 0.0 0.0
+    rotation 0.0 0.0 0.0
+    mass 2.0
+
+    collider
+    {
+        type sphere
+        bounciness 0.6
+        friction 0.2
+        radius 0.5
+    }
+}
+dynamicobject rk2Orbiter
+{
+    simulated 0
+    id 102
+    mesh 1
+    material 2
+    position 0.0 5.0 2.0
+    scale 0.5 0.5 0.5
+    velocity 0.0 0.0 0.0
+    rotation 0.0 0.0 0.0
+    mass 2.0
+
+    collider
+    {
+        type sphere
+        bounciness 0.6
+        friction 0.2
+        radius 0.5
+    }
+}
+dynamicobject eulerOrbiter
+{
+    simulated 0
+    id 100
+    mesh 1
+    material 1
+    position 10.0 5.0 2.0
+    scale 0.5 0.5 0.5
+    velocity 0.0 0.0 0.0
+    rotation 0.0 0.0 0.0
+    mass 2.0
+
+    collider
+    {
+        type sphere
+        bounciness 0.6
+        friction 0.2
+        radius 0.5
+    }
+}
+
+dynamicobject rk4Centre
+{
+    simulated 0
+    id 105
+    mesh 1
+    material 1
+    position -10.0 5.0 0.0
+    scale 0.5 0.5 0.5
+    velocity 0.0 0.0 0.0
+    rotation 0.0 0.0 0.0
+    mass 2.0
+
+    collider
+    {
+        type sphere
+        bounciness 0.6
+        friction 0.2
+        radius 0.5
+    }
+}
+dynamicobject rk2Centre
+{
+    simulated 0
+    id 103
+    mesh 1
+    material 2
+    position 0.0 5.0 0.0
+    scale 0.5 0.5 0.5
+    velocity 0.0 0.0 0.0
+    rotation 0.0 0.0 0.0
+    mass 2.0
+
+    collider
+    {
+        type sphere
+        bounciness 0.6
+        friction 0.2
+        radius 0.5
+    }
+}
+dynamicobject eulerCentre
+{
+    simulated 0
+    id 101
+    mesh 1
+    material 1
+    position 10.0 5.0 0.0
+    scale 0.5 0.5 0.5
+    velocity 0.0 0.0 0.0
+    rotation 0.0 0.0 0.0
+    mass 2.0
+
+    collider
+    {
+        type sphere
+        bounciness 0.6
+        friction 0.2
+        radius 0.5
+    }
+}
+
+cameraposition 0 20 8
+cameraangles -1 -0.8
