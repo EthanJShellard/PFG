@@ -57,10 +57,10 @@ void OrbitController::Initialize()
 	rk4Orbiter->integrationMethod = IntegrationMethod::RK4;
 	//RK2 object ID = 102
 	rk2Orbiter = static_pointer_cast<DynamicObject>(scene->FindObjectByID(102));
-	rk2Orbiter->integrationMethod = IntegrationMethod::RK2;
+	rk2Orbiter->integrationMethod = IntegrationMethod::ExplicitEuler;
 	//Euler object ID = 100
 	eulerOrbiter = static_pointer_cast<DynamicObject>(scene->FindObjectByID(100));
-	eulerOrbiter->integrationMethod = IntegrationMethod::Euler;
+	eulerOrbiter->integrationMethod = IntegrationMethod::ImplicitEuler;
 
 	//Centre ID = object ID + 1
 	rk4Centre = scene->FindObjectByID(105)->GetPosition();

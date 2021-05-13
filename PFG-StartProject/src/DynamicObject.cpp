@@ -97,7 +97,8 @@ void DynamicObject::Update(float deltaTs)
 			{
 			case IntegrationMethod::RK4: RungeKutta4(deltaTs); break;
 			case IntegrationMethod::RK2: RungeKutta2(deltaTs); break;
-			case IntegrationMethod::Euler: Euler(deltaTs); break;
+			case IntegrationMethod::ImplicitEuler: ImplicitEuler(deltaTs); break;
+			case IntegrationMethod::ExplicitEuler: ExplicitEuler(deltaTs);
 			}
 		}
 
@@ -108,9 +109,9 @@ void DynamicObject::Update(float deltaTs)
 	UpdateModelMatrix();
 }
 
-void DynamicObject::Euler(float deltaTs)
+void DynamicObject::ImplicitEuler(float deltaTs)
 {
-	float oneOverMass = 1.0f / mass;
+	float oneOverMass = GetInverseMass();
 	//update velocity using euler algorithm (a = f/m)
 	velocity += (netForce * oneOverMass) * deltaTs;
 	//Update position using velocity
@@ -135,6 +136,39 @@ void DynamicObject::Euler(float deltaTs)
 	R += omega_star * R * deltaTs;
 	rotation = R;
 	rotation = glm::normalize(rotation);
+}
+
+void DynamicObject::ExplicitEuler(float deltaTs)
+{
+	float oneOverMass = GetInverseMass();
+
+	//Update position using velocity
+	position += velocity * deltaTs;
+	//update velocity using euler algorithm (a = f/m)
+	velocity += (netForce * oneOverMass) * deltaTs;
+	
+
+	glm::mat3 inverseInertiaTensor = collider->ComputeInverseInertiaTensor(rotation);
+
+	//Compute angular velocity
+	angularVelocity = inverseInertiaTensor * angularMomentum;
+
+	//Compute skew matrix omega star
+	glm::mat3 omega_star = glm::mat3(0.0f, -angularVelocity.z, angularVelocity.y,
+		angularVelocity.z, 0.0f, -angularVelocity.x,
+		-angularVelocity.y, angularVelocity.x, 0.0f);
+
+	glm::mat3 R = glm::toMat3(rotation);
+
+	//Update orientation
+	R += omega_star * R * deltaTs;
+	rotation = R;
+	rotation = glm::normalize(rotation);
+
+	//Compute Angular Momentum
+	angularMomentum += netTorque * deltaTs;
+
+	
 }
 
 void DynamicObject::RungeKutta2(float deltaTs) 
@@ -207,22 +241,22 @@ void DynamicObject::RungeKutta4(float deltaTs)
 	//LINEAR
 
 	//evaluate once at t0
-	force = netForce;
-	acceleration = force / mass;
-	k0 = acceleration * deltaTs;
+	force = netForce; //Force, kgm/s^2
+	acceleration = force / mass; //Acceleration, m/s^2
+	k0 = acceleration * deltaTs; //Velocity, m/s
 
 	//evaluate once at half deltaTs
-	force = netForce + (k0 / 2.0f);
+	// = netForce + (k0 / 2.0f);// force + acceleration, kgm/s^2 + m/s / s
 	acceleration = force / mass;
 	k1 = acceleration * deltaTs;
 
 	//evaluate again at half deltaTs;
-	force = netForce + (k1 / 2.0f);
+	//force = netForce + (k1 / 2.0f);
 	acceleration = force / mass;
 	k2 = acceleration * deltaTs;
 
 	//Evaluate once at full deltaTs
-	force = netForce + k2;
+	//force = netForce + k2;
 	acceleration = force / mass;
 	k3 = acceleration * deltaTs;
 

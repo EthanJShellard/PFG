@@ -13,7 +13,7 @@
 */
 
 // Define a fixed step length for stable physics simulations
-static float STEP_LENGTH = 0.02;
+static float STEP_LENGTH = 0.001;
 
 Application::Application()
 {
@@ -193,7 +193,7 @@ bool Application::Update()
 		
 		//caps framerate
 		lastTime = currentTime;		
-		SDL_Delay(10);
+		SDL_Delay(1);
 
 
 		performanceMonitor.FrameEnd();

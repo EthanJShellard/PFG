@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-enum class IntegrationMethod {Euler, RK2, RK4};
+enum class IntegrationMethod {ImplicitEuler, RK2, RK4, ExplicitEuler};
 
 class DynamicObject : public GameObject 
 {
@@ -33,7 +33,8 @@ public:
 	/// Euler numeric integration method
 	/// </summary>
 	/// <param name="deltaT">Period of time</param>
-	void Euler(float deltaTs);
+	void ImplicitEuler(float deltaTs);
+	void ExplicitEuler(float deltaTs);
 	/// <summary>
 	/// Runge Kutta 2 numeric integration method
 	/// </summary>
