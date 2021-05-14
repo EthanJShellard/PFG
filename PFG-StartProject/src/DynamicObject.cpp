@@ -97,8 +97,8 @@ void DynamicObject::Update(float deltaTs)
 			{
 			case IntegrationMethod::RK4: RungeKutta4(deltaTs); break;
 			case IntegrationMethod::RK2: RungeKutta2(deltaTs); break;
-			case IntegrationMethod::ImplicitEuler: ImplicitEuler(deltaTs); break;
-			case IntegrationMethod::ExplicitEuler: ExplicitEuler(deltaTs);
+			case IntegrationMethod::IMPLICITEULER: ImplicitEuler(deltaTs); break;
+			case IntegrationMethod::EXPLICITEULER: ExplicitEuler(deltaTs);
 			}
 		}
 
@@ -171,6 +171,7 @@ void DynamicObject::ExplicitEuler(float deltaTs)
 	
 }
 
+//Deprecated
 void DynamicObject::RungeKutta2(float deltaTs) 
 {
 	float oneOverMass = 1.0f / mass;
@@ -229,6 +230,7 @@ void DynamicObject::RungeKutta2(float deltaTs)
 	rotation = glm::normalize(rotation);
 }
 
+//Deprecated
 void DynamicObject::RungeKutta4(float deltaTs)
 {
 	float oneOverMass = 1.0f / mass;
@@ -327,7 +329,7 @@ DynamicObject::DynamicObject()
 	angularMomentum = glm::vec3();
 	netTorque = glm::vec3();
 	angularVelocity = glm::vec3();
-	integrationMethod = IntegrationMethod::RK4;
+	integrationMethod = IntegrationMethod::IMPLICITEULER;
 }
 
 DynamicObject::~DynamicObject()

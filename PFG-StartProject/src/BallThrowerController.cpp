@@ -44,6 +44,8 @@ void BallThrowerController::Update(float deltaTs, Input* input)
 		cam->_translation = right * cam->speed;
 		cam->_cameraPos += cam->_translation;
 	}
+	cam->_cameraPos.x = std::max(std::min(cam->_cameraPos.x, xBound), -xBound);
+	cam->_cameraPos.z = std::max(std::min(cam->_cameraPos.z, xBound), -zBound);
 
 	if (input->cmd_mouseleftUp) 
 	{
@@ -51,6 +53,19 @@ void BallThrowerController::Update(float deltaTs, Input* input)
 	}
 
 	//WRITE TIMER TO DELETE BALLS
+	for (int i = 0; i < balls.size(); i++) 
+	{
+		if (balls.at(i).second > timeout) 
+		{
+			balls.at(i).first->ID = -10;
+			balls.erase(std::remove(balls.begin(), balls.end(), balls.at(i)), balls.end());
+		}
+		else
+		{
+			balls.at(i).second += deltaTs;
+		}
+	}
+	scene->DeleteObjectsByID(-10);
 }
 
 
@@ -58,6 +73,10 @@ void BallThrowerController::Update(float deltaTs, Input* input)
 void BallThrowerController::Initialize()
 {
 	cam = scene->GetCamera();
+
+	xBound = 10;
+	zBound = 10;
+	timeout = 8.0f;
 
 	//Load cached assets
 	ballMesh = std::make_shared<Mesh>();
@@ -85,7 +104,7 @@ std::shared_ptr<DynamicObject> BallThrowerController::CreateBall()
 	newBall->InitialiseCollider();
 
 
-	balls.push_back(newBall);
+	balls.push_back(std::pair< std::shared_ptr<DynamicObject>, float>(newBall, 0.0f));
 	scene->AddObject(newBall);
 	return newBall;
 }

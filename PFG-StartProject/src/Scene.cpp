@@ -101,6 +101,17 @@ void Scene::AddObject(std::shared_ptr<GameObject> newObject)
 	gameObjects.push_back(newObject);
 }
 
+void Scene::DeleteObjectsByID(int ID)
+{
+	for (int i = 0; i < gameObjects.size(); i++) 
+	{
+		if (gameObjects.at(i)->ID == ID) 
+		{
+			gameObjects.erase(std::remove(gameObjects.begin(), gameObjects.end(), gameObjects.at(i)), gameObjects.end());
+		}
+	}
+}
+
 std::vector<std::shared_ptr<GameObject>> Scene::GetObjects()
 {
 	return gameObjects;

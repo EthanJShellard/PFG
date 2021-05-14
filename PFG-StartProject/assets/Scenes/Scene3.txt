@@ -62,68 +62,16 @@ gameobject floorPlane
         point 0.0 0.0 0.0
     }
 }
-// gameobject divider1
-// {
-//     simulated 1
-//     id 2
-//     position 5.0 7.5 0.0
-//     rotation 90.0 90.0 0.0
-//     scale 1.5 1.0 1.5
-//     collider
-//     {
-//         type plane
-//         bounciness 0.5
-//         friction 0.2
-//         normal -1.0 0.0 0.0
-//         point 7.5 7.5 0.0
-//     }
-// }
-// gameobject divider2
-// {
-//     simulated 1
-//     id 3
-//     position -5.0 7.5 0.0
-//     rotation 90.0 -90.0 0.0
-//     scale 1.5 1.0 1.5
-//     collider
-//     {
-//         type plane
-//         bounciness 0.5
-//         friction 0.2
-//         normal 1.0 0.0 0.0
-//         point -7.5 7.5 0.0
-//     }
-// }
 
 
 
-dynamicobject rk4Orbiter
-{
-    simulated 0
-    id 104
-    mesh 1
-    material 3
-    position -10.0 5.0 2.0
-    scale 0.5 0.5 0.5
-    velocity 0.0 0.0 0.0
-    rotation 0.0 0.0 0.0
-    mass 2.0
-
-    collider
-    {
-        type sphere
-        bounciness 0.6
-        friction 0.2
-        radius 0.5
-    }
-}
-dynamicobject rk2Orbiter
+dynamicobject explicit orbiter
 {
     simulated 0
     id 102
     mesh 1
     material 2
-    position 0.0 5.0 2.0
+    position -3.5 5.0 2.0
     scale 0.5 0.5 0.5
     velocity 0.0 0.0 0.0
     rotation 0.0 0.0 0.0
@@ -137,13 +85,13 @@ dynamicobject rk2Orbiter
         radius 0.5
     }
 }
-dynamicobject eulerOrbiter
+dynamicobject semi-implicit orbiter
 {
     simulated 0
     id 100
     mesh 1
     material 1
-    position 10.0 5.0 2.0
+    position 3.5 5.0 2.0
     scale 0.5 0.5 0.5
     velocity 0.0 0.0 0.0
     rotation 0.0 0.0 0.0
@@ -157,34 +105,13 @@ dynamicobject eulerOrbiter
         radius 0.5
     }
 }
-
-dynamicobject rk4Centre
-{
-    simulated 0
-    id 105
-    mesh 1
-    material 1
-    position -10.0 5.0 0.0
-    scale 0.5 0.5 0.5
-    velocity 0.0 0.0 0.0
-    rotation 0.0 0.0 0.0
-    mass 2.0
-
-    collider
-    {
-        type sphere
-        bounciness 0.6
-        friction 0.2
-        radius 0.5
-    }
-}
-dynamicobject rk2Centre
+dynamicobject explicit centre
 {
     simulated 0
     id 103
     mesh 1
     material 2
-    position 0.0 5.0 0.0
+    position -3.5 5.0 0.0
     scale 0.5 0.5 0.5
     velocity 0.0 0.0 0.0
     rotation 0.0 0.0 0.0
@@ -198,13 +125,13 @@ dynamicobject rk2Centre
         radius 0.5
     }
 }
-dynamicobject eulerCentre
+dynamicobject semi-implicit centre
 {
     simulated 0
     id 101
     mesh 1
     material 1
-    position 10.0 5.0 0.0
+    position 3.5 5.0 0.0
     scale 0.5 0.5 0.5
     velocity 0.0 0.0 0.0
     rotation 0.0 0.0 0.0

@@ -32,7 +32,7 @@ gameobject floorPlane
     mesh 0
     material 0
     position 0.0 0.0 0.0
-    scale 100.0 1.0 100.0
+    scale 2.0 1.0 2.0
     rotation 0.0 0.0 0.0
     collider
     {
@@ -41,27 +41,6 @@ gameobject floorPlane
         friction 0.2
         normal 0.0 1.0 0.0
         point 0.0 0.0 0.0
-    }
-}
-
-dynamicobject smallSphere
-{
-    simulated 0
-    id 10
-    mesh 1
-    material 1
-    position -1.0 5.0 0.0
-    scale 0.5 0.5 0.5
-    velocity 6.0 0.0 0.0
-    rotation 0.0 0.0 0.0
-    mass 2.0
-
-    collider
-    {
-        type sphere
-        bounciness 0.6
-        friction 0.2
-        radius 0.5
     }
 }
 
@@ -85,4 +64,4 @@ dynamicobject bigSphere
         radius 0.75
     }
 }
-cameraposition 0 5 10
+cameraposition 0 5 8

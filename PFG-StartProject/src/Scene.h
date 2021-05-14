@@ -47,6 +47,8 @@ public:
 
 	void AddObject(std::shared_ptr<GameObject> newObject);
 
+	void DeleteObjectsByID(int ID);
+
 	std::vector<std::shared_ptr<GameObject>> GetObjects();
 
 	void SetPerformanceMonitor(PerformanceMonitor* monitor) { perfMonitor = monitor; };

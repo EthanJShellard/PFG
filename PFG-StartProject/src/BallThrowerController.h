@@ -14,7 +14,11 @@ class BallThrowerController : public Script
 
 	std::shared_ptr<Mesh> ballMesh;
 	std::shared_ptr<Material> ballMaterial;
-	std::vector<std::shared_ptr<DynamicObject>> balls;
+	std::vector< std::pair< std::shared_ptr<DynamicObject>, float> > balls;
+	float timeout;
+
+	float xBound;
+	float zBound;
 
 
 	void Update(float deltaTs, Input* input) override;

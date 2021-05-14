@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 #include <iostream>
+#include <string>
 
 /**
 * Application class which defines the main sequences for the application (Init, Update and Exit, etc.)
@@ -13,7 +14,7 @@
 */
 
 // Define a fixed step length for stable physics simulations
-static float STEP_LENGTH = 0.001;
+static float STEP_LENGTH = 0.02;
 
 Application::Application()
 {
@@ -56,7 +57,32 @@ bool Application::Run()
 
 bool Application::Init()
 {
-	
+
+	//GET SCENE TO BE LOADED
+	bool found = false;
+	int sceneIndex = -1;
+
+	while (!found)
+	{
+		std::cout << "Please input the index of the scene you wish to load: ";
+
+		cin >> sceneIndex;
+
+		if (sceneIndex > 0 && sceneIndex <= 3)
+		{
+			found = true;
+		}
+		else 
+		{
+			std::cout << "\nInvalid Scene Index\nPlease input the index of the scene you wish to load: ";
+			std::cin.clear();
+			std::cin.sync();
+		}
+
+	}
+
+
+
 	// Init SDL with video mode
 	if (SDL_Init(SDL_INIT_VIDEO) !=0)
 	{
@@ -106,10 +132,15 @@ bool Application::Init()
 	//Enable multisampling to smooth jagged edges
 	glEnable(GL_MULTISAMPLE);
 	
+
 	//LOAD SCENE HERE
 	// The scene contains all the objects etc
 	SceneLoader sl;
-	myScene = sl.LoadScene("assets/Scenes/Scene3.txt");
+	std::string path = "assets/Scenes/Scene";
+	path.append(std::to_string(sceneIndex));
+	path.append(".txt");
+
+	myScene = sl.LoadScene(path.c_str());
 	myScene->SetPerformanceMonitor(&performanceMonitor);
 
 	SDL_ShowCursor(true);
@@ -170,15 +201,7 @@ bool Application::Update()
 		// We target a real-time simulation, say 60 fps.
 		// Therefore multiple updates to achieve our goal.
 
-		double dt = STEP_LENGTH;
-		//int NumOfUpdates = int(deltaTime * 60);
-		//for (int i = 0; i < NumOfUpdates; i++)
-		//{
-		//	myScene->Update(dt, input);
-		//}
-		//NumOfUpdates = 0;
-
-		myScene->Update(dt, input);
+		myScene->Update(STEP_LENGTH, input);
 		
 		// Specify the colour to clear the framebuffer to
 		glClearColor(0.25f, 0.25f, 0.25f, 0.0f);
@@ -193,7 +216,7 @@ bool Application::Update()
 		
 		//caps framerate
 		lastTime = currentTime;		
-		SDL_Delay(1);
+		SDL_Delay(10);
 
 
 		performanceMonitor.FrameEnd();
