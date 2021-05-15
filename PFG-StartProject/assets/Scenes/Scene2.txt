@@ -22,6 +22,14 @@ material 2
     lightposition 0 10 0
     texture assets/textures/default.bmp
 }
+material 3
+{
+    vert assets/shaders/VertShader.txt
+    frag assets/shaders/FragShader.txt
+    colour 0.8 0.8 0.8
+    lightposition 200 10 300
+    texture assets/textures/gameover.bmp
+}
 mesh assets/models/woodfloor.obj 0
 mesh assets/models/sphere.obj 1
 script 1 (Ball thrower)
@@ -122,6 +130,17 @@ gameobject tunnelPlaneWestWall
         normal 1.0 0.0 0.0
         point -15.0 15.0 0.0
     }
+}
+
+gameobject game over screen
+{
+    simulated 1
+    id 70
+    mesh 0
+    material 3
+    position 200 0 10
+    scale 1.0 1.0 1.0
+    rotation -90.0 180.0 0.0
 }
 
 cameraposition 0 5 8

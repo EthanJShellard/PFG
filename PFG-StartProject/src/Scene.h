@@ -50,10 +50,12 @@ public:
 	void DeleteObjectsByID(int ID);
 
 	std::vector<std::shared_ptr<GameObject>> GetObjects();
+	std::shared_ptr<GameObject> GetObjectByID(int _ID);
 
 	void SetPerformanceMonitor(PerformanceMonitor* monitor) { perfMonitor = monitor; };
 
 	void AddScript(std::shared_ptr<Script> script);
+	std::shared_ptr<Script> GetScriptByID(int _ID);
 
 	void Initialize();
 

@@ -7,6 +7,7 @@ class Script
 {
 public:
 	int ID;
+	bool enabled = true;
 	Scene* scene;
 
 	virtual void Update(float deltaTs, Input* input) = 0;

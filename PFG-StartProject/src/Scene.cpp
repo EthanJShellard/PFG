@@ -30,7 +30,7 @@ void Scene::Update(float deltaTs, Input* input)
 	//Update scripts
 	for (int i = 0; i < scripts.size(); i++) 
 	{
-		scripts.at(i)->Update(deltaTs, input);
+		if(scripts.at(i)->enabled)scripts.at(i)->Update(deltaTs, input);
 	}
 
 	for (int i = 0; i < gameObjects.size(); i++)
@@ -117,10 +117,26 @@ std::vector<std::shared_ptr<GameObject>> Scene::GetObjects()
 	return gameObjects;
 }
 
+std::shared_ptr<GameObject> Scene::GetObjectByID(int _ID)
+{
+	for (int i = 0; i < gameObjects.size(); i++)
+	{
+		if (gameObjects.at(i)->ID == _ID) return gameObjects.at(i);
+	}
+}
+
 void Scene::AddScript(std::shared_ptr<Script> script)
 {
 	script->scene = this;
 	scripts.push_back(script);
+}
+
+std::shared_ptr<Script> Scene::GetScriptByID(int _ID)
+{
+	for (int i = 0; i < scripts.size(); i++) 
+	{
+		if (scripts.at(i)->ID == _ID) return scripts.at(i);
+	}
 }
 
 void Scene::Initialize()

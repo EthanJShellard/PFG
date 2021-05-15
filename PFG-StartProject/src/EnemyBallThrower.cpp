@@ -59,6 +59,7 @@ void EnemyBallThrower::Update(float deltaTs, Input* input)
 			ball->SetVelocity((minThrowSpeed + (((float)std::rand() / RAND_MAX) * maxThrowSpeed)) * throwDir);
 
 			cooldownTimer = cooldown;
+			cooldown = max(cooldown *= 0.99f, 0.1f);
 		}
 
 		cooldownTimer -= deltaTs;
@@ -77,7 +78,8 @@ void EnemyBallThrower::Update(float deltaTs, Input* input)
 				//Check for collision with player
 				if (glm::distance(yZapper * balls.at(i).first->GetPosition(), yZapper * scene->GetCamera()->_cameraPos) < 1.5f)
 				{
-					std::cout << "DEAD" << std::endl;
+					scene->GetScriptByID(1)->enabled = false; //Disable player control class
+					ShowDeathScreen();
 				}
 
 				balls.at(i).second += deltaTs;
@@ -110,9 +112,8 @@ void EnemyBallThrower::Initialize()
 	//Load enemy sprite plane
 	sprite = std::make_shared<GameObject>();
 	sprite->SetPosition(0.0f,2.5f,-50.0f);
-	sprite->SetRotation(glm::vec3(glm::radians(90.0f), 0.0f, 0.0f));
+	sprite->SetRotation(glm::vec3(glm::radians(-90.0f), glm::radians(180.0f), 0.0f));
 	sprite->SetScale(0.5f,0.5f,0.5f);
-	sprite->Rotate(glm::radians(180.0f), glm::vec3(0,0,1));
 
 	auto spriteMesh = std::make_shared<Mesh>();
 	spriteMesh->LoadOBJ("assets/models/woodfloor.obj");
@@ -131,10 +132,8 @@ void EnemyBallThrower::Initialize()
 	//Load press start plane
 	pressStart = std::make_shared<GameObject>();
 	pressStart->SetPosition(glm::vec3(0.0f,4.5f,-25.0f));
-	pressStart->SetRotation(glm::vec3(glm::radians(90.0f), 0.0f, 0.0f));
+	pressStart->SetRotation(glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f));
 	pressStart->SetScale(1.0f, 1.0f, 1.0f);
-	pressStart->Rotate(glm::radians(180.0f), glm::vec3(0, 0, 1));
-	pressStart->Rotate(glm::radians(180.0f), glm::vec3(0, 1, 0));
 
 	auto pressStartMesh = std::make_shared<Mesh>();
 	pressStartMesh->LoadOBJ("assets/models/woodfloor.obj");
@@ -144,7 +143,7 @@ void EnemyBallThrower::Initialize()
 	pressStartMaterial->LoadShaders("assets/shaders/VertShader.txt", "assets/shaders/FragShader.txt");
 	pressStartMaterial->SetDiffuseColour(glm::vec3(1.0f, 1.0f, 1.0f));
 	pressStartMaterial->SetTexture("assets/textures/pressstart.bmp");
-	pressStartMaterial->SetLightPosition(glm::vec3(0,5,5));
+	pressStartMaterial->SetLightPosition(glm::vec3(0,5,-5));
 	pressStart->SetMaterial(pressStartMaterial);
 
 	scene->AddObject(pressStart);
@@ -159,4 +158,12 @@ void EnemyBallThrower::Initialize()
 	ballMaterial->SetDiffuseColour(glm::vec3(0.8, 0.1, 0.1));
 	ballMaterial->SetTexture("assets/textures/default.bmp");
 	ballMaterial->SetLightPosition(glm::vec3(0, 10, 0));
+}
+
+void EnemyBallThrower::ShowDeathScreen()
+{
+	cam->_cameraAngleX = 0;
+	cam->_cameraAngleY = 0;
+	cam->_cameraPos = glm::vec3(200, 0, 0);
+	std::cout << "Game Over! Press escape to exit." << std::endl;
 }

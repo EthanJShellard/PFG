@@ -428,16 +428,21 @@ glm::vec3 SceneLoader::vec3ToRadians(glm::vec3 input)
 
 std::shared_ptr<Script> SceneLoader::LoadScript(int index)
 {
+	std::shared_ptr<Script> scrp;
+
 	//Select script
 	switch (index) 
 	{
-	case 0: return std::make_shared<FlyingCameraController>(); break;
-	case 1: return std::make_shared<BallThrowerController>(); break;
-	case 2: return std::make_shared<OrbitController>(); break;
-	case 3: return std::make_shared<SimulationStarter>(); break;
-	case 4: return std::make_shared<EnemyBallThrower>(); break;
+	case 0: scrp = std::make_shared<FlyingCameraController>(); break;
+	case 1: scrp = std::make_shared<BallThrowerController>(); break;
+	case 2: scrp = std::make_shared<OrbitController>(); break;
+	case 3: scrp = std::make_shared<SimulationStarter>(); break;
+	case 4: scrp = std::make_shared<EnemyBallThrower>(); break;
 	default: return nullptr;
 	}
+
+	scrp->ID = index;
+	return scrp;
 }
 
 glm::vec3 SceneLoader::LoadVec3(std::vector<std::string> tokens)

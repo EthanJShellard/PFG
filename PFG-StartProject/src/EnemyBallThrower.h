@@ -36,4 +36,5 @@ class EnemyBallThrower : public Script
 	std::shared_ptr<DynamicObject> CreateBall();
 	void Update(float deltaTs, Input* input) override;
 	void Initialize() override;
+	void ShowDeathScreen();
 };
