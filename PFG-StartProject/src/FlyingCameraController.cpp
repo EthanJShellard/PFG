@@ -2,7 +2,6 @@
 #include "Scene.h"
 #include "Camera.h"
 
-
 void FlyingCameraController::Update(float deltaTs, Input* input)
 {
 	cam->_cameraAngleX -= input->getMouseDelta().x * cam->mouseSpeed;

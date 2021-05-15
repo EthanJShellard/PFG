@@ -74,7 +74,7 @@ void BallThrowerController::Initialize()
 {
 	cam = scene->GetCamera();
 
-	xBound = 10;
+	xBound = 14;
 	zBound = 10;
 	timeout = 8.0f;
 
@@ -84,9 +84,9 @@ void BallThrowerController::Initialize()
 
 	ballMaterial = std::make_shared<Material>();
 	ballMaterial->LoadShaders("assets/shaders/VertShader.txt", "assets/shaders/FragShader.txt");
-	ballMaterial->SetDiffuseColour(glm::vec3(0.8, 0.1, 0.1));
+	ballMaterial->SetDiffuseColour(glm::vec3(0.1, 0.8, 0.1));
 	ballMaterial->SetTexture("assets/textures/default.bmp");
-	ballMaterial->SetLightPosition(glm::vec3(0,10,0));
+	ballMaterial->SetLightPosition(glm::vec3(0, 10, 0));
 }
 
 std::shared_ptr<DynamicObject> BallThrowerController::CreateBall()

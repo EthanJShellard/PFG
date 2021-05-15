@@ -12,7 +12,7 @@ material 1
     frag assets/shaders/FragShader.txt
     colour 0.8 0.1 0.1
     lightposition 0 10 0
-    texture assets/textures/default.bmp
+    texture assets/textures/diffuse.bmp
 }
 material 2
 {
@@ -25,43 +25,103 @@ material 2
 mesh assets/models/woodfloor.obj 0
 mesh assets/models/sphere.obj 1
 script 1 (Ball thrower)
+script 4 (Enemy ball thrower)
 gameobject floorPlane
 {
     simulated 1
     id 0
     mesh 0
+    material 1
+    position 0.0 0.05 0.0
+    scale 3.0 1.0 2.0
+    rotation 0.0 0.0 0.0
+}
+
+gameobject floorPlane2
+{
+    simulated 1
+    id 1
+    mesh 0
+    material 1
+    position 0.0 0.05 -50.0
+    scale 3.0 1.0 2.0
+    rotation 0.0 0.0 0.0
+}
+
+gameobject tunnelPlaneFloor
+{
+    simulated 1
+    id 1
+    mesh 0
     material 0
-    position 0.0 0.0 0.0
-    scale 2.0 1.0 2.0
+    position 0.0 0.0 -20.0
+    scale 20.0 1.0 20.0
     rotation 0.0 0.0 0.0
     collider
     {
         type plane
-        bounciness 0.1
+        bounciness 0.45
         friction 0.2
         normal 0.0 1.0 0.0
         point 0.0 0.0 0.0
     }
 }
 
-dynamicobject bigSphere
+gameobject tunnelPlaneCeiling
 {
     simulated 1
-    id 11
-    mesh 1
-    material 2
-    position 1.0 5.0 0.0
-    scale 0.75 0.75 0.75
-    velocity -10.0 0.0 0.0
-    rotation 0.0 0.0 0.0
-    mass 4.0
-
+    id 1
+    mesh 0
+    material 0
+    position 0.0 15.0 -20.0
+    scale 20.0 1.0 20.0
+    rotation 0.0 0.0 180.0
     collider
     {
-        type sphere
-        bounciness 0.0
-        friction 0.3
-        radius 0.75
+        type plane
+        bounciness 0.45
+        friction 0.2
+        normal 0.0 -1.0 0.0
+        point 0.0 15.0 0.0
     }
 }
+
+gameobject tunnelPlaneEastWall
+{
+    simulated 1
+    id 1
+    mesh 0
+    material 0
+    position 15.0 15.0 -20.0
+    scale 20.0 1.0 20.0
+    rotation 0.0 90.0 0.0
+    collider
+    {
+        type plane
+        bounciness 0.45
+        friction 0.2
+        normal -1.0 0.0 0.0
+        point 15.0 15.0 0.0
+    }
+}
+
+gameobject tunnelPlaneWestWall
+{
+    simulated 1
+    id 1
+    mesh 0
+    material 0
+    position -15.0 15.0 -20.0
+    scale 20.0 1.0 20.0
+    rotation 0.0 -90.0 0.0
+    collider
+    {
+        type plane
+        bounciness 0.45
+        friction 0.2
+        normal 1.0 0.0 0.0
+        point -15.0 15.0 0.0
+    }
+}
+
 cameraposition 0 5 8

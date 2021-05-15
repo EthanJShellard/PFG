@@ -74,8 +74,9 @@ bool Application::Init()
 		}
 		else 
 		{
-			std::cout << "\nInvalid Scene Index\nPlease input the index of the scene you wish to load: ";
+			std::cout << "\nInvalid Scene Index\n";
 			std::cin.clear();
+			std::cin.ignore(10000, '\n');
 			std::cin.sync();
 		}
 

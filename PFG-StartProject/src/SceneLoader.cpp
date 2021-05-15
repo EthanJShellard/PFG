@@ -6,6 +6,7 @@
 #include "Mesh.h"
 #include "FlyingCameraController.h"
 #include "BallThrowerController.h"
+#include "EnemyBallThrower.h"
 #include "OrbitController.h"
 #include "SimulationStarter.h"
 #include <string>
@@ -434,6 +435,7 @@ std::shared_ptr<Script> SceneLoader::LoadScript(int index)
 	case 1: return std::make_shared<BallThrowerController>(); break;
 	case 2: return std::make_shared<OrbitController>(); break;
 	case 3: return std::make_shared<SimulationStarter>(); break;
+	case 4: return std::make_shared<EnemyBallThrower>(); break;
 	default: return nullptr;
 	}
 }
