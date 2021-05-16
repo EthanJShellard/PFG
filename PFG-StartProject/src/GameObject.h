@@ -16,7 +16,7 @@
 *
 */
 
-class GameObject : public std::enable_shared_from_this<GameObject>
+class GameObject
 {
 public:
 	/** GameObject constructor
@@ -30,40 +30,40 @@ public:
 	/** Function for setting mesh geometry for the game object 
 	* @param *input  a pointer to a mesh object
 	*/
-	void SetMesh(std::shared_ptr<Mesh> input) {mesh = input;}
+	void SetMesh(std::shared_ptr<Mesh> _input) {m_mesh = _input;}
 	/** Function for setting material for the game object
 	* @param *input  a pointer to a material object
 	*/
-	void SetMaterial(std::shared_ptr<Material> input) {material = input;}
+	void SetMaterial(std::shared_ptr<Material> _input) {m_material = _input;}
 	/** Function for setting position for the game object
 	* @param float posX x position
 	* @param float posY y position
 	* @param float posZ z position
 	*/
-	void SetPosition( float posX, float posY, float posZ ) {position.x = posX; position.y = posY; position.z = posZ;}
+	void SetPosition( float _posX, float _posY, float _posZ ) {m_position.x = _posX; m_position.y = _posY; m_position.z = _posZ;}
 	/** Function for setting position for the game object
 	* @param glm::vec3 value  a position 3D vector
 	*/
-	void SetPosition( glm::vec3 value) {position = value;}
+	virtual void SetPosition( glm::vec3 _value) {m_position = _value;}
 	/** Function for setting rotation for the game object
 	* @param float rotX x rotation
 	* @param float rotY y rotation
 	* @param float rotZ z rotation
 	*/
-	void SetRotation(float rotX, float rotY, float rotZ) { rotation = glm::quat(glm::orientate3(glm::vec3(rotX, rotY, rotZ))); }
-	void SetRotation(glm::vec3 newRot) { rotation = glm::quat(glm::orientate3(newRot)); }
+	void SetRotation(float _rotX, float _rotY, float _rotZ) { m_rotation = glm::quat(glm::orientate3(glm::vec3(_rotX, _rotY, _rotZ))); }
+	void SetRotation(glm::vec3 _newRot) { m_rotation = glm::quat(glm::orientate3(_newRot)); }
 	
-	void Rotate(float angle, glm::vec3 axis) { rotation = glm::angleAxis(angle, axis) * rotation; };
+	void Rotate(float _angle, glm::vec3 _axis) { m_rotation = glm::angleAxis(_angle, _axis) * m_rotation; };
 
 	/** Function for setting scale for the game object
 	* @param float sX x scale
 	* @param float sY y scale
 	* @param float sZ z scale
 	*/
-	void SetScale(float sX, float sY, float sZ) { scale.x = sX; scale.y = sY; scale.z = sZ; }
-	void SetScale(glm::vec3 newScale) { scale = newScale; }
+	void SetScale(float _sX, float _sY, float _sZ) { m_scale.x = _sX; m_scale.y = _sY; m_scale.z = _sZ; }
+	void SetScale(glm::vec3 _newScale) { m_scale = _newScale; }
 	
-	void SetVelocity(glm::vec3 newVel);
+	void SetVelocity(glm::vec3 _newVel);
 
 	glm::vec3 GetVelocity();
 	glm::vec3 GetScale();
@@ -71,21 +71,21 @@ public:
 	/** Function for getting position of the game object
 	* @return The result
 	*/
-	glm::vec3 GetPosition() {return position;}
+	glm::vec3 GetPosition() {return m_position;}
 	
 	/** A virtual function for updating the simulation result at each time frame
 	*   You need to expand this function 
 	* @param float deltaTs the time intervel in second for the simulation frame
 	*/
-	virtual void Update( float deltaTs );
+	virtual void Update( float _deltaTs );
 	/** A virtual function for drawing the simulation result
 	*  The function takes viewing matrix and projection matrix 
 	* @param glm::mat4 &viewMatrix a 4x4 matrix
 	* @param glm::mat4 &projMatrix a 4x4 matrix
 	*/
-	virtual void Draw(glm::mat4 &viewMatrix, glm::mat4 &projMatrix);
+	virtual void Draw(glm::mat4 &_viewMatrix, glm::mat4 &_projMatrix);
 
-	virtual void SetSimulated(bool sim);
+	virtual void SetSimulated(bool _sim);
 
 	virtual float GetInverseMass();
 	
@@ -94,9 +94,9 @@ public:
 
 	std::shared_ptr<Collider> GetCollider();
 
-	void SetCollider(std::shared_ptr<Collider> newCollider);
+	void SetCollider(std::shared_ptr<Collider> _newCollider);
 
-	void UpdateCollider(float deltaTs);
+	void UpdateCollider(float _deltaTs);
 
 	void InitialiseCollider();
 
@@ -112,41 +112,39 @@ protected:
 
 	/** The model geometry
 	*/
-	std::shared_ptr<Mesh> mesh;
+	std::shared_ptr<Mesh> m_mesh;
 	/** The material contains the shader
 	*/
-	std::shared_ptr<Material> material;
+	std::shared_ptr<Material> m_material;
 
 	/** Matrix for the position of the game object
 	*/ 
-	glm::mat4 modelMatrix;
+	glm::mat4 m_modelMatrix;
 	/** Matrix for the orientation of the game object
 	*/
-	glm::mat4 invModelMatrix;
+	glm::mat4 m_invModelMatrix;
 	
 	/** Position of the model
 	* The model matrix must be built from the position of the model geometry
 	*/
-	glm::vec3 position;
+	glm::vec3 m_position;
 	
 	/** Orientation of the model
 	* The model matrix must be built from the orientation of the model geometry
 	*/
-	glm::quat rotation;
+	glm::quat m_rotation;
 	/** Scale of the model
 	* The model matrix must be built from the scale of the model geometry
 	*/
-	glm::vec3 scale;
+	glm::vec3 m_scale;
 
-	glm::vec3 velocity;
-
-	
+	glm::vec3 m_velocity;	
 
 	//Collider and Collisions
-	std::shared_ptr<Collider> collider;
-	std::vector<Collision> collisions;
+	std::shared_ptr<Collider> m_collider;
+	std::vector<Collision> m_collisions;
 	
 	//Include object in physics simulation?
-	bool simulated;
+	bool m_simulated;
 };
 #endif

@@ -4,18 +4,18 @@
 class KinematicObject : public GameObject
 {
 private:
-	bool simulated;
-	float radius;
+	bool m_simulated;
+	float m_radius;
 
 public:
 
 	void UpdateModelMatrix();
 
-	void Update(float deltaTs);
+	void Update(float m_deltaTs);
 
-	void SetRadius(float newRad);
+	void SetRadius(float m_newRad);
 
-	void SetSimulated(bool sim);
+	void SetSimulated(bool m_sim);
 
 	KinematicObject();
 	~KinematicObject();

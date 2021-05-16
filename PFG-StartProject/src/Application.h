@@ -26,33 +26,30 @@ class Application
 private:
 	/** SDL Variables and parameters
 	*/
-	SDL_Window* window; /*!<SDL window*/
-	SDL_Renderer* renderer; /*!<SDL renderer*/
-	SDL_Surface* surface; /*!<SDL window surface*/
-	SDL_Event  events; /*!< The current event being parsed from SDL*/
-	SDL_GLContext glcontext; /*!<gl drawing context*/
+	SDL_Window* m_window; /*!<SDL window*/
+	SDL_Renderer* m_renderer; /*!<SDL renderer*/
+	SDL_Surface* m_surface; /*!<SDL window surface*/
+	SDL_Event  m_events; /*!< The current event being parsed from SDL*/
+	SDL_GLContext m_glcontext; /*!<gl drawing context*/
 
     /** Game engine variables and parameters
 	*/
-	bool running; /*!< Defines if the update loop is running or not*/
+	bool m_running; /*!< Defines if the update loop is running or not*/
 	
     /** Game and simulation timing variables and parameters
 	*/
-	unsigned int lastTime; /*!< The last frames time*/
-	unsigned int currentTime; /*!< The current frames time */
-	float deltaTime; /*!< The delta between the last frame and current frame times */
-	
+	unsigned int m_lastTime; /*!< The last frames time*/
+	unsigned int m_currentTime; /*!< The current frames time */
+	float m_deltaTime; /*!< The delta between the last frame and current frame times */
+	PerformanceMonitor m_performanceMonitor;
 	/** Game and simulation content 
 	*/
-	std::shared_ptr<Scene> myScene; /*!< The game scene*/
-	Input* input; /*!< The keyboard and mouse input */
-
+	std::shared_ptr<Scene> m_myScene; /*!< The game scene*/
+	Input* m_input; /*!< The keyboard and mouse input */
 	
     /** STATIC MEMBERS: only one application instance running 
 	*/
-	static Application* instance;
-
-	PerformanceMonitor performanceMonitor;
+	static Application* g_instance;	
 
 public:
 	/** Application class constructor

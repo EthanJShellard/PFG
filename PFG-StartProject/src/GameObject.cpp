@@ -11,12 +11,12 @@
 GameObject::GameObject()
 {
 	// Initialise everything here
-	mesh = NULL;
-	material = NULL;
+	m_mesh = NULL;
+	m_material = NULL;
 	// Set default value
-	scale = glm::vec3(1.0f, 1.0f, 1.0f);
-	velocity = glm::vec3(0.0f, 0.0f, 0.0f);
-	simulated = false;
+	m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	m_velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+	m_simulated = false;
 	ID = 0;
 }
 
@@ -25,57 +25,57 @@ GameObject::~GameObject()
 	// Do any clean up here
 }
 
-void GameObject::SetVelocity(glm::vec3 newVel)
+void GameObject::SetVelocity(glm::vec3 _newVel)
 {
-	velocity = newVel;
+	m_velocity = _newVel;
 }
 
 glm::vec3 GameObject::GetVelocity()
 {
-	return velocity;
+	return m_velocity;
 }
 
 glm::vec3 GameObject::GetScale()
 {
-	return scale;
+	return m_scale;
 }
 
-void GameObject::Update(float deltaTs)
+void GameObject::Update(float _deltaTs)
 {
 	// Put any update code here
 	// Make sure matrices are up to date (if you don't change them elsewhere, you can put this in the update function)
 	//_modelMatrix = glm::rotate(_modelMatrix, _rotation.y, glm::vec3(0,1,0) );
 	//_invModelMatrix = glm::rotate(glm::mat4(1.0f), -_rotation.y, glm::vec3(0,1,0) );
-	modelMatrix = glm::mat4();
-	modelMatrix = glm::toMat4(rotation) * modelMatrix;
-	modelMatrix = glm::translate(glm::mat4(), position) * modelMatrix;
-	modelMatrix = glm::scale(modelMatrix, scale);
-	invModelMatrix = glm::inverse(modelMatrix);
+	m_modelMatrix = glm::mat4();
+	m_modelMatrix = glm::toMat4(m_rotation) * m_modelMatrix;
+	m_modelMatrix = glm::translate(glm::mat4(), m_position) * m_modelMatrix;
+	m_modelMatrix = glm::scale(m_modelMatrix, m_scale);
+	m_invModelMatrix = glm::inverse(m_modelMatrix);
 }
 
-void GameObject::Draw(glm::mat4& viewMatrix, glm::mat4& projMatrix)
+void GameObject::Draw(glm::mat4& _viewMatrix, glm::mat4& _projMatrix)
 {
-	if (mesh != NULL)
+	if (m_mesh != NULL)
 	{
-		if (material != NULL)
+		if (m_material != NULL)
 		{
 			// Give all the matrices to the material
 
 			// This makes sure they are sent to the shader
-			material->SetMatrices(modelMatrix, invModelMatrix, viewMatrix, projMatrix);
+			m_material->SetMatrices(m_modelMatrix, m_invModelMatrix, _viewMatrix, _projMatrix);
 			// This activates the shader
-			material->Apply();
+			m_material->Apply();
 		}
 
 		// Sends the mesh data down the pipeline
-		mesh->Draw();
+		m_mesh->Draw();
 
 	}
 }
 
-void GameObject::SetSimulated(bool sim)
+void GameObject::SetSimulated(bool _sim)
 {
-	simulated = sim;
+	m_simulated = _sim;
 }
 
 float GameObject::GetInverseMass()
@@ -83,37 +83,37 @@ float GameObject::GetInverseMass()
 	return 0.0f;
 }
 
-void GameObject::AddCollision(Collision c)
+void GameObject::AddCollision(Collision _c)
 {
-	collisions.push_back(c);
+	m_collisions.push_back(_c);
 }
 
 void GameObject::ClearCollisions()
 {
-	collisions.clear();
+	m_collisions.clear();
 }
 
 std::shared_ptr<Collider> GameObject::GetCollider()
 {
-	return collider;
+	return m_collider;
 }
 
 void GameObject::SetCollider(std::shared_ptr<Collider> newCollider)
 {
-	collider = newCollider;
-	collider->parent = this;
+	m_collider = newCollider;
+	m_collider->m_parent = this;
 }
 
-void GameObject::UpdateCollider(float deltaTs)
+void GameObject::UpdateCollider(float _deltaTs)
 {
-	if (!collider) return;
-	collider->Update(deltaTs);
+	if (!m_collider) return;
+	m_collider->Update(_deltaTs);
 }
 
 void GameObject::InitialiseCollider()
 {
-	if (!collider) return;
-	collider->Initialise();
+	if (!m_collider) return;
+	m_collider->Initialise();
 }
 
 float GameObject::GetMass()
@@ -123,10 +123,10 @@ float GameObject::GetMass()
 
 std::shared_ptr<Mesh> GameObject::GetMesh()
 {
-	return mesh;
+	return m_mesh;
 }
 
 std::shared_ptr<Material> GameObject::GetMaterial()
 {
-	return material;
+	return m_material;
 }

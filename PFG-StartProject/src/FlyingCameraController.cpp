@@ -2,42 +2,42 @@
 #include "Scene.h"
 #include "Camera.h"
 
-void FlyingCameraController::Update(float deltaTs, Input* input)
+void FlyingCameraController::Update(float _deltaTs, Input* _input)
 {
-	cam->_cameraAngleX -= input->getMouseDelta().x * cam->mouseSpeed;
-	cam->_cameraAngleY -= input->getMouseDelta().y * cam->mouseSpeed;
+	m_cam->m_cameraAngleX -= _input->getMouseDelta().x * m_cam->m_mouseSpeed;
+	m_cam->m_cameraAngleY -= _input->getMouseDelta().y * m_cam->m_mouseSpeed;
 
-	glm::vec3 direction(cos(cam->_cameraAngleY) * sin(cam->_cameraAngleX), sin(cam->_cameraAngleY), cos(cam->_cameraAngleY) * cos(cam->_cameraAngleX));
-	glm::vec3 right = glm::vec3(sin(cam->_cameraAngleX - 3.14f / 2.0f), 0, cos(cam->_cameraAngleX - 3.14f / 2.0f));
+	glm::vec3 direction(cos(m_cam->m_cameraAngleY) * sin(m_cam->m_cameraAngleX), sin(m_cam->m_cameraAngleY), cos(m_cam->m_cameraAngleY) * cos(m_cam->m_cameraAngleX));
+	glm::vec3 right = glm::vec3(sin(m_cam->m_cameraAngleX - 3.14f / 2.0f), 0, cos(m_cam->m_cameraAngleX - 3.14f / 2.0f));
 	glm::vec3 up = glm::cross(right, direction);
 
 	// Move camera in a direction
-	if (input->cmd_w)
+	if (_input->cmd_w)
 	{
-		cam->_translation = direction * cam->speed;
-		cam->_cameraPos += cam->_translation;
+		m_cam->m_translation = direction * m_cam->m_speed;
+		m_cam->m_cameraPos += m_cam->m_translation;
 
 	}
-	else if (input->cmd_s)
+	else if (_input->cmd_s)
 	{
-		cam->_translation = -(direction * cam->speed);
-		cam->_cameraPos += cam->_translation;
+		m_cam->m_translation = -(direction * m_cam->m_speed);
+		m_cam->m_cameraPos += m_cam->m_translation;
 	}
-	if (input->cmd_a)
+	if (_input->cmd_a)
 	{
-		cam->_translation = -(right * cam->speed);
-		cam->_cameraPos += cam->_translation;
+		m_cam->m_translation = -(right * m_cam->m_speed);
+		m_cam->m_cameraPos += m_cam->m_translation;
 
 	}
-	else if (input->cmd_d)
+	else if (_input->cmd_d)
 	{
-		cam->_translation = right * cam->speed;
-		cam->_cameraPos += cam->_translation;
+		m_cam->m_translation = right * m_cam->m_speed;
+		m_cam->m_cameraPos += m_cam->m_translation;
 	}
 	
 }
 
 void FlyingCameraController::Initialize()
 {
-	cam = scene->GetCamera();
+	m_cam = m_scene->GetCamera();
 }

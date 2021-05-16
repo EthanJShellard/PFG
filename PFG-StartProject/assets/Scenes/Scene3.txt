@@ -6,7 +6,7 @@ material 0
     lightposition 0 10 0
     texture assets/textures/diffuse.bmp
 }
-material 1 rk4
+material 1 semi-implicit
 {
     vert assets/shaders/VertShader.txt
     frag assets/shaders/FragShader.txt
@@ -14,7 +14,7 @@ material 1 rk4
     lightposition 0 10 0
     texture assets/textures/default.bmp
 }
-material 2 rk2
+material 2 explicit
 {
     vert assets/shaders/VertShader.txt
     frag assets/shaders/FragShader.txt
@@ -22,7 +22,7 @@ material 2 rk2
     lightposition 0 10 0
     texture assets/textures/default.bmp
 }
-material 3 euler
+material 3 verlet
 {
     vert assets/shaders/VertShader.txt
     frag assets/shaders/FragShader.txt

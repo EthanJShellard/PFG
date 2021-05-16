@@ -12,13 +12,13 @@
 #include <string>
 #include <fstream>
 
-std::shared_ptr<Scene> SceneLoader::LoadScene(const char* path)
+std::shared_ptr<Scene> SceneLoader::LoadScene(const char* _path)
 {
-	std::string currentLine = path;
+	std::string currentLine = _path;
 
 	try 
 	{
-		return LoadScene(currentLine, path);
+		return LoadScene(currentLine, _path);
 	}
 	catch (std::exception& e) 
 	{
@@ -29,39 +29,39 @@ std::shared_ptr<Scene> SceneLoader::LoadScene(const char* path)
 	}
 }
 
-std::shared_ptr<Scene> SceneLoader::LoadScene(std::string& currentLine, const char* path)
+std::shared_ptr<Scene> SceneLoader::LoadScene(std::string& _currentLine, const char* _path)
 {
 	//Attempt to open file
-	std::ifstream file(path);
+	std::ifstream file(_path);
 	if (!file.is_open()) 
 	{
 		throw std::exception();
 	}
 
 	std::shared_ptr<Scene> scene = std::make_shared<Scene>();
-	materialLibrary = std::vector<std::shared_ptr<Material> >();
-	meshLibrary = std::vector<std::shared_ptr<Mesh> >();
+	m_materialLibrary = std::vector<std::shared_ptr<Material> >();
+	m_meshLibrary = std::vector<std::shared_ptr<Mesh> >();
 
 	while (!file.eof()) 
 	{
-		std::getline(file, currentLine);
-		if (currentLine.length() < 1) continue; //Skip empty lines
+		std::getline(file, _currentLine);
+		if (_currentLine.length() < 1) continue; //Skip empty lines
 
 		std::vector<std::string> tokens;
-		SplitStringWhitespace(currentLine, tokens);
+		SplitStringWhitespace(_currentLine, tokens);
 		if (tokens.size() < 1) continue; //Skip if no tokens
 
 		if (tokens.at(0) == "gameobject") 
 		{
-			scene->AddObject(LoadGameObject(currentLine, file));
+			scene->AddObject(LoadGameObject(_currentLine, file));
 		}
 		else if (tokens.at(0) == "dynamicobject") 
 		{
-			scene->AddObject(LoadDynamicObject(currentLine, file));
+			scene->AddObject(LoadDynamicObject(_currentLine, file));
 		}
 		else if (tokens.at(0) == "material") 
 		{
-			materialLibrary.push_back(LoadMaterial(currentLine, file));
+			m_materialLibrary.push_back(LoadMaterial(_currentLine, file));
 		}
 		else if (tokens.at(0) == "mesh") 
 		{
@@ -70,7 +70,7 @@ std::shared_ptr<Scene> SceneLoader::LoadScene(std::string& currentLine, const ch
 			{
 				mesh->LoadOBJ(tokens.at(1)); //Load mesh using path
 			}
-			meshLibrary.push_back(mesh);
+			m_meshLibrary.push_back(mesh);
 		}
 		else if (tokens.at(0) == "cameraposition") 
 		{
@@ -78,8 +78,8 @@ std::shared_ptr<Scene> SceneLoader::LoadScene(std::string& currentLine, const ch
 		}
 		else if (tokens.at(0) == "cameraangles") 
 		{
-			scene->GetCamera()->_cameraAngleX = atof(tokens.at(1).c_str());
-			scene->GetCamera()->_cameraAngleY = atof(tokens.at(2).c_str());
+			scene->GetCamera()->m_cameraAngleX = atof(tokens.at(1).c_str());
+			scene->GetCamera()->m_cameraAngleY = atof(tokens.at(2).c_str());
 		}
 		else if (tokens.at(0) == "script") 
 		{
@@ -96,31 +96,31 @@ std::shared_ptr<Scene> SceneLoader::LoadScene(std::string& currentLine, const ch
 	return scene;
 }
 
-std::shared_ptr<GameObject> SceneLoader::LoadGameObject(std::string& currentLine, std::ifstream& file)
+std::shared_ptr<GameObject> SceneLoader::LoadGameObject(std::string& _currentLine, std::ifstream& _file)
 {
 	std::shared_ptr<GameObject> gameObject = std::make_shared<GameObject>();
 	std::vector<std::string> tokens;
 
-	std::string backupLine = currentLine;
+	std::string backupLine = _currentLine;
 
-	std::getline(file, currentLine);
-	SplitStringWhitespace(currentLine, tokens);
+	std::getline(_file, _currentLine);
+	SplitStringWhitespace(_currentLine, tokens);
 
 	if (tokens.at(0) != "{") //Empty gameobject requested 
 	{
-		currentLine = backupLine;
+		_currentLine = backupLine;
 		return gameObject;
 	}
 
-	while (!file.eof()) 
+	while (!_file.eof()) 
 	{
-		std::getline(file, currentLine);
-		SplitStringWhitespace(currentLine, tokens);
+		std::getline(_file, _currentLine);
+		SplitStringWhitespace(_currentLine, tokens);
 		if (tokens.size() < 1) continue; //Skip if no tokens
 
 		if (tokens.at(0) == "mesh") 
 		{
-			gameObject->SetMesh(meshLibrary.at(atoi(tokens.at(1).c_str())));
+			gameObject->SetMesh(m_meshLibrary.at(atoi(tokens.at(1).c_str())));
 		}
 		else if (tokens.at(0) == "simulated") 
 		{
@@ -144,7 +144,7 @@ std::shared_ptr<GameObject> SceneLoader::LoadGameObject(std::string& currentLine
 		}
 		else if (tokens.at(0) == "material") 
 		{
-			gameObject->SetMaterial(materialLibrary.at(atoi(tokens.at(1).c_str())));
+			gameObject->SetMaterial(m_materialLibrary.at(atoi(tokens.at(1).c_str())));
 		}
 		else if (tokens.at(0) == "id") 
 		{
@@ -152,42 +152,42 @@ std::shared_ptr<GameObject> SceneLoader::LoadGameObject(std::string& currentLine
 		}
 		else if (tokens.at(0) == "collider")
 		{
-			gameObject->SetCollider(LoadCollider(currentLine, file));
+			gameObject->SetCollider(LoadCollider(_currentLine, _file));
 		}
 		else if (tokens.at(0) == "}") 
 		{
 			return gameObject;
 		}
 	}
-	file.close();
+	_file.close();
 	throw std::exception();
 }
 
-std::shared_ptr<DynamicObject> SceneLoader::LoadDynamicObject(std::string& currentLine, std::ifstream& file)
+std::shared_ptr<DynamicObject> SceneLoader::LoadDynamicObject(std::string& _currentLine, std::ifstream& _file)
 {
 	std::shared_ptr<DynamicObject> dynamicObject = std::make_shared<DynamicObject>();
 	std::vector<std::string> tokens;
 
-	std::string backupLine = currentLine;
+	std::string backupLine = _currentLine;
 
-	std::getline(file, currentLine);
-	SplitStringWhitespace(currentLine, tokens);
+	std::getline(_file, _currentLine);
+	SplitStringWhitespace(_currentLine, tokens);
 
 	if (tokens.at(0) != "{") //Empty dynamicObject requested 
 	{
-		currentLine = backupLine;
+		_currentLine = backupLine;
 		return dynamicObject;
 	}
 
-	while (!file.eof())
+	while (!_file.eof())
 	{
-		std::getline(file, currentLine);
-		SplitStringWhitespace(currentLine, tokens);
+		std::getline(_file, _currentLine);
+		SplitStringWhitespace(_currentLine, tokens);
 		if (tokens.size() < 1) continue; //Skip if no tokens
 
 		if (tokens.at(0) == "mesh")
 		{
-			dynamicObject->SetMesh(meshLibrary.at(atoi(tokens.at(1).c_str())));
+			dynamicObject->SetMesh(m_meshLibrary.at(atoi(tokens.at(1).c_str())));
 		}
 		else if (tokens.at(0) == "simulated")
 		{
@@ -219,7 +219,7 @@ std::shared_ptr<DynamicObject> SceneLoader::LoadDynamicObject(std::string& curre
 		}
 		else if (tokens.at(0) == "material")
 		{
-			dynamicObject->SetMaterial(materialLibrary.at(atoi(tokens.at(1).c_str())));
+			dynamicObject->SetMaterial(m_materialLibrary.at(atoi(tokens.at(1).c_str())));
 		}
 		else if (tokens.at(0) == "id")
 		{
@@ -227,39 +227,39 @@ std::shared_ptr<DynamicObject> SceneLoader::LoadDynamicObject(std::string& curre
 		}
 		else if (tokens.at(0) == "collider")
 		{
-			dynamicObject->SetCollider(LoadCollider(currentLine, file));
+			dynamicObject->SetCollider(LoadCollider(_currentLine, _file));
 		}
 		else if (tokens.at(0) == "}")
 		{
 			return dynamicObject;
 		}
 	}
-	file.close();
+	_file.close();
 	throw std::exception();
 }
 
-std::shared_ptr<Material> SceneLoader::LoadMaterial(std::string& currentLine, std::ifstream& file)
+std::shared_ptr<Material> SceneLoader::LoadMaterial(std::string& _currentLine, std::ifstream& _file)
 {
 	std::shared_ptr<Material> material = std::make_shared<Material>();
 	std::vector<std::string> tokens;
 
-	std::string backupLine = currentLine;
+	std::string backupLine = _currentLine;
 	std::string vertPath;
 	std::string fragPath;
 
-	std::getline(file, currentLine);
-	SplitStringWhitespace(currentLine, tokens);
+	std::getline(_file, _currentLine);
+	SplitStringWhitespace(_currentLine, tokens);
 
 	if (tokens.at(0) != "{") //Empty material requested 
 	{
-		currentLine = backupLine;
+		_currentLine = backupLine;
 		return material;
 	}
 
-	while (!file.eof())
+	while (!_file.eof())
 	{
-		std::getline(file, currentLine);
-		SplitStringWhitespace(currentLine, tokens);
+		std::getline(_file, _currentLine);
+		SplitStringWhitespace(_currentLine, tokens);
 		if (tokens.size() < 1) continue; //Skip if no tokens
 
 		if (tokens.at(0) == "vert") 
@@ -299,11 +299,11 @@ std::shared_ptr<Material> SceneLoader::LoadMaterial(std::string& currentLine, st
 			return material;
 		}
 	}
-	file.close();
+	_file.close();
 	throw std::exception();
 }
 
-shared_ptr<Collider> SceneLoader::LoadCollider(std::string& currentLine, std::ifstream& file)
+shared_ptr<Collider> SceneLoader::LoadCollider(std::string& _currentLine, std::ifstream& _file)
 {
 	std::shared_ptr<Collider> collider;
 	std::vector<std::string> tokens;
@@ -311,25 +311,25 @@ shared_ptr<Collider> SceneLoader::LoadCollider(std::string& currentLine, std::if
 	ColliderType type;
 	std::vector<std::vector<std::string>> parameters;
 
-	std::string backupLine = currentLine;
+	std::string backupLine = _currentLine;
 	std::string vertPath;
 	std::string fragPath;
 	float bounciness = 0;
 	float friction = 0;
 
-	std::getline(file, currentLine);
-	SplitStringWhitespace(currentLine, tokens);
+	std::getline(_file, _currentLine);
+	SplitStringWhitespace(_currentLine, tokens);
 
 	if (tokens.at(0) != "{") //Empty Collider requested, but is impossible 
 	{
-		currentLine = backupLine;
+		_currentLine = backupLine;
 		throw std::exception();
 	}
 
-	while (!file.eof())
+	while (!_file.eof())
 	{
-		std::getline(file, currentLine);
-		SplitStringWhitespace(currentLine, tokens);
+		std::getline(_file, _currentLine);
+		SplitStringWhitespace(_currentLine, tokens);
 		if (tokens.size() < 1) continue; //Skip if no tokens
 
 		if (tokens.at(0) == "type")
@@ -357,7 +357,7 @@ shared_ptr<Collider> SceneLoader::LoadCollider(std::string& currentLine, std::if
 				if (parameters.at(0).size() > 1 && parameters.at(0).at(0) == "radius") collider = std::make_shared<SphereCollider>(atof(parameters.at(0).at(1).c_str()));
 				else 
 				{
-					currentLine = "FAILED TO PROVIDE PLANE COLLIDER PARAMETERS";
+					_currentLine = "FAILED TO PROVIDE PLANE COLLIDER PARAMETERS";
 					throw std::exception();
 				}
 			}
@@ -386,7 +386,7 @@ shared_ptr<Collider> SceneLoader::LoadCollider(std::string& currentLine, std::if
 
 				if (!pointGot || !normalGot)
 				{
-					currentLine = "FAILED TO PROVIDE PLANE COLLIDER PARAMETERS";
+					_currentLine = "FAILED TO PROVIDE PLANE COLLIDER PARAMETERS";
 					throw std::exception();
 				}
 
@@ -395,12 +395,12 @@ shared_ptr<Collider> SceneLoader::LoadCollider(std::string& currentLine, std::if
 			}
 			else
 			{
-				currentLine = "NO COLLIDER TYPE SPECIFIED";
+				_currentLine = "NO COLLIDER TYPE SPECIFIED";
 				throw std::exception();
 			}
 
-			collider->bounciness = bounciness;
-			collider->friction = friction;
+			collider->m_bounciness = bounciness;
+			collider->m_friction = friction;
 			return collider;
 		}
 		else
@@ -412,26 +412,26 @@ shared_ptr<Collider> SceneLoader::LoadCollider(std::string& currentLine, std::if
 			}
 		}
 	}
-	file.close();
+	_file.close();
 	throw std::exception();
 
 }
 
-glm::vec3 SceneLoader::vec3ToRadians(glm::vec3 input)
+glm::vec3 SceneLoader::vec3ToRadians(glm::vec3 _input)
 {
 	glm::vec3 output;
-	output.x = glm::radians(input.x);
-	output.y = glm::radians(input.y);
-	output.z = glm::radians(input.z);
+	output.x = glm::radians(_input.x);
+	output.y = glm::radians(_input.y);
+	output.z = glm::radians(_input.z);
 	return output;
 }
 
-std::shared_ptr<Script> SceneLoader::LoadScript(int index)
+std::shared_ptr<Script> SceneLoader::LoadScript(int _index)
 {
 	std::shared_ptr<Script> scrp;
 
 	//Select script
-	switch (index) 
+	switch (_index) 
 	{
 	case 0: scrp = std::make_shared<FlyingCameraController>(); break;
 	case 1: scrp = std::make_shared<BallThrowerController>(); break;
@@ -441,18 +441,18 @@ std::shared_ptr<Script> SceneLoader::LoadScript(int index)
 	default: return nullptr;
 	}
 
-	scrp->ID = index;
+	scrp->m_ID = _index;
 	return scrp;
 }
 
-glm::vec3 SceneLoader::LoadVec3(std::vector<std::string> tokens)
+glm::vec3 SceneLoader::LoadVec3(std::vector<std::string> _tokens)
 {
-	if (tokens.size() >= 4)
+	if (_tokens.size() >= 4)
 	{
 		glm::vec3 pos;
-		pos.x = atof(tokens.at(1).c_str());
-		pos.y = atof(tokens.at(2).c_str());
-		pos.z = atof(tokens.at(3).c_str());
+		pos.x = atof(_tokens.at(1).c_str());
+		pos.y = atof(_tokens.at(2).c_str());
+		pos.z = atof(_tokens.at(3).c_str());
 		return pos;
 	}
 	else 
@@ -461,33 +461,33 @@ glm::vec3 SceneLoader::LoadVec3(std::vector<std::string> tokens)
 	}
 }
 
-void SceneLoader::SplitStringWhitespace(std::string& input, std::vector<std::string>& output)
+void SceneLoader::SplitStringWhitespace(std::string& _input, std::vector<std::string>& _output)
 {
 	std::string curr;
 
-	output.clear();
+	_output.clear();
 
-	for (size_t i = 0; i < input.length(); i++)
+	for (size_t i = 0; i < _input.length(); i++)
 	{
-		if (input.at(i) == ' ' ||
-			input.at(i) == '\r' ||
-			input.at(i) == '\n' ||
-			input.at(i) == '\t')
+		if (_input.at(i) == ' ' ||
+			_input.at(i) == '\r' ||
+			_input.at(i) == '\n' ||
+			_input.at(i) == '\t')
 		{
 			if (curr.length() > 0)
 			{
-				output.push_back(curr);
+				_output.push_back(curr);
 				curr = "";
 			}
 		}
 		else
 		{
-			curr += input.at(i);
+			curr += _input.at(i);
 		}
 	}
 
 	if (curr.length() > 0)
 	{
-		output.push_back(curr);
+		_output.push_back(curr);
 	}
 }

@@ -5,8 +5,8 @@ class Camera;
 
 class FlyingCameraController : public Script 
 {
-	Camera* cam;
+	Camera* m_cam;
 
-	void Update(float deltaTs, Input* input) override;
+	void Update(float _deltaTs, Input* _input) override;
 	void Initialize() override;
 };

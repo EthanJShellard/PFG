@@ -183,7 +183,7 @@ dynamicobject bigSphere
     material 2
     position 1.0 5.0 0.0
     scale 0.75 0.75 0.75
-    velocity -10.0 0.0 0.0
+    velocity -30.0 0.0 0.0
     rotation 0.0 0.0 0.0
     mass 4.0
 

@@ -1,11 +1,11 @@
 #include "SimulationStarter.h"
 #include "Scene.h"
 
-void SimulationStarter::Update(float deltaTs, Input* input)
+void SimulationStarter::Update(float _deltaTs, Input* _input)
 {
-	if (input->cmd_x)
+	if (_input->cmd_x)
 	{
-		auto gos = scene->GetObjects();
+		auto gos = m_scene->GetObjects();
 		for (int i = 0; i < gos.size(); i++)
 		{
 			gos.at(i)->SetSimulated(true);

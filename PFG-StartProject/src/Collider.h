@@ -10,48 +10,47 @@ class GameObject;
 struct Collider 
 {
 	//Current position
-	glm::vec3 pos;
+	glm::vec3 m_pos;
 	//Next position if no collision - used for collision detection
-	glm::vec3 nextPos;
-	float bounciness;
-	float friction;
-	glm::vec3 velocity;
-	glm::vec3 centreOfMass;
-	float mass;
+	glm::vec3 m_nextPos;
+	float m_bounciness;
+	float m_friction;
+	glm::vec3 m_velocity;
+	glm::vec3 m_centreOfMass;
+	float m_mass;
 
-	glm::mat3 bodyInteriaTensor;
-	glm::mat3 inverseBodyInertiaTensor;
+	glm::mat3 m_bodyInteriaTensor;
+	glm::mat3 m_inverseBodyInertiaTensor;
 
-
-	GameObject * parent;
+	GameObject * m_parent;
 
 	ColliderType GetType();
 	virtual void ComputeCentreOfMass() = 0;
-	glm::mat3 ComputeInverseInertiaTensor(glm::quat rotation);
+	glm::mat3 ComputeInverseInertiaTensor(glm::quat _rotation);
 	Collider();
 	virtual void Initialise() = 0;
-	virtual void Update(float deltaTs) = 0;
+	virtual void Update(float _deltaTs) = 0;
 
 protected:
-	ColliderType type;
+	ColliderType m_type;
 };
 
 struct SphereCollider : public Collider
 {
-	float radius;
+	float m_radius;
 
-	SphereCollider(float radius);
+	SphereCollider(float _radius);
 	void ComputeCentreOfMass() override;
 	void Initialise() override;
-	void Update(float deltaTs) override;
+	void Update(float _deltaTs) override;
 };
 
 struct InfinitePlaneCollider : public Collider
 {
-	glm::vec3 planeNormal;
-	glm::vec3 pointOnPlane;
+	glm::vec3 m_planeNormal;
+	glm::vec3 m_pointOnPlane;
 	InfinitePlaneCollider(glm::vec3 _planeNormal, glm::vec3 _pointOnPlane);
 	void ComputeCentreOfMass() override;
 	void Initialise() override;
-	void Update(float deltaTs) override;
+	void Update(float _deltaTs) override;
 };

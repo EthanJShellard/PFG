@@ -4,54 +4,52 @@
 #include <iostream>
 #include <fstream>
 
-void OrbitController::Update(float deltaTs, Input* input)
+void OrbitController::Update(float _deltaTs, Input* _input)
 {
-	if (input->cmd_x && !start) 
+	if (_input->cmd_x && !m_start) 
 	{
-		explicitOrbiter->SetSimulated(true);
-		semiImplicitOrbiter->SetSimulated(true);
+		m_explicitOrbiter->SetSimulated(true);
+		m_semiImplicitOrbiter->SetSimulated(true);
 
 		//Set start velocities
-		explicitOrbiter->SetVelocity(2.0f * glm::normalize(glm::cross(glm::vec3(0, 1, 0), (explicitCentre - explicitOrbiter->GetPosition()))));;
-		semiImplicitOrbiter->SetVelocity(2.0f * glm::normalize(glm::cross(glm::vec3(0, 1, 0), (semiImplicitCentre - semiImplicitOrbiter->GetPosition()))));;
-
-		start = true;
+		m_explicitOrbiter->SetVelocity(2.0f * glm::normalize(glm::cross(glm::vec3(0, 1, 0), m_explicitCentre - m_explicitOrbiter->GetPosition())));
+		m_semiImplicitOrbiter->SetVelocity(2.0f * glm::normalize(glm::cross(glm::vec3(0, 1, 0), m_semiImplicitCentre - m_semiImplicitOrbiter->GetPosition())));
+		m_start = true;
 	}
 
 
-	if (start) 
+	if (m_start) 
 	{
 		//Counteract gravity
-		explicitOrbiter->AddForce(glm::vec3(0, explicitOrbiter->GetMass() * 9.81, 0));
-		semiImplicitOrbiter->AddForce(glm::vec3(0, semiImplicitOrbiter->GetMass() * 9.81, 0));
+		m_explicitOrbiter->AddForce(glm::vec3(0, m_explicitOrbiter->GetMass() * 9.81, 0));
+		m_semiImplicitOrbiter->AddForce(glm::vec3(0, m_semiImplicitOrbiter->GetMass() * 9.81, 0));
 
-		float rk2Speed = glm::length(explicitOrbiter->GetVelocity());
-		float eulerSpeed = glm::length(semiImplicitOrbiter->GetVelocity());
+		float explicitSpeed = glm::length(m_explicitOrbiter->GetVelocity());
+		float semiImplicitSpeed = glm::length(m_semiImplicitOrbiter->GetVelocity());
 
 		//Add cetripetal force (F = mv^2/r)
-		explicitOrbiter->AddForce(
-			(explicitOrbiter->GetMass() * rk2Speed * rk2Speed) * glm::normalize(explicitCentre - explicitOrbiter->GetPosition())
-			/ explicitRadius
+		m_explicitOrbiter->AddForce(
+			(m_explicitOrbiter->GetMass() * explicitSpeed * explicitSpeed) * glm::normalize(m_explicitCentre - m_explicitOrbiter->GetPosition())
+			/ m_explicitRadius
 		);
-		semiImplicitOrbiter->AddForce(
-			(semiImplicitOrbiter->GetMass() * eulerSpeed * eulerSpeed) * glm::normalize(semiImplicitCentre - semiImplicitOrbiter->GetPosition())
-			/ semiImplicitRadius
+		m_semiImplicitOrbiter->AddForce(
+			(m_semiImplicitOrbiter->GetMass() * semiImplicitSpeed * semiImplicitSpeed) * glm::normalize(m_semiImplicitCentre - m_semiImplicitOrbiter->GetPosition())
+			/ m_semiImplicitRadius
 		);
 
 		
-		explicitSpeeds.push_back(glm::length(explicitOrbiter->GetVelocity()));
-		semiImplicitSpeeds.push_back(glm::length(semiImplicitOrbiter->GetVelocity()));
+		m_explicitDeviations.push_back(glm::length(m_explicitCentre - m_explicitOrbiter->GetPosition()) - 2.0f);
+		m_semiImplicitDeviations.push_back(glm::length(m_semiImplicitCentre - m_semiImplicitOrbiter->GetPosition()) - 2.0f);
 
-
-		if (input->cmd_x && !fileWrote) 
+		if (_input->cmd_x) 
 		{
 			std::ofstream outputFile("logs/orbitlogs.txt");
 
-			outputFile << "Orbital integration results\nExplicit | Semi-implicit\n";
+			outputFile << "Orbital integration results\nExplicit | Semi-implicit | Verlet\n";
 
-			for (size_t i = 0; i < explicitSpeeds.size(); i++) 
+			for (size_t i = 0; i < m_explicitDeviations.size(); i++) 
 			{
-				outputFile << explicitSpeeds.at(i) << "		 |		 " << semiImplicitSpeeds.at(i) << std::endl;
+				outputFile << m_explicitDeviations.at(i) << "		 |		 " << m_semiImplicitDeviations.at(i) << std::endl;
 			}
 
 			outputFile.close();
@@ -62,21 +60,21 @@ void OrbitController::Update(float deltaTs, Input* input)
 
 void OrbitController::Initialize()
 {
-	//RK2 object ID = 102
-	explicitOrbiter = static_pointer_cast<DynamicObject>(scene->FindObjectByID(102));
-	explicitOrbiter->integrationMethod = IntegrationMethod::EXPLICITEULER;
+	//Explicit object ID = 102
+	m_explicitOrbiter = static_pointer_cast<DynamicObject>(m_scene->FindObjectByID(102));
+	m_explicitOrbiter->m_integrationMethod = IntegrationMethod::EXPLICITEULER;
 	//Euler object ID = 100
-	semiImplicitOrbiter = static_pointer_cast<DynamicObject>(scene->FindObjectByID(100));
-	semiImplicitOrbiter->integrationMethod = IntegrationMethod::IMPLICITEULER;
+	m_semiImplicitOrbiter = static_pointer_cast<DynamicObject>(m_scene->FindObjectByID(100));
+	m_semiImplicitOrbiter->m_integrationMethod = IntegrationMethod::IMPLICITEULER;
 
 	//Centre ID = object ID + 1
-	explicitCentre = scene->FindObjectByID(103)->GetPosition();
-	semiImplicitCentre = scene->FindObjectByID(101)->GetPosition();
+	m_explicitCentre = m_scene->FindObjectByID(103)->GetPosition();
+	m_semiImplicitCentre = m_scene->FindObjectByID(101)->GetPosition();
 
 	//Initialize radii
-	explicitRadius = glm::distance(explicitCentre, explicitOrbiter->GetPosition());
-	semiImplicitRadius = glm::distance(semiImplicitCentre, semiImplicitOrbiter->GetPosition());
+	m_explicitRadius = glm::distance(m_explicitCentre, m_explicitOrbiter->GetPosition());
+	m_semiImplicitRadius = glm::distance(m_semiImplicitCentre, m_semiImplicitOrbiter->GetPosition());
 
-	start = false;
-	fileWrote = false;
+	m_start = false;
+	m_fileWrote = false;
 }

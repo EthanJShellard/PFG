@@ -9,21 +9,21 @@ class Input;
 
 class OrbitController : public Script
 {
-	bool start;
-	bool fileWrote;
+	bool m_start;
+	bool m_fileWrote;
 
-	std::shared_ptr<DynamicObject> explicitOrbiter;
-	std::shared_ptr<DynamicObject> semiImplicitOrbiter;
+	std::shared_ptr<DynamicObject> m_explicitOrbiter;
+	std::shared_ptr<DynamicObject> m_semiImplicitOrbiter;
 
-	glm::vec3 explicitCentre;
-	glm::vec3 semiImplicitCentre;
+	glm::vec3 m_explicitCentre;
+	glm::vec3 m_semiImplicitCentre;
 
-	float explicitRadius;
-	float semiImplicitRadius;
+	float m_explicitRadius;
+	float m_semiImplicitRadius;
 
-	std::vector<float> explicitSpeeds;
-	std::vector<float> semiImplicitSpeeds;
+	std::vector<float> m_explicitDeviations;
+	std::vector<float> m_semiImplicitDeviations;
 
-	void Update(float deltaTs, Input* input) override;
+	void Update(float _deltaTs, Input* _input) override;
 	void Initialize() override;
 };

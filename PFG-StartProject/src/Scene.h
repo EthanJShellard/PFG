@@ -32,57 +32,57 @@ public:
 	* This function is called for each simulation time step to
 	* update on all objects in the scene
 	*/
-	void Update(float deltaTs, Input* input);
+	void Update(float _deltaTs, Input* _input);
 
 	/** 
 	* Call this function to get a pointer to the camera
 	* 
 	*/
-    Camera* GetCamera() { return _camera; }
+    Camera* GetCamera() { return m_camera; }
 
 	/** Draw the scene from the camera's point of view
 	*
 	*/
 	void Draw();
 
-	void AddObject(std::shared_ptr<GameObject> newObject);
+	void AddObject(std::shared_ptr<GameObject> _newObject);
 
-	void DeleteObjectsByID(int ID);
+	void DeleteObjectsByID(int _ID);
 
 	std::vector<std::shared_ptr<GameObject>> GetObjects();
 	std::shared_ptr<GameObject> GetObjectByID(int _ID);
 
-	void SetPerformanceMonitor(PerformanceMonitor* monitor) { perfMonitor = monitor; };
+	void SetPerformanceMonitor(PerformanceMonitor* _monitor) { m_perfMonitor = _monitor; };
 
-	void AddScript(std::shared_ptr<Script> script);
+	void AddScript(std::shared_ptr<Script> _script);
 	std::shared_ptr<Script> GetScriptByID(int _ID);
 
 	void Initialize();
 
-	std::shared_ptr<GameObject> FindObjectByID(int ID);
+	std::shared_ptr<GameObject> FindObjectByID(int _ID);
 private:
 
-	std::vector< std::shared_ptr<GameObject> > gameObjects;
-	std::vector< std::shared_ptr<Script> > scripts;
+	std::vector< std::shared_ptr<GameObject> > m_gameObjects;
+	std::vector< std::shared_ptr<Script> > m_scripts;
 
 	/** The main camera in the scene 
 	*/
-	Camera* _camera; 
+	Camera* m_camera; 
 
 	/**The position for a light that lits the scene
 	*/
-	glm::vec3 _lightPosition; 
+	glm::vec3 m_lightPosition; 
 	/** This matrix represents the camera's position and orientation 
 	*/
-	glm::mat4 _viewMatrix; 
+	glm::mat4 m_viewMatrix; 
 	/** This matrix is the camera's lens
 	*/
-	glm::mat4 _projMatrix; 
+	glm::mat4 m_projMatrix; 
 	/** A boolen variable to control the start of the simulation This matrix is the camera's lens
 	*/
-	bool _simulation_start;
+	bool m_simulationStart;
 
-	PerformanceMonitor* perfMonitor;
+	PerformanceMonitor* m_perfMonitor;
 };
 
 #endif // !_SCENE_H_

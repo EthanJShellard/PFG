@@ -21,35 +21,35 @@ public:
 
 	void update();
 
-	bool Quit;
+	bool m_quit;
 
-	int mouse_x, mouse_y;
+	int m_mouse_x, m_mouse_y;
 
 	bool cmd_mouseleft, cmd_mouseleftUp, cmd_mouseright, cmd_mouserightUp;
 	bool cmd_s, cmd_a, cmd_d, cmd_w, cmd_z, cmd_x, cmd_c;
-	bool once;
+	bool m_once;
 
 	glm::vec2 getMouseDelta();
 	
 private:
 
-	SDL_Event eventQueue;
-	glm::vec2 mouseDelta;
+	SDL_Event m_eventQueue;
+	glm::vec2 m_mouseDelta;
 
-	static bool getKey(int keyCode);
-	static bool getKeyDown(int keyCode); // Was the key pressed this frame?
-	static bool getKeyUp(int keyCode);
+	static bool getKey(int _keyCode);
+	static bool getKeyDown(int _keyCode); // Was the key pressed this frame?
+	static bool getKeyUp(int _keyCode);
 
-	static std::vector<int> keys;
-	static std::vector<int> upKeys;
-	static std::vector<int> downKeys;
+	static std::vector<int> m_keys;
+	static std::vector<int> m_upKeys;
+	static std::vector<int> m_downKeys;
 
-	bool keyDown;
+	bool m_keyDown;
 
-	void keyboard(unsigned char key);
-	void keyboardUp(unsigned char key);
+	void keyboard(unsigned char _key);
+	void keyboardUp(unsigned char _key);
 
-	void _keyboard(int key);
-	void _keyboardUp(int key);
+	void _keyboard(int _key);
+	void _keyboardUp(int _key);
 
 };

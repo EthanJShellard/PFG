@@ -20,16 +20,16 @@ Application::Application()
 {
 	/** Default parameters for SDL
 	*/
-	window = nullptr;
-	renderer = nullptr;
+	m_window = nullptr;
+	m_renderer = nullptr;
 
 	// Engine defaults
-	running = false;
+	m_running = false;
 
 	//Timing defaults
-	lastTime = 0;
-	currentTime = 0;
-	deltaTime = 0.0166666667f; // Default deltatime to 1/60 for first frame
+	m_lastTime = 0;
+	m_currentTime = 0;
+	m_deltaTime = 0.0166666667f; // Default deltatime to 1/60 for first frame
 	
 }
 
@@ -106,10 +106,10 @@ bool Application::Init()
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 8);
 
 	// Create the SDL window
-	window = SDL_CreateWindow("Physics Simulation", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+	m_window = SDL_CreateWindow("Physics Simulation", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
 	// Check the window was made okay
-	if (window == NULL)
+	if (m_window == NULL)
 	{
 		std::cerr << "Failed to create SDL window!\n";
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL Error", "Failed to create SDL Window!", NULL);
@@ -117,9 +117,9 @@ bool Application::Init()
 	}
 
 	// Create the SDL renderer
-	renderer = SDL_CreateRenderer(window, -1, 0);
+	m_renderer = SDL_CreateRenderer(m_window, -1, 0);
 	// This will allow us to actually use OpenGL to draw to the window
-	glcontext = SDL_GL_CreateContext(window);
+	m_glcontext = SDL_GL_CreateContext(m_window);
 
 	// Call our initialisation function to set up GLEW and print out some GL info to console
 	if (!InitGL())
@@ -141,18 +141,18 @@ bool Application::Init()
 	path.append(std::to_string(sceneIndex));
 	path.append(".txt");
 
-	myScene = sl.LoadScene(path.c_str());
-	myScene->SetPerformanceMonitor(&performanceMonitor);
+	m_myScene = sl.LoadScene(path.c_str());
+	m_myScene->SetPerformanceMonitor(&m_performanceMonitor);
 
 	SDL_ShowCursor(true);
-	input = new Input();
+	m_input = new Input();
 
 	// Get the last time to calculate deltatime for the first runthrough.
 	/* No more code should be under this line in the init function unless its
 	timing related or enabling the update loop */
 
-	lastTime = SDL_GetTicks();
-	running = true;
+	m_lastTime = SDL_GetTicks();
+	m_running = true;
 	
 	return true;
 }
@@ -184,25 +184,25 @@ bool Application::InitGL()
 bool Application::Update()
 {
 	// Game loop
-	while (running)
+	while (m_running)
 	{
 		// Calculate deltatime
-		currentTime = SDL_GetTicks();
-		performanceMonitor.FrameBegin();
-		deltaTime = (float)(currentTime - lastTime) / 1000.0f;
-		lastTime = currentTime;
+		m_currentTime = SDL_GetTicks();
+		m_performanceMonitor.FrameBegin();
+		m_deltaTime = (float)(m_currentTime - m_lastTime) / 1000.0f;
+		m_lastTime = m_currentTime;
 
 		// Update the scene
-	    input->update();
-		if (input->Quit)
-			running = false;
+	    m_input->update();
+		if (m_input->m_quit)
+			m_running = false;
 
 		// Update scene and physics simulation
 		// Run simulation: 
 		// We target a real-time simulation, say 60 fps.
 		// Therefore multiple updates to achieve our goal.
 
-		myScene->Update(STEP_LENGTH, input);
+		m_myScene->Update(STEP_LENGTH, m_input);
 		
 		// Specify the colour to clear the framebuffer to
 		glClearColor(0.25f, 0.25f, 0.25f, 0.0f);
@@ -210,20 +210,20 @@ bool Application::Update()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		// Draw the scene
-		myScene->Draw();
+		m_myScene->Draw();
 
 		// This tells the renderer to actually show its contents to the screen
-		SDL_GL_SwapWindow(window);
+		SDL_GL_SwapWindow(m_window);
 		
 		//caps framerate
-		lastTime = currentTime;		
+		m_lastTime = m_currentTime;		
 		SDL_Delay(10);
 
 
-		performanceMonitor.FrameEnd();
+		m_performanceMonitor.FrameEnd();
 	}
 
-	performanceMonitor.OutputResults();
+	m_performanceMonitor.OutputResults();
 
 	return true;
 }
@@ -233,8 +233,8 @@ bool Application::Exit()
 {
 	
 	// Destroy everything, clean up!
-	SDL_GL_DeleteContext(glcontext);
-	SDL_DestroyWindow(window);
+	SDL_GL_DeleteContext(m_glcontext);
+	SDL_DestroyWindow(m_window);
 	SDL_Quit();
 
 	return true;
@@ -243,19 +243,19 @@ bool Application::Exit()
 /** STATIC IMPLEMENTS 
 * The static instance variable that stores the one instance of itself
 */
-Application* Application::instance = nullptr;
+Application* Application::g_instance = nullptr;
 
 /** The Instance getter method. Returns the static instance of itself (or makes one if it doesn't yet exist
 */
 Application* Application::Instance()
 {
 	// Check if the instance is null
-	if (instance == nullptr)
+	if (g_instance == nullptr)
 	{
 		// Instance is null, we need to make one
-		instance = new Application();
+		g_instance = new Application();
 	}
 
 	// Return the instance of the application
-	return instance;
+	return g_instance;
 }

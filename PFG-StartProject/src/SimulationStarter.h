@@ -5,6 +5,6 @@
 
 class SimulationStarter : public Script
 {
-	void Update(float deltaTs, Input* input) override;
+	void Update(float _deltaTs, Input* _input) override;
 	void Initialize() override;
 };

@@ -6,12 +6,12 @@
 */
 Input::Input()
 {
-	Quit = cmd_s = cmd_a = cmd_w = cmd_d = keyDown = cmd_mouseleft = cmd_mouseleftUp = cmd_mouseright = cmd_mouserightUp = once = cmd_z = cmd_x = cmd_c = false;
+	m_quit = cmd_s = cmd_a = cmd_w = cmd_d = m_keyDown = cmd_mouseleft = cmd_mouseleftUp = cmd_mouseright = cmd_mouserightUp = m_once = cmd_z = cmd_x = cmd_c = false;
 }
 
-std::vector<int> Input::keys;
-std::vector<int> Input::downKeys;
-std::vector<int> Input::upKeys;
+std::vector<int> Input::m_keys;
+std::vector<int> Input::m_downKeys;
+std::vector<int> Input::m_upKeys;
 
 Input::~Input()
 {
@@ -19,106 +19,106 @@ Input::~Input()
 
 glm::vec2 Input::getMouseDelta()
 {
-	return mouseDelta;
+	return m_mouseDelta;
 }
 
 void Input::update()
 {
-	mouseDelta.x = 0;
-	mouseDelta.y = 0;
+	m_mouseDelta.x = 0;
+	m_mouseDelta.y = 0;
 	cmd_mouserightUp = false;
 	cmd_mouseleftUp = false;
 
-	while (SDL_PollEvent(&eventQueue) != 0)
+	while (SDL_PollEvent(&m_eventQueue) != 0)
 	{
-		if (eventQueue.type == SDL_QUIT)
+		if (m_eventQueue.type == SDL_QUIT)
 		{
-			Quit = 1;
+			m_quit = 1;
 		}
-		else if (eventQueue.type == SDL_MOUSEMOTION)
+		else if (m_eventQueue.type == SDL_MOUSEMOTION)
 		{
 
-			mouse_x = eventQueue.motion.x;
-			mouse_y = eventQueue.motion.y;
+			m_mouse_x = m_eventQueue.motion.x;
+			m_mouse_y = m_eventQueue.motion.y;
 
-			mouseDelta.x += mouse_x - 400;
-			mouseDelta.y += mouse_y - 300;
+			m_mouseDelta.x += m_mouse_x - 400;
+			m_mouseDelta.y += m_mouse_y - 300;
 
 		}
-		else if (eventQueue.type == SDL_MOUSEBUTTONDOWN && eventQueue.button.button == SDL_BUTTON_LEFT)
+		else if (m_eventQueue.type == SDL_MOUSEBUTTONDOWN && m_eventQueue.button.button == SDL_BUTTON_LEFT)
 		{
 			cmd_mouseleft = true;
 		}
-		else if (eventQueue.type == SDL_MOUSEBUTTONDOWN && eventQueue.button.button == SDL_BUTTON_RIGHT)
+		else if (m_eventQueue.type == SDL_MOUSEBUTTONDOWN && m_eventQueue.button.button == SDL_BUTTON_RIGHT)
 		{
 			cmd_mouseright = true;
 		}
-		else if (eventQueue.type == SDL_MOUSEBUTTONUP && eventQueue.button.button == SDL_BUTTON_LEFT)
+		else if (m_eventQueue.type == SDL_MOUSEBUTTONUP && m_eventQueue.button.button == SDL_BUTTON_LEFT)
 		{
 			cmd_mouseleft = false;
 			cmd_mouseleftUp = true;
 		}
-		else if (eventQueue.type == SDL_MOUSEBUTTONUP && eventQueue.button.button == SDL_BUTTON_RIGHT)
+		else if (m_eventQueue.type == SDL_MOUSEBUTTONUP && m_eventQueue.button.button == SDL_BUTTON_RIGHT)
 		{
 			cmd_mouseright = false;
 			cmd_mouserightUp = true;
 		}
-		else if (eventQueue.type == SDL_KEYDOWN)
+		else if (m_eventQueue.type == SDL_KEYDOWN)
 		{
-			if (eventQueue.key.keysym.sym == SDLK_UP || eventQueue.key.keysym.sym == SDLK_w)
+			if (m_eventQueue.key.keysym.sym == SDLK_UP || m_eventQueue.key.keysym.sym == SDLK_w)
 			{
 				//mouseDelta.y = 10;
 				cmd_w = true;
 			}
-			else if (eventQueue.key.keysym.sym == SDLK_DOWN || eventQueue.key.keysym.sym == SDLK_s)
+			else if (m_eventQueue.key.keysym.sym == SDLK_DOWN || m_eventQueue.key.keysym.sym == SDLK_s)
 			{
 				//mouseDelta.y = -10;
 				cmd_s = true;
 			}
-			else if (eventQueue.key.keysym.sym == SDLK_RIGHT || eventQueue.key.keysym.sym == SDLK_d)
+			else if (m_eventQueue.key.keysym.sym == SDLK_RIGHT || m_eventQueue.key.keysym.sym == SDLK_d)
 			{
 				//mouseDelta.x = 10;
 				cmd_d = true;
 			}
-			else if (eventQueue.key.keysym.sym == SDLK_LEFT || eventQueue.key.keysym.sym == SDLK_a)
+			else if (m_eventQueue.key.keysym.sym == SDLK_LEFT || m_eventQueue.key.keysym.sym == SDLK_a)
 			{
 				//mouseDelta.x = -10;
 				cmd_a = true;
 			}
-			else if (eventQueue.key.keysym.sym == SDLK_x)
+			else if (m_eventQueue.key.keysym.sym == SDLK_x)
 			{
 				cmd_x = true;
 			}
-			else if (eventQueue.key.keysym.sym == SDLK_ESCAPE)
+			else if (m_eventQueue.key.keysym.sym == SDLK_ESCAPE)
 			{
-				Quit = true;
+				m_quit = true;
 			}
 
 
 		}
-		else if (eventQueue.type == SDL_KEYUP)
+		else if (m_eventQueue.type == SDL_KEYUP)
 		{
-			if (eventQueue.key.keysym.sym == SDLK_UP || eventQueue.key.keysym.sym == SDLK_w )
+			if (m_eventQueue.key.keysym.sym == SDLK_UP || m_eventQueue.key.keysym.sym == SDLK_w )
 			{
 				//mouseDelta.y = 0;
 				cmd_w = false;
 				
 
 			}
-			else if (eventQueue.key.keysym.sym == SDLK_DOWN || eventQueue.key.keysym.sym == SDLK_s)
+			else if (m_eventQueue.key.keysym.sym == SDLK_DOWN || m_eventQueue.key.keysym.sym == SDLK_s)
 			{
 				cmd_s = false;
 			}
-			else if (eventQueue.key.keysym.sym == SDLK_RIGHT || eventQueue.key.keysym.sym == SDLK_d)
+			else if (m_eventQueue.key.keysym.sym == SDLK_RIGHT || m_eventQueue.key.keysym.sym == SDLK_d)
 			{
 				//mouseDelta.x = 0;
 				cmd_d = false;
 			}
-			else if (eventQueue.key.keysym.sym == SDLK_LEFT || eventQueue.key.keysym.sym == SDLK_a)
+			else if (m_eventQueue.key.keysym.sym == SDLK_LEFT || m_eventQueue.key.keysym.sym == SDLK_a)
 			{
 				cmd_a = false;
 			}
-			else if (eventQueue.key.keysym.sym == SDLK_x) 
+			else if (m_eventQueue.key.keysym.sym == SDLK_x) 
 			{
 				cmd_x = false;
 			}

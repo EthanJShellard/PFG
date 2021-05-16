@@ -3,81 +3,81 @@
 
 ColliderType Collider::GetType()
 {
-	return type;
+	return m_type;
 }
 
-glm::mat3 Collider::ComputeInverseInertiaTensor(glm::quat rotation)
+glm::mat3 Collider::ComputeInverseInertiaTensor(glm::quat _rotation)
 {
-	glm::mat3 R = glm::toMat3(rotation);
-	return R * inverseBodyInertiaTensor * glm::transpose(R);
+	glm::mat3 R = glm::toMat3(_rotation);
+	return R * m_inverseBodyInertiaTensor * glm::transpose(R);
 }
 
 Collider::Collider()
 {
-	pos = glm::vec3(0);
-	nextPos = glm::vec3(0);
-	bounciness = 0;
-	friction = 0;
-	parent = nullptr;
-	mass = 0;
-	type = ColliderType::SPHERE;
+	m_pos = glm::vec3(0);
+	m_nextPos = glm::vec3(0);
+	m_bounciness = 0;
+	m_friction = 0;
+	m_parent = nullptr;
+	m_mass = 0;
+	m_type = ColliderType::SPHERE;
 }
 
 SphereCollider::SphereCollider(float _radius)
 {
-	radius = _radius;
+	m_radius = _radius;
 
-	type = ColliderType::SPHERE;
+	m_type = ColliderType::SPHERE;
 }
 
 void SphereCollider::ComputeCentreOfMass()
 {
-	centreOfMass = pos;
+	m_centreOfMass = m_pos;
 }
 
 void SphereCollider::Initialise()
 {
-	mass = parent->GetMass();
+	m_mass = m_parent->GetMass();
 
 	//COMPUTE INERTIA TENSORS
 	//Solid Sphere
-	bodyInteriaTensor = glm::mat3(
-		(2.0f / 5.0f) * mass * radius * radius, 0.0f, 0.0f,
-		0.0f, (2.0f / 5.0f) * mass * radius * radius, 0.0f,
-		0.0f, 0.0f, (2.0f / 5.0f) * mass * radius * radius);
+	m_bodyInteriaTensor = glm::mat3(
+		(2.0f / 5.0f) * m_mass * m_radius * m_radius, 0.0f, 0.0f,
+		0.0f, (2.0f / 5.0f) * m_mass * m_radius * m_radius, 0.0f,
+		0.0f, 0.0f, (2.0f / 5.0f) * m_mass * m_radius * m_radius);
 	//Inverse
-	inverseBodyInertiaTensor = glm::inverse(bodyInteriaTensor);
+	m_inverseBodyInertiaTensor = glm::inverse(m_bodyInteriaTensor);
 }
 
-void SphereCollider::Update(float deltaTs)
+void SphereCollider::Update(float _deltaTs)
 {
-	pos = parent->GetPosition();
-	velocity = parent->GetVelocity();
-	nextPos = pos + (velocity * deltaTs);
+	m_pos = m_parent->GetPosition();
+	m_velocity = m_parent->GetVelocity();
+	m_nextPos = m_pos + (m_velocity * _deltaTs);
 }
 
 InfinitePlaneCollider::InfinitePlaneCollider(glm::vec3 _planeNormal, glm::vec3 _pointOnPlane)
 {
-	type = ColliderType::INFINITE_PLANE;
-	planeNormal = _planeNormal;
-	pointOnPlane = _pointOnPlane;
+	m_type = ColliderType::INFINITE_PLANE;
+	m_planeNormal = _planeNormal;
+	m_pointOnPlane = _pointOnPlane;
 }
 
 void InfinitePlaneCollider::ComputeCentreOfMass()
 {
-	centreOfMass = pos;
+	m_centreOfMass = m_pos;
 }
 
 void InfinitePlaneCollider::Initialise()
 {
-	mass = parent->GetMass();
-	bodyInteriaTensor = glm::mat3();
-	inverseBodyInertiaTensor = glm::mat3();
+	m_mass = m_parent->GetMass();
+	m_bodyInteriaTensor = glm::mat3();
+	m_inverseBodyInertiaTensor = glm::mat3();
 }
 
-void InfinitePlaneCollider::Update(float deltaTs)
+void InfinitePlaneCollider::Update(float _deltaTs)
 {
-	pos = parent->GetPosition();
-	velocity = parent->GetVelocity();
-	nextPos = pos + (velocity * deltaTs);
+	m_pos = m_parent->GetPosition();
+	m_velocity = m_parent->GetVelocity();
+	m_nextPos = m_pos + (m_velocity * _deltaTs);
 }

@@ -25,7 +25,7 @@ public:
 	/** Process an OBJ file
 	*  The OBJ file must be triangulated
     */
-	void LoadOBJ( std::string filename );
+	void LoadOBJ( std::string _filename );
 
 	/**Draws the mesh -
 	*  The mesh must have shaders applied for this to display!
@@ -37,11 +37,11 @@ protected:
 
 	/**OpenGL Vertex Array Object
 	*/
-	GLuint _VAO;
+	GLuint m_VAO;
 
 	/**Number of vertices in the mesh
 	*/
-	unsigned int _numVertices;
+	unsigned int m_numVertices;
 
 };
 

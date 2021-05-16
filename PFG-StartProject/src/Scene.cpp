@@ -11,9 +11,9 @@ Scene::Scene()
 {
 	// Set up your scene here......
 	// Set a camera
-	_camera = new Camera();
+	m_camera = new Camera();
 	// Don't start simulation yet
-	_simulation_start = false;
+	m_simulationStart = false;
 
 }
 
@@ -22,64 +22,64 @@ Scene::~Scene()
 	// You should neatly clean everything up here
 	//delete _physics_object;
 	//delete _physics_object2;
-	delete _camera;
+	delete m_camera;
 }
 
-void Scene::Update(float deltaTs, Input* input)
+void Scene::Update(float _deltaTs, Input* _input)
 {
 	//Update scripts
-	for (int i = 0; i < scripts.size(); i++) 
+	for (int i = 0; i < m_scripts.size(); i++) 
 	{
-		if(scripts.at(i)->enabled)scripts.at(i)->Update(deltaTs, input);
+		if(m_scripts.at(i)->m_enabled)m_scripts.at(i)->Update(_deltaTs, _input);
 	}
 
-	for (int i = 0; i < gameObjects.size(); i++)
+	for (int i = 0; i < m_gameObjects.size(); i++)
 	{
-		gameObjects.at(i)->UpdateCollider(deltaTs);
+		m_gameObjects.at(i)->UpdateCollider(_deltaTs);
 	}
 
 	//CHECK COLLISION
 	bool didCollide = false;
-	for (int i = 0; i < gameObjects.size(); i++)
+	for (int i = 0; i < m_gameObjects.size(); i++)
 	{
-		if (!gameObjects.at(i)->GetCollider()) continue; //No need to perform checks if no collider
-		gameObjects.at(i)->ClearCollisions();
+		if (!m_gameObjects.at(i)->GetCollider()) continue; //No need to perform checks if no collider
+		m_gameObjects.at(i)->ClearCollisions();
 
 		//Collision checks for this object begin, begin monitoring
-		perfMonitor->CollisionBegin();
+		m_perfMonitor->CollisionBegin();
 
-		for (int j = 0; j < gameObjects.size(); j++) 
+		for (int j = 0; j < m_gameObjects.size(); j++) 
 		{
-			if (i == j || !gameObjects.at(j)->GetCollider()) continue; //No need to perform checks if no collider
+			if (i == j || !m_gameObjects.at(j)->GetCollider()) continue; //No need to perform checks if no collider
 
 			didCollide = false;
 
-			Collision c = PFG::CheckCollision(gameObjects.at(i)->GetCollider(), gameObjects.at(j)->GetCollider(), didCollide);
+			Collision c = PFG::CheckCollision(m_gameObjects.at(i)->GetCollider(), m_gameObjects.at(j)->GetCollider(), didCollide);
 
-			if (didCollide) gameObjects.at(i)->AddCollision(c);
+			if (didCollide) m_gameObjects.at(i)->AddCollision(c);
 		}
 		//Collision checks for this object over, end monitoring
-		perfMonitor->CollisionEnd();
+		m_perfMonitor->CollisionEnd();
 	}
 
-	for (int i = 0; i < gameObjects.size(); i++)
+	for (int i = 0; i < m_gameObjects.size(); i++)
 	{
 		//Update for this object beginning, start monitoring
-		perfMonitor->UpdatesBegin();
+		m_perfMonitor->UpdatesBegin();
 
-		gameObjects.at(i)->Update(deltaTs);
+		m_gameObjects.at(i)->Update(_deltaTs);
 
 		//Update for this object ending, end monitoring
-		perfMonitor->UpdatesEnd();
+		m_perfMonitor->UpdatesEnd();
 	}
 
 	//_physics_object->Update(deltaTs);
 	//_physics_object2->Update(deltaTs);
 	//_level->Update(deltaTs);
-	_camera->Update(input);
+	m_camera->Update(_input);
 
-	_viewMatrix = _camera->GetView();
-	_projMatrix = _camera->GetProj();
+	m_viewMatrix = m_camera->GetView();
+	m_projMatrix = m_camera->GetProj();
 														
 }
 
@@ -88,78 +88,78 @@ void Scene::Draw()
 	// Draw objects, giving the camera's position and projection
 	//_physics_object->Draw(_viewMatrix, _projMatrix);
 	//_physics_object2->Draw(_viewMatrix, _projMatrix);
-	for (int i = 0; i < gameObjects.size(); i++)
+	for (int i = 0; i < m_gameObjects.size(); i++)
 	{
-		gameObjects.at(i)->Draw(_viewMatrix, _projMatrix);
+		m_gameObjects.at(i)->Draw(m_viewMatrix, m_projMatrix);
 	}
 	//_level->Draw(_viewMatrix, _projMatrix);
 
 }
 
-void Scene::AddObject(std::shared_ptr<GameObject> newObject)
+void Scene::AddObject(std::shared_ptr<GameObject> _newObject)
 {
-	gameObjects.push_back(newObject);
+	m_gameObjects.push_back(_newObject);
 }
 
-void Scene::DeleteObjectsByID(int ID)
+void Scene::DeleteObjectsByID(int _ID)
 {
-	for (int i = 0; i < gameObjects.size(); i++) 
+	for (int i = 0; i < m_gameObjects.size(); i++) 
 	{
-		if (gameObjects.at(i)->ID == ID) 
+		if (m_gameObjects.at(i)->ID == _ID) 
 		{
-			gameObjects.erase(std::remove(gameObjects.begin(), gameObjects.end(), gameObjects.at(i)), gameObjects.end());
+			m_gameObjects.erase(std::remove(m_gameObjects.begin(), m_gameObjects.end(), m_gameObjects.at(i)), m_gameObjects.end());
 		}
 	}
 }
 
 std::vector<std::shared_ptr<GameObject>> Scene::GetObjects()
 {
-	return gameObjects;
+	return m_gameObjects;
 }
 
 std::shared_ptr<GameObject> Scene::GetObjectByID(int _ID)
 {
-	for (int i = 0; i < gameObjects.size(); i++)
+	for (int i = 0; i < m_gameObjects.size(); i++)
 	{
-		if (gameObjects.at(i)->ID == _ID) return gameObjects.at(i);
+		if (m_gameObjects.at(i)->ID == _ID) return m_gameObjects.at(i);
 	}
 }
 
-void Scene::AddScript(std::shared_ptr<Script> script)
+void Scene::AddScript(std::shared_ptr<Script> _script)
 {
-	script->scene = this;
-	scripts.push_back(script);
+	_script->m_scene = this;
+	m_scripts.push_back(_script);
 }
 
 std::shared_ptr<Script> Scene::GetScriptByID(int _ID)
 {
-	for (int i = 0; i < scripts.size(); i++) 
+	for (int i = 0; i < m_scripts.size(); i++) 
 	{
-		if (scripts.at(i)->ID == _ID) return scripts.at(i);
+		if (m_scripts.at(i)->m_ID == _ID) return m_scripts.at(i);
 	}
 }
 
 void Scene::Initialize()
 {
 	//Initialise all colliders
-	for (int i = 0; i < gameObjects.size(); i++)
+	for (int i = 0; i < m_gameObjects.size(); i++)
 	{
-		gameObjects.at(i)->InitialiseCollider();
+		m_gameObjects.at(i)->InitialiseCollider();
 	}
 
-	for (int i = 0; i < scripts.size(); i++) 
+	for (int i = 0; i < m_scripts.size(); i++) 
 	{
-		scripts.at(i)->Initialize();
+		m_scripts.at(i)->Initialize();
 	}
 }
 
-std::shared_ptr<GameObject> Scene::FindObjectByID(int ID)
+std::shared_ptr<GameObject> Scene::FindObjectByID(int _ID)
 {
-	for (int i = 0; i < gameObjects.size(); i++) 
+	for (int i = 0; i < m_gameObjects.size(); i++) 
 	{
-		if (gameObjects.at(i)->ID == ID) 
+		if (m_gameObjects.at(i)->ID == _ID) 
 		{
-			return gameObjects.at(i);
+			return m_gameObjects.at(i);
 		}
 	}
 	return nullptr;

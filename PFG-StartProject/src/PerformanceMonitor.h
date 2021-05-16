@@ -5,25 +5,25 @@ class PerformanceMonitor
 {
 	//All times in ticks
 
-	uint32_t totalFrames;
-	uint32_t frametimeSum;
-	uint32_t minFrametime;
-	uint32_t maxFrametime;
+	uint32_t m_totalFrames;
+	uint32_t m_frametimeSum;
+	uint32_t m_minFrametime;
+	uint32_t m_maxFrametime;
 	
 	//Per colliding object
-	uint32_t collisionChecks;
-	uint32_t collisionCheckTimeSum;
-	uint32_t maxCollisionCheckTime;
-	uint32_t minCollisionCheckTime;
+	uint32_t m_collisionChecks;
+	uint32_t m_collisionCheckTimeSum;
+	uint32_t m_maxCollisionCheckTime;
+	uint32_t m_minCollisionCheckTime;
 
-	uint32_t updates;
-	uint32_t updateTimeSum;
-	uint32_t maxUpdateTime;
-	uint32_t minUpdateTime;
+	uint32_t m_updates;
+	uint32_t m_updateTimeSum;
+	uint32_t m_maxUpdateTime;
+	uint32_t m_minUpdateTime;
 
-	uint32_t frameStartTime;
-	uint32_t collisionCheckStartTime;
-	uint32_t updateStartTime;
+	uint32_t m_frameStartTime;
+	uint32_t m_collisionCheckStartTime;
+	uint32_t m_updateStartTime;
 
 public:
 

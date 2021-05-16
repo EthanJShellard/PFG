@@ -21,17 +21,17 @@ public:
 	/** Function for getting the viewing matrix
 	* @return a 4x4 matrix
 	*/
-	inline glm::mat4 GetView() { return _viewMatrix; };
+	inline glm::mat4 GetView() { return m_viewMatrix; };
 	/** Function for getting the projection matrix
 	* @return a 4x4 matrix
 	*/
-	inline glm::mat4 GetProj() { return _projMatrix; };
+	inline glm::mat4 GetProj() { return m_projMatrix; };
 	/** Function for getting the camera position
 	* @param glm::vec3 pos camera position 
 	*/
-	inline void SetPos(glm::vec3 pos) { _cameraPos = pos; }
+	inline void SetPos(glm::vec3 pos) { m_cameraPos = pos; }
 
-	inline glm::vec3 GetPos() { return _cameraPos; }
+	inline glm::vec3 GetPos() { return m_cameraPos; }
 
 	/** Function for updatting the camera 
 	* @param input keyboard and mourse input inofrmation
@@ -40,48 +40,48 @@ public:
 
 	/** Camera's rotation angle in a radian about x axis
 	*/
-	float _cameraAngleX;
+	float m_cameraAngleX;
 	/** Camera's rotation angle in a radian about y axis
 	*/
-	float _cameraAngleY;
+	float m_cameraAngleY;
 	/** Camera's speed of movement
 	*/
-	float speed;
+	float m_speed;
 	/** The speed of the mouse movement
 	*/
-	float mouseSpeed;
+	float m_mouseSpeed;
 	/** Camera's up vector
 	*/
-	glm::vec3 _up;
+	glm::vec3 m_up;
 
 	/** Camera's transaltion vector
 	*/
-	glm::vec3 _translation;
+	glm::vec3 m_translation;
 
 
 	/** The state of the mouse position
 	*/
-	int posx, posy;
+	int m_posx, m_posy;
 	/** The state of the mouse's previous position
 	*/
-	glm::vec2 oldMousePosition;
-	glm::vec3 _cameraPos;
+	glm::vec2 m_oldMousePosition;
+	glm::vec3 m_cameraPos;
 	/** Position of the camera
 	*/
 	/** Orientation of the camera
 	*/
-	glm::vec3 _cameraRot;
+	glm::vec3 m_cameraRot;
 	/** Point that camera looks at
 	*/
 private:
 	/** Viewing matrix for the camera
 	*/
-	glm::mat4 _viewMatrix;
+	glm::mat4 m_viewMatrix;
 	/** Projection matrix for the camera
 	*/
-	glm::mat4 _projMatrix;	
+	glm::mat4 m_projMatrix;	
 
-	glm::vec3 _lookAt;
+	glm::vec3 m_lookAt;
 	
 
 };

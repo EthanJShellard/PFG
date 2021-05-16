@@ -6,10 +6,10 @@ class Input;
 class Script 
 {
 public:
-	int ID;
-	bool enabled = true;
-	Scene* scene;
+	int m_ID;
+	bool m_enabled = true;
+	Scene* m_scene;
 
-	virtual void Update(float deltaTs, Input* input) = 0;
+	virtual void Update(float _deltaTs, Input* _input) = 0;
 	virtual void Initialize() = 0;
 };
