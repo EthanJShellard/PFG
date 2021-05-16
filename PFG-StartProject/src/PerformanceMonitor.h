@@ -15,7 +15,7 @@ class PerformanceMonitor
 	uint32_t m_collisionCheckTimeSum;
 	uint32_t m_maxCollisionCheckTime;
 	uint32_t m_minCollisionCheckTime;
-
+	//Per update
 	uint32_t m_updates;
 	uint32_t m_updateTimeSum;
 	uint32_t m_maxUpdateTime;

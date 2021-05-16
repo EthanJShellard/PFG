@@ -29,14 +29,14 @@ public:
 	void SetAngularVelocity(glm::vec3 _angVel);
 	void SetForce(glm::vec3 _newForce);
 	void ClearForces();
-	/// <summary>
-	/// Euler numeric integration method
-	/// </summary>
-	/// <param name="deltaT">Period of time</param>
+	//Implicit Euler integration
 	void ImplicitEuler(float _deltaTs);
+	//Explicit Euler integration
 	void ExplicitEuler(float _deltaTs);
+	//Velocity Verlet integration
 	void VelocityVerlet(float _deltaTs);
 
+	//Safely get inverse mass. Will return 0 if mass is 0.
 	float GetInverseMass() override;
 
 	float GetMass() override;

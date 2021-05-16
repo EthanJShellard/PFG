@@ -1,5 +1,6 @@
 #include "DynamicObject.h"
 #include "PFGCollision.h"
+#include "Collider.h"
 #include <GLM/gtc/matrix_transform.hpp>
 #include <glm/gtx/dual_quaternion.hpp>
 #include <iostream>
@@ -10,7 +11,8 @@ void DynamicObject::Update(float _deltaTs)
 {
 	if (m_simulated)
 	{
-		glm::vec3 previousNetForce = m_netForce;
+		
+		//Declare gravity
 		glm::vec3 gravity = glm::vec3(0, m_mass * -9.81, 0);
 
 
@@ -36,8 +38,6 @@ void DynamicObject::Update(float _deltaTs)
 			for (int i = 0; i < m_collisions.size(); i++) 
 			{
 				Collision c = m_collisions.at(i);
-				
-				
 
 				//Normal force
 				glm::vec3 normalForce = c.m_otherNormal * glm::dot(gravity, -c.m_otherNormal); //Query
@@ -101,6 +101,8 @@ void DynamicObject::Update(float _deltaTs)
 			}
 		}
 
+		//Store previous net force
+		glm::vec3 previousNetForce = m_netForce;
 		//Clear Force
 		ClearForces();
 
@@ -145,7 +147,6 @@ void DynamicObject::ExplicitEuler(float _deltaTs)
 	m_position += m_velocity * _deltaTs;
 	//update velocity using euler algorithm (a = f/m)
 	m_velocity += (m_netForce * oneOverMass) * _deltaTs;
-	
 
 	glm::mat3 inverseInertiaTensor = m_collider->ComputeInverseInertiaTensor(m_rotation);
 
@@ -186,13 +187,11 @@ void DynamicObject::VelocityVerlet(float _deltaTs)
 	m_acceleration = newAccelaration;
 }
 
-
 float DynamicObject::GetInverseMass()
 {
 	if (m_mass != 0) return 1 / m_mass;
 	else return 0; //Will make it clear something is wrong
 }
-
 
 DynamicObject::DynamicObject()
 {
@@ -240,7 +239,6 @@ void DynamicObject::ClearForces()
 	m_netForce = glm::vec3(0);
 	m_netTorque = glm::vec3();
 }
-
 
 float DynamicObject::GetMass()
 {

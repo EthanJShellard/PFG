@@ -22,7 +22,7 @@ std::shared_ptr<Scene> SceneLoader::LoadScene(const char* _path)
 	}
 	catch (std::exception& e) 
 	{
-		std::cout << "MESSAGE [" + currentLine + "]"
+		std::cout << "Message/Error Line: [" + currentLine + "]"
 			<< std::endl;
 
 		throw std::exception();
@@ -38,6 +38,7 @@ std::shared_ptr<Scene> SceneLoader::LoadScene(std::string& _currentLine, const c
 		throw std::exception();
 	}
 
+	//Initialise return variable and object libraries
 	std::shared_ptr<Scene> scene = std::make_shared<Scene>();
 	m_materialLibrary = std::vector<std::shared_ptr<Material> >();
 	m_meshLibrary = std::vector<std::shared_ptr<Mesh> >();

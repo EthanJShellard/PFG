@@ -44,24 +44,24 @@ public:
 	*
 	*/
 	void Draw();
-
+	//Add _newObject into the scene so that it will be included in updates
 	void AddObject(std::shared_ptr<GameObject> _newObject);
-
+	//Delete all objects with ID _ID
 	void DeleteObjectsByID(int _ID);
-
+	//Get a vector of this scenes game objects
 	std::vector<std::shared_ptr<GameObject>> GetObjects();
-	std::shared_ptr<GameObject> GetObjectByID(int _ID);
-
+	//Set this scene's performance monitor
 	void SetPerformanceMonitor(PerformanceMonitor* _monitor) { m_perfMonitor = _monitor; };
-
+	//Add a script to this scene so that it will be included in updates
 	void AddScript(std::shared_ptr<Script> _script);
+	//Find a script with a specific ID
 	std::shared_ptr<Script> GetScriptByID(int _ID);
-
+	//Initialise all objects and scripts in the scene
 	void Initialize();
-
+	//Find an object with a specific ID
 	std::shared_ptr<GameObject> FindObjectByID(int _ID);
 private:
-
+	//Vectors containing all gameobjects and scripts in this scene
 	std::vector< std::shared_ptr<GameObject> > m_gameObjects;
 	std::vector< std::shared_ptr<Script> > m_scripts;
 
@@ -81,7 +81,7 @@ private:
 	/** A boolen variable to control the start of the simulation This matrix is the camera's lens
 	*/
 	bool m_simulationStart;
-
+	//This scee's performance monitor
 	PerformanceMonitor* m_perfMonitor;
 };
 

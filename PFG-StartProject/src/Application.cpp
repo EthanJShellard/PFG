@@ -75,13 +75,14 @@ bool Application::Init()
 		else 
 		{
 			std::cout << "\nInvalid Scene Index\n";
+			//Reset input buffer
 			std::cin.clear();
 			std::cin.ignore(10000, '\n');
 			std::cin.sync();
 		}
 
 	}
-
+	////////////////////////
 
 
 	// Init SDL with video mode
@@ -138,10 +139,11 @@ bool Application::Init()
 	// The scene contains all the objects etc
 	SceneLoader sl;
 	std::string path = "assets/Scenes/Scene";
-	path.append(std::to_string(sceneIndex));
+	path.append(std::to_string(sceneIndex)); //Amend path to fit scene index to be loaded
 	path.append(".txt");
 
 	m_myScene = sl.LoadScene(path.c_str());
+	//Provide scene with performance monitor
 	m_myScene->SetPerformanceMonitor(&m_performanceMonitor);
 
 	SDL_ShowCursor(true);
@@ -219,10 +221,10 @@ bool Application::Update()
 		m_lastTime = m_currentTime;		
 		SDL_Delay(10);
 
-
+		//Tell the performance monitor that the frame has ended
 		m_performanceMonitor.FrameEnd();
 	}
-
+	//Ouput performance metrics
 	m_performanceMonitor.OutputResults();
 
 	return true;

@@ -1,6 +1,7 @@
 #include <GLM/gtc/type_ptr.hpp>
 #include <GLM/gtc/matrix_transform.hpp>
 #include "glm/gtx/quaternion.hpp"
+#include "Collider.h"
 #include "GameObject.h"
 
 /*! \brief Brief description.

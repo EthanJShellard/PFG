@@ -13,10 +13,12 @@
 
 void BallThrowerController::Update(float _deltaTs, Input* _input)
 {
+	//Update camera angles
 	m_cam->m_cameraAngleX -= _input->getMouseDelta().x * m_cam->m_mouseSpeed;
 	//Clamp vertical camera rotation
 	m_cam->m_cameraAngleY = std::max(std::min(m_cam->m_cameraAngleY - _input->getMouseDelta().y * m_cam->m_mouseSpeed, MAX_CAM_ANGLE), MIN_CAM_ANGLE);
 
+	//Create camera directions
 	glm::vec3 right = glm::vec3(sin(m_cam->m_cameraAngleX - 3.14f / 2.0f), 0, cos(m_cam->m_cameraAngleX - 3.14f / 2.0f));
 	glm::vec3 direction(cos(m_cam->m_cameraAngleY) * sin(m_cam->m_cameraAngleX), 0.0f, cos(m_cam->m_cameraAngleY) * cos(m_cam->m_cameraAngleX));
 	glm::vec3 forward(cos(m_cam->m_cameraAngleY) * sin(m_cam->m_cameraAngleX), sin(m_cam->m_cameraAngleY), cos(m_cam->m_cameraAngleY) * cos(m_cam->m_cameraAngleX));
@@ -47,12 +49,13 @@ void BallThrowerController::Update(float _deltaTs, Input* _input)
 	m_cam->m_cameraPos.x = std::max(std::min(m_cam->m_cameraPos.x, m_xBound), -m_xBound);
 	m_cam->m_cameraPos.z = std::max(std::min(m_cam->m_cameraPos.z, m_xBound), -m_zBound);
 
+	//Shoot ball
 	if (_input->cmd_mouseleftUp) 
 	{
 		CreateBall()->SetVelocity(forward * 20.0f);
 	}
 
-	//WRITE TIMER TO DELETE BALLS
+	//TIMER TO DELETE BALLS
 	for (int i = 0; i < m_balls.size(); i++) 
 	{
 		if (m_balls.at(i).second > m_timeout) 

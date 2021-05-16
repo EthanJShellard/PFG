@@ -37,7 +37,7 @@ void OrbitController::Update(float _deltaTs, Input* _input)
 			/ m_semiImplicitRadius
 		);
 
-		
+		//Push deviations to logs
 		m_explicitDeviations.push_back(glm::length(m_explicitCentre - m_explicitOrbiter->GetPosition()) - 2.0f);
 		m_semiImplicitDeviations.push_back(glm::length(m_semiImplicitCentre - m_semiImplicitOrbiter->GetPosition()) - 2.0f);
 

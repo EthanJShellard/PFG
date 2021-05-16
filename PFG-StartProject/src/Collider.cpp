@@ -1,4 +1,6 @@
 #include "Collider.h"
+#include "GameObject.h"
+#include "glm/gtx/quaternion.hpp"
 
 
 ColliderType Collider::GetType()

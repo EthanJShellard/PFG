@@ -67,22 +67,18 @@ void Input::update()
 		{
 			if (m_eventQueue.key.keysym.sym == SDLK_UP || m_eventQueue.key.keysym.sym == SDLK_w)
 			{
-				//mouseDelta.y = 10;
 				cmd_w = true;
 			}
 			else if (m_eventQueue.key.keysym.sym == SDLK_DOWN || m_eventQueue.key.keysym.sym == SDLK_s)
 			{
-				//mouseDelta.y = -10;
 				cmd_s = true;
 			}
 			else if (m_eventQueue.key.keysym.sym == SDLK_RIGHT || m_eventQueue.key.keysym.sym == SDLK_d)
 			{
-				//mouseDelta.x = 10;
 				cmd_d = true;
 			}
 			else if (m_eventQueue.key.keysym.sym == SDLK_LEFT || m_eventQueue.key.keysym.sym == SDLK_a)
 			{
-				//mouseDelta.x = -10;
 				cmd_a = true;
 			}
 			else if (m_eventQueue.key.keysym.sym == SDLK_x)

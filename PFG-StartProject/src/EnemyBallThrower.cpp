@@ -1,4 +1,5 @@
 #include "EnemyBallThrower.h"
+#include "Collider.h"
 #include "Scene.h"
 #include "GameObject.h"
 #include "DynamicObject.h"
@@ -47,7 +48,7 @@ void EnemyBallThrower::Update(float _deltaTs, Input* _input)
 			if (m_sprite->GetPosition().x <= m_posXMin) m_movingRight = true;
 		}
 
-		if (m_cooldownTimer <= 0)
+		if (m_cooldownTimer <= 0) //Shoot ball
 		{
 			auto ball = CreateBall();
 			glm::vec3 throwDir = m_defaultThrowDirection;
@@ -59,7 +60,7 @@ void EnemyBallThrower::Update(float _deltaTs, Input* _input)
 			ball->SetVelocity((m_minThrowSpeed + (((float)std::rand() / RAND_MAX) * m_maxThrowSpeed)) * throwDir);
 
 			m_cooldownTimer = m_cooldown;
-			m_cooldown = max(m_cooldown *= 0.99f, 0.1f);
+			m_cooldown = max(m_cooldown *= 0.99f, 0.1f); //Make balls shoot more frequently as time goes on
 		}
 
 		m_cooldownTimer -= _deltaTs;
@@ -68,7 +69,7 @@ void EnemyBallThrower::Update(float _deltaTs, Input* _input)
 		//WRITE TIMER TO DELETE BALLS
 		for (int i = 0; i < m_balls.size(); i++)
 		{
-			if (m_balls.at(i).second > m_timeout)
+			if (m_balls.at(i).second > m_timeout) //Ball has reached end of lifetime
 			{
 				m_balls.at(i).first->ID = -11;
 				m_balls.erase(std::remove(m_balls.begin(), m_balls.end(), m_balls.at(i)), m_balls.end());
@@ -82,21 +83,20 @@ void EnemyBallThrower::Update(float _deltaTs, Input* _input)
 					ShowDeathScreen();
 				}
 
-				m_balls.at(i).second += _deltaTs;
+				m_balls.at(i).second += _deltaTs; //Increment timer
 			}
 		}
-		m_scene->DeleteObjectsByID(-11);
+		m_scene->DeleteObjectsByID(-11);//Tell scene to delete all objects which we've tagged with this delete ID
 	}
 	
 }
 
 void EnemyBallThrower::Initialize()
 {
+	//Initialise values
 	m_cam = m_scene->GetCamera();
 	m_start = false;
-
 	m_timeout = 10.0f;
-
 	m_defaultThrowDirection = glm::vec3(0,0,1);
 	m_maxVerticalDeviation = 50.0f;
 	m_maxHorizontalDeviation = 50.0f;

@@ -1,22 +1,17 @@
 #include "glm/glm.hpp"
 #include "PFGCollision.h"
 #include "Collider.h"
+#include "GameObject.h"
 #include <iostream>
 
 namespace PFG
 {
+	//Linear interpolation between 2 vec 3s
 	glm::vec3 Interpolate(float _t, glm::vec3 _pos1, glm::vec3 _pos2)
 	{
 		return ((1 - _t) * _pos1) + (_t * _pos2);
 	}
 
-	/// <summary>
-	/// Distance of point from plane.
-	/// </summary>
-	/// <param name="n">Normal of plane</param>
-	/// <param name="p">Point to find distance to</param>
-	/// <param name="q">Any point on plane</param>
-	/// <returns>Distance to object from plane</returns>
 	float DistanceToPlane(glm::vec3 _n, glm::vec3 _p, glm::vec3 _q)
 	{
 		return glm::dot((_p - _q), glm::normalize(_n));
@@ -79,15 +74,6 @@ namespace PFG
 		return false;
 	};
 
-	/// <summary>
-	/// Checks for collision between two spheres.
-	/// </summary>
-	/// <param name="centre0">Centre of the first sphere</param>
-	/// <param name="centre1">Centre of the second sphere</param>
-	/// <param name="radius0">Radius of the first sphere</param>
-	/// <param name="radius1">Radius of the second sphere</param>
-	/// <param name="contactPoint">The point of contact if a collision took place</param>
-	/// <returns>true if collision occured, false otherwise</returns>
 	bool SphereToSphereCollision(glm::vec3 _centre0, glm::vec3 _centre1, float _radius0, float _radius1, glm::vec3& _contactPoint)
 	{
 		float distance = glm::length(_centre0 - _centre1);
@@ -103,7 +89,6 @@ namespace PFG
 
 		return false;
 	}
-
 
 	Collision CheckCollision(std::shared_ptr<Collider> _A, std::shared_ptr<Collider> _B, bool& _didCollide)
 	{
@@ -133,7 +118,6 @@ namespace PFG
 
 		return c;
 	}
-
 }
 
 Collision::Collision()

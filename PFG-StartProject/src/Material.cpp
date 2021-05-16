@@ -34,7 +34,6 @@ Material::~Material()
 	// Clean up everything here
 }
 
-
 bool Material::LoadShaders( std::string _vertFilename, std::string _fragFilename )
 {
 	// OpenGL doesn't provide any functions for loading shaders from file
@@ -209,7 +208,6 @@ bool Material::CheckShaderCompiled( GLint _shader )
 	return true;
 }
 
-
 unsigned int Material::LoadTexture( std::string _filename )
 {
 	// Load SDL surface
@@ -251,9 +249,6 @@ unsigned int Material::LoadTexture( std::string _filename )
 	return texName;
 }
 
-
-
-
 void Material::SetMatrices(glm::mat4 &_modelMatrix, glm::mat4 &_invModelMatrix, glm::mat4 &_viewMatrix, glm::mat4 &_projMatrix)
 {
 	glUseProgram( m_shaderProgram );
@@ -263,7 +258,6 @@ void Material::SetMatrices(glm::mat4 &_modelMatrix, glm::mat4 &_invModelMatrix, 
 	glUniformMatrix4fv(m_shaderViewMatLocation, 1, GL_FALSE, glm::value_ptr(_viewMatrix) );
 	glUniformMatrix4fv(m_shaderProjMatLocation, 1, GL_FALSE, glm::value_ptr(_projMatrix) );
 }
-	
 
 void Material::Apply()
 {

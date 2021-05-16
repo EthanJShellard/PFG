@@ -5,6 +5,7 @@
 
 PerformanceMonitor::PerformanceMonitor()
 {
+	//Inintialise values
 	m_totalFrames = 0;
 	m_frametimeSum = 0;
 	m_minFrametime = 0xFFFFFFFFFFFFFFFF;

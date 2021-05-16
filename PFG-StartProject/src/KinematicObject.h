@@ -1,6 +1,9 @@
 #pragma once
 #include "GameObject.h"
 #include <GLM/gtc/matrix_transform.hpp>
+
+
+//DEPRECATED - NOT USED IN THIS SIMULATION.
 class KinematicObject : public GameObject
 {
 private:

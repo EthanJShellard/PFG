@@ -5,10 +5,10 @@ void SimulationStarter::Update(float _deltaTs, Input* _input)
 {
 	if (_input->cmd_x)
 	{
-		auto gos = m_scene->GetObjects();
-		for (int i = 0; i < gos.size(); i++)
+		auto gameObjects = m_scene->GetObjects();
+		for (int i = 0; i < gameObjects.size(); i++)
 		{
-			gos.at(i)->SetSimulated(true);
+			gameObjects.at(i)->SetSimulated(true);
 		}
 	}
 }

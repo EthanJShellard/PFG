@@ -20,8 +20,6 @@ Scene::Scene()
 Scene::~Scene()
 {
 	// You should neatly clean everything up here
-	//delete _physics_object;
-	//delete _physics_object2;
 	delete m_camera;
 }
 
@@ -62,6 +60,7 @@ void Scene::Update(float _deltaTs, Input* _input)
 		m_perfMonitor->CollisionEnd();
 	}
 
+	//Update game objects
 	for (int i = 0; i < m_gameObjects.size(); i++)
 	{
 		//Update for this object beginning, start monitoring
@@ -73,9 +72,6 @@ void Scene::Update(float _deltaTs, Input* _input)
 		m_perfMonitor->UpdatesEnd();
 	}
 
-	//_physics_object->Update(deltaTs);
-	//_physics_object2->Update(deltaTs);
-	//_level->Update(deltaTs);
 	m_camera->Update(_input);
 
 	m_viewMatrix = m_camera->GetView();
@@ -86,13 +82,10 @@ void Scene::Update(float _deltaTs, Input* _input)
 void Scene::Draw()
 {
 	// Draw objects, giving the camera's position and projection
-	//_physics_object->Draw(_viewMatrix, _projMatrix);
-	//_physics_object2->Draw(_viewMatrix, _projMatrix);
 	for (int i = 0; i < m_gameObjects.size(); i++)
 	{
 		m_gameObjects.at(i)->Draw(m_viewMatrix, m_projMatrix);
 	}
-	//_level->Draw(_viewMatrix, _projMatrix);
 
 }
 
@@ -115,14 +108,6 @@ void Scene::DeleteObjectsByID(int _ID)
 std::vector<std::shared_ptr<GameObject>> Scene::GetObjects()
 {
 	return m_gameObjects;
-}
-
-std::shared_ptr<GameObject> Scene::GetObjectByID(int _ID)
-{
-	for (int i = 0; i < m_gameObjects.size(); i++)
-	{
-		if (m_gameObjects.at(i)->ID == _ID) return m_gameObjects.at(i);
-	}
 }
 
 void Scene::AddScript(std::shared_ptr<Script> _script)
